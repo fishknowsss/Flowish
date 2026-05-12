@@ -21,7 +21,7 @@ export function BacklogPanel(props: BacklogPanelProps) {
       bucket="backlog"
       tasks={props.tasks}
       accent="backlog"
-      emptyState="这里适合放还没决定何时推进的事项、想法和临时提醒。"
+      emptyState="记下暂时不用安排的事。"
       inputPlaceholder="记下一条待办、想法或提醒"
       allowClearCompleted
       onAdd={props.onAdd}

@@ -313,13 +313,6 @@ function App() {
 
   return (
     <div className="app-shell">
-      <div className="ambient-backdrop" aria-hidden="true">
-        <span className="orb orb-a" />
-        <span className="orb orb-b" />
-        <span className="orb orb-c" />
-        <span className="orb orb-d" />
-      </div>
-
       <input
         ref={fileInputRef}
         type="file"
@@ -390,8 +383,8 @@ function App() {
         onOpenSearch={() => setSearchOpen(true)}
       />
 
-      <main className="dashboard-grid">
-        <section className="primary-column">
+      <main className="workspace-board">
+        <section className="today-rail" aria-label="今日工作区">
           <OverviewStrip
             todayKey={todayKey}
             selectedDate={selectedDate}
@@ -433,7 +426,46 @@ function App() {
               handleDropTask('focus', fromBucket, taskId, targetId)
             }
           />
+        </section>
 
+        <section className="time-board" aria-label="时间板">
+          <CalendarWidget
+            appData={appData}
+            todayKey={todayKey}
+            selectedDate={selectedDate}
+            viewDate={calendarMonth}
+            onPrevMonth={() => setCalendarMonth((prev) => addMonths(prev, -1))}
+            onNextMonth={() => setCalendarMonth((prev) => addMonths(prev, 1))}
+            onSelectDate={(dateKey) => {
+              setSelectedDate(dateKey)
+              setCalendarMonth(startOfMonth(parseDateKey(dateKey)))
+            }}
+            onOpenStage={() => {
+              playFeedbackSound('surface', appData.preferences.soundEnabled)
+              setCalendarStageOpen(true)
+            }}
+          />
+
+          <CountdownPanel
+            events={appData.events}
+            onAdd={(title, date, type) => {
+              playFeedbackSound('add', appData.preferences.soundEnabled)
+              setAppData((prev) => ({
+                ...prev,
+                events: [createEvent(title, date, type), ...prev.events],
+              }))
+            }}
+            onDelete={(eventId) => {
+              playFeedbackSound('delete', appData.preferences.soundEnabled)
+              setAppData((prev) => ({
+                ...prev,
+                events: prev.events.filter((event) => event.id !== eventId),
+              }))
+            }}
+          />
+        </section>
+
+        <aside className="capture-rail" aria-label="收纳区">
           <BacklogPanel
             tasks={appData.backlogTasks}
             onAdd={(text) => {
@@ -520,43 +552,6 @@ function App() {
                 nextRituals.splice(targetIndex, 0, removed)
                 return { ...prev, rituals: nextRituals }
               })
-            }}
-          />
-        </section>
-
-        <aside className="side-column">
-          <CalendarWidget
-            appData={appData}
-            todayKey={todayKey}
-            selectedDate={selectedDate}
-            viewDate={calendarMonth}
-            onPrevMonth={() => setCalendarMonth((prev) => addMonths(prev, -1))}
-            onNextMonth={() => setCalendarMonth((prev) => addMonths(prev, 1))}
-            onSelectDate={(dateKey) => {
-              setSelectedDate(dateKey)
-              setCalendarMonth(startOfMonth(parseDateKey(dateKey)))
-            }}
-            onOpenStage={() => {
-              playFeedbackSound('surface', appData.preferences.soundEnabled)
-              setCalendarStageOpen(true)
-            }}
-          />
-
-          <CountdownPanel
-            events={appData.events}
-            onAdd={(title, date, type) => {
-              playFeedbackSound('add', appData.preferences.soundEnabled)
-              setAppData((prev) => ({
-                ...prev,
-                events: [createEvent(title, date, type), ...prev.events],
-              }))
-            }}
-            onDelete={(eventId) => {
-              playFeedbackSound('delete', appData.preferences.soundEnabled)
-              setAppData((prev) => ({
-                ...prev,
-                events: prev.events.filter((event) => event.id !== eventId),
-              }))
             }}
           />
         </aside>

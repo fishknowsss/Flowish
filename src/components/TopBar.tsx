@@ -14,6 +14,8 @@ import {
 import { PomodoroTimer } from './PomodoroTimer'
 import { QuoteBar } from './QuoteBar'
 
+const faviconUrl = `${import.meta.env.BASE_URL}favicon.png`
+
 interface TopBarProps {
   todayKey: string
   quoteText: string
@@ -82,7 +84,9 @@ export function TopBar({
   return (
     <header className="topbar glass-panel">
       <div className="brand-block">
-        <div className="brand-glyph" aria-hidden="true" />
+        <div className="brand-glyph" aria-hidden="true">
+          <img src={faviconUrl} alt="" />
+        </div>
         <div>
           <h1>Flowish</h1>
           <p className="topbar-date">{formatTopbarDate(todayKey)}</p>

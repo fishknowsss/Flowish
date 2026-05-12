@@ -87,8 +87,7 @@ export function DatePlannerDrawer({
 
       {!isOpen ? (
         <div className="drawer-empty-state">
-          <p>点击月历中的任意日期，这里会展开当天任务、事件和日期短记。</p>
-          <span>今天会保留独立标记，方便区分“今天”与“当前选中的日期”。</span>
+          <p>从月历选一天。</p>
         </div>
       ) : null}
 
@@ -158,7 +157,7 @@ export function DatePlannerDrawer({
                 ) : (
                   <>
                     <p>{task.text}</p>
-                    <span>{task.completed ? '已完成' : '双击可编辑'}</span>
+                    {task.completed ? <span>已完成</span> : null}
                   </>
                 )}
               </div>

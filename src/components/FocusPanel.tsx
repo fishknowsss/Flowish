@@ -20,7 +20,7 @@ export function FocusPanel(props: FocusPanelProps) {
       bucket="focus"
       tasks={props.tasks}
       accent="focus"
-      emptyState="把今天最值得推进的事情放进这里，只保留真正要完成的几项。"
+      emptyState="写下今天最重要的一件事。"
       inputPlaceholder="写下今天必须完成的一件事"
       onAdd={props.onAdd}
       onToggle={props.onToggle}

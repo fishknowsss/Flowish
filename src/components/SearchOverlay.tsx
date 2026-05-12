@@ -96,8 +96,8 @@ export function SearchOverlay({ appData, onClose }: SearchOverlayProps) {
   return (
     <div className="search-overlay" role="presentation" onClick={onClose}>
       <div className="search-panel glass-panel" onClick={(event) => event.stopPropagation()}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 10px' }}>
-          <SearchIcon width={18} height={18} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+        <div className="search-input-row">
+          <SearchIcon width={18} height={18} className="search-input-icon" />
           <input
             ref={inputRef}
             className="search-input"
@@ -112,7 +112,7 @@ export function SearchOverlay({ appData, onClose }: SearchOverlayProps) {
           <div className="search-results">
             {filtered.map((item) => (
               <div key={item.id} className="search-result-item" onClick={onClose}>
-                <span style={{ color: 'var(--text-muted)' }}>{getTypeIcon(item.type)}</span>
+                <span className="search-result-icon">{getTypeIcon(item.type)}</span>
                 <div>
                   <div className="search-result-label">{item.label}</div>
                   <div className="search-result-meta">{item.meta}</div>
@@ -123,9 +123,7 @@ export function SearchOverlay({ appData, onClose }: SearchOverlayProps) {
         ) : query.trim() ? (
           <div className="search-hint">没有找到匹配的结果</div>
         ) : (
-          <div className="search-hint">
-            输入关键词搜索 · 按 <span className="kbd">Esc</span> 关闭
-          </div>
+          <div className="search-hint">输入关键词</div>
         )}
       </div>
     </div>

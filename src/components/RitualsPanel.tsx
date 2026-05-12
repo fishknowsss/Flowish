@@ -171,7 +171,11 @@ export function RitualsPanel({
                   <div className="ritual-chip-footer">
                     {streak > 0 ? (
                       <span className="ritual-streak">
-                        <FireIcon width={11} height={11} style={{ color: streak >= 7 ? 'var(--accent-focus)' : streak >= 3 ? 'var(--accent-event)' : 'inherit' }} />
+                        <FireIcon
+                          width={11}
+                          height={11}
+                          className={`ritual-streak-icon ${streak >= 7 ? 'hot' : streak >= 3 ? 'warm' : ''}`}
+                        />
                         {streak}天
                       </span>
                     ) : null}

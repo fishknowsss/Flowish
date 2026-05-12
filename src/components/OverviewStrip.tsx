@@ -56,65 +56,56 @@ export function OverviewStrip({
   const selectedSummary = getSelectedDateSummary(selectedDate, todayKey, selectedPlan, events)
 
   return (
-    <section className="overview-grid" aria-label="首页总览">
-      <article className="overview-card solid-panel">
-        <div className="overview-head">
-          <p className="eyebrow">Morning brief</p>
-          <span className="overview-kicker">今日节奏</span>
-        </div>
+    <section className="overview-sheet solid-panel" aria-label="首页总览">
+      <div className="overview-hero">
+        <span className="overview-kicker">今日</span>
         <strong className="overview-number">{progressValue}%</strong>
         <p className="overview-title">完成进度</p>
-        <div className="progress-track" aria-hidden="true">
-          <span className="progress-fill" style={{ width: `${progressValue}%` }} />
-        </div>
-        <p className="overview-copy">
-          今日重点已完成 {focusCompleted} 项，固定节律完成 {ritualCompleted} 项。
-        </p>
-      </article>
+        <progress className="progress-track" value={progressValue} max={100} aria-label="今日完成进度" />
+      </div>
 
-      <article className="overview-card solid-panel">
-        <div className="overview-head">
-          <p className="eyebrow">Open load</p>
-          <span className="overview-kicker cool">待处理负载</span>
-        </div>
-        <strong className="overview-number">{focusPending + backlogPending}</strong>
-        <p className="overview-title">当前仍待推进</p>
-        <p className="overview-copy">
-          今日重点剩余 {focusPending} 项，积压事项还有 {backlogPending} 项。
-        </p>
-      </article>
+      <div className="overview-lines">
+        <article className="overview-line">
+          <span>重点</span>
+          <strong>{focusCompleted}/{focusTasks.length}</strong>
+          <p>还剩 {focusPending} 项</p>
+        </article>
 
-      <article className="overview-card solid-panel">
-        <div className="overview-head">
-          <p className="eyebrow">Next marker</p>
-          <span className="overview-kicker warm">最近节点</span>
-        </div>
-        {upcoming ? (
-          <>
-            <strong className="overview-number">{daysUntil(upcoming.date) === 0 ? '今天' : `${daysUntil(upcoming.date)} 天`}</strong>
-            <p className="overview-title">{upcoming.title}</p>
-            <p className="overview-copy">
-              {formatShortDate(upcoming.date)} · {upcoming.type === 'countdown' ? '倒数日' : '自定义事件'}
-            </p>
-          </>
-        ) : (
-          <>
-            <strong className="overview-number">空</strong>
-            <p className="overview-title">还没有下一个节点</p>
-            <p className="overview-copy">可以在右侧添加倒数日、纪念日或阶段性里程碑。</p>
-          </>
-        )}
-      </article>
+        <article className="overview-line">
+          <span>收纳</span>
+          <strong>{backlogPending}</strong>
+          <p>积压待推进</p>
+        </article>
 
-      <article className="overview-card solid-panel">
-        <div className="overview-head">
-          <p className="eyebrow">Date window</p>
-          <span className="overview-kicker green">{selectedSummary.label}</span>
-        </div>
-        <strong className="overview-number">{selectedPlan.tasks.length}</strong>
-        <p className="overview-title">{selectedSummary.headline}</p>
-        <p className="overview-copy">{selectedSummary.meta}</p>
-      </article>
+        <article className="overview-line">
+          <span>节律</span>
+          <strong>{ritualCompleted}/{rituals.length}</strong>
+          <p>今日已完成</p>
+        </article>
+
+        <article className="overview-line">
+          <span>{selectedSummary.label}</span>
+          <strong>{selectedPlan.tasks.length}</strong>
+          <p>{selectedSummary.headline}</p>
+        </article>
+
+        <article className="overview-line wide">
+          <span>最近节点</span>
+          {upcoming ? (
+            <>
+              <strong>{daysUntil(upcoming.date) === 0 ? '今天' : `${daysUntil(upcoming.date)} 天`}</strong>
+              <p>
+                {upcoming.title} · {formatShortDate(upcoming.date)}
+              </p>
+            </>
+          ) : (
+            <>
+              <strong>空</strong>
+              <p>还没有下一个节点</p>
+            </>
+          )}
+        </article>
+      </div>
     </section>
   )
 }

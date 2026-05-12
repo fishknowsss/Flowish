@@ -250,10 +250,6 @@ export function TaskList({
               />
             ))}
           </div>
-
-          <div className="panel-footer">
-            <span className="panel-hint">双击可编辑</span>
-          </div>
         </div>
       </div>
     </section>
