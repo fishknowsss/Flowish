@@ -148,9 +148,7 @@ function sanitizeAppData(raw: unknown, reducedMotion: boolean): AppData {
   const preferences = isObject(raw.preferences)
     ? {
         soundEnabled: Boolean(raw.preferences.soundEnabled),
-        theme: (['pearl', 'mist', 'obsidian'].includes(raw.preferences.theme as string)
-          ? raw.preferences.theme
-          : 'pearl') as ThemeMode,
+        theme: (raw.preferences.theme === 'obsidian' ? 'obsidian' : 'pearl') as ThemeMode,
         reducedMotion:
           typeof raw.preferences.reducedMotion === 'boolean'
             ? raw.preferences.reducedMotion

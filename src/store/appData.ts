@@ -4,7 +4,7 @@ export const APP_DATA_VERSION = 1
 export const APP_DATA_STORAGE_KEY = 'flowish_app'
 
 export type TaskBucket = 'focus' | 'backlog' | 'date'
-export type ThemeMode = 'pearl' | 'mist' | 'obsidian'
+export type ThemeMode = 'pearl' | 'obsidian'
 export type QuoteMode = 'daily' | 'random'
 export type TaskPriority = 'p1' | 'p2' | 'p3' | null
 

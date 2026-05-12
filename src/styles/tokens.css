@@ -71,35 +71,6 @@
   --p3-color: #65765a;
 }
 
-:root[data-theme='mist'] {
-  --bg-app: #e9efef;
-  --bg-paper: #fbfdfb;
-  --bg-paper-soft: #f0f5f3;
-  --bg-rail: #edf4f2;
-  --bg-board: #fcfefc;
-  --bg-line: #ccd9d5;
-  --bg-line-strong: #98aaa5;
-
-  --text-primary: #202827;
-  --text-secondary: #57635f;
-  --text-muted: #7d8b86;
-
-  --brand-red: #d44120;
-  --brand-orange: #ec7541;
-  --brand-line: #b42b17;
-  --accent-focus: #d44120;
-  --accent-backlog: #4b6d78;
-  --accent-ritual: #5f7966;
-  --accent-event: #ec7541;
-  --accent-surface: #dde8e4;
-
-  --focus-soft: #eee0da;
-  --backlog-soft: #dde9ec;
-  --ritual-soft: #dfeae2;
-  --event-soft: #e9e2d8;
-  --overlay-bg: rgba(32, 40, 39, 0.22);
-}
-
 :root[data-theme='obsidian'] {
   --bg-app: #151711;
   --bg-paper: #20211a;

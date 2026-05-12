@@ -36,7 +36,7 @@ interface TopBarProps {
 }
 
 function getThemeLabel(theme: Preferences['theme']) {
-  return theme === 'pearl' ? '珍珠' : theme === 'mist' ? '雾面' : '黑曜石'
+  return theme === 'pearl' ? '普通' : '深色'
 }
 
 export function TopBar({
@@ -157,7 +157,7 @@ export function TopBar({
           {showSettings ? (
             <div className="settings-popover glass-panel">
               <button className="toggle-row" type="button" onClick={onToggleTheme}>
-                <span>主题材质</span>
+                <span>颜色模式</span>
                 <strong>{getThemeLabel(preferences.theme)}</strong>
               </button>
               <button className="toggle-row" type="button" onClick={onToggleMotion}>

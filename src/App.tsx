@@ -27,7 +27,7 @@ import {
   type ThemeMode,
 } from './store/appData'
 
-const THEME_CYCLE: ThemeMode[] = ['pearl', 'mist', 'obsidian']
+const THEME_CYCLE: ThemeMode[] = ['pearl', 'obsidian']
 
 function playFeedbackSound(type: 'add' | 'complete' | 'delete' | 'surface', enabled: boolean) {
   if (!enabled) return
