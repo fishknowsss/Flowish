@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { formatLongDate } from '../lib/date'
+import { formatLongDate, getEventTypeLabel } from '../lib/date'
 import {
   getBaseCalendarSignal,
   getHydratedCalendarSignal,
@@ -22,10 +22,6 @@ interface DatePlannerDrawerProps {
   onDeleteTask: (taskId: string) => void
   onUpdateTask: (taskId: string, text: string) => void
   onNoteChange: (note: string) => void
-}
-
-function getEventTypeLabel(type: EventItem['type']) {
-  return type === 'countdown' ? '倒数日' : '自定义'
 }
 
 export function DatePlannerDrawer({
@@ -175,7 +171,7 @@ export function DatePlannerDrawer({
           <strong>{events.length}</strong>
         </div>
         <div className="event-inline-list">
-          {events.length === 0 ? <div className="empty-card subtle">这一天没有自定义事件或倒数日。</div> : null}
+          {events.length === 0 ? <div className="empty-card subtle">这一天没有重要日期。</div> : null}
           {events.map((event) => (
             <div key={event.id} className="inline-pill">
               <span>{event.title}</span>

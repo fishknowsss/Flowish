@@ -67,7 +67,12 @@ function mapLegacyEvents(raw: unknown): EventItem[] {
             : ''
       const date = typeof item.date === 'string' ? item.date : ''
       if (!title || !date) return null
-      const type = item.type === 'custom' ? 'custom' : 'countdown'
+      const type =
+        item.type === 'annual'
+          ? 'annual'
+          : item.type === 'countup' || item.type === 'custom'
+            ? 'countup'
+            : 'countdown'
       return createEvent(title, date, type)
     })
     .filter((item): item is EventItem => item !== null)

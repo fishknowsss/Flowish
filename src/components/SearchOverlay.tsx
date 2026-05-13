@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import type { AppData } from '../store/appData'
+import { getEventTypeLabel } from '../lib/date'
 import { FocusIcon, LoopIcon, MilestoneIcon, SearchIcon, StackIcon } from './Icon'
 
 interface SearchOverlayProps {
@@ -49,7 +50,7 @@ function buildSearchIndex(appData: AppData): SearchResult[] {
     results.push({
       id: event.id,
       label: event.title,
-      meta: `${event.date} · ${event.type === 'countdown' ? '倒数日' : '自定义'}`,
+      meta: `${event.date} · ${getEventTypeLabel(event.type)}`,
       type: 'event',
     })
   }

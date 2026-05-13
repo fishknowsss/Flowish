@@ -1,3 +1,5 @@
+import type { EventItem } from '../store/appData'
+
 const weekdayFormatter = new Intl.DateTimeFormat('zh-CN', { weekday: 'long' })
 const shortDateFormatter = new Intl.DateTimeFormat('zh-CN', {
   month: 'long',
@@ -84,6 +86,69 @@ export function daysUntil(dateKey: string) {
   const target = parseDateKey(dateKey)
   const today = parseDateKey(getTodayKey())
   return Math.ceil((target.getTime() - today.getTime()) / 86400000)
+}
+
+export function getEventTypeLabel(type: EventItem['type']) {
+  if (type === 'countdown') return '倒数日'
+  if (type === 'countup') return '正数日'
+  return '年纪日'
+}
+
+export function getAnnualOccurrenceDateKey(dateKey: string, baseDateKey = getTodayKey()) {
+  const eventDate = parseDateKey(dateKey)
+  const baseDate = parseDateKey(baseDateKey)
+  const occurrence = new Date(baseDate.getFullYear(), eventDate.getMonth(), eventDate.getDate(), 12)
+
+  if (occurrence.getTime() < baseDate.getTime()) {
+    occurrence.setFullYear(baseDate.getFullYear() + 1)
+  }
+
+  return toDateKey(occurrence)
+}
+
+export function getEventRelevantDateKey(event: EventItem, baseDateKey = getTodayKey()) {
+  return event.type === 'annual' ? getAnnualOccurrenceDateKey(event.date, baseDateKey) : event.date
+}
+
+export function getEventDays(event: EventItem, baseDateKey = getTodayKey()) {
+  const target = parseDateKey(getEventRelevantDateKey(event, baseDateKey))
+  const baseDate = parseDateKey(baseDateKey)
+  return Math.ceil((target.getTime() - baseDate.getTime()) / 86400000)
+}
+
+export function getEventDayCopy(event: EventItem, baseDateKey = getTodayKey()) {
+  const days = getEventDays(event, baseDateKey)
+
+  if (event.type === 'countup') {
+    if (days > 0) {
+      return {
+        value: `${days}`,
+        unit: '天后',
+        phrase: `${days} 天后开始`,
+      }
+    }
+
+    const elapsed = Math.abs(days)
+    return {
+      value: elapsed === 0 ? '今天' : `${elapsed}`,
+      unit: elapsed === 0 ? '' : '天',
+      phrase: elapsed === 0 ? '今天开始' : `已开始 ${elapsed} 天`,
+    }
+  }
+
+  if (days === 0) {
+    return {
+      value: '今天',
+      unit: '',
+      phrase: event.type === 'annual' ? '今天' : '今天到期',
+    }
+  }
+
+  return {
+    value: `${Math.abs(days)}`,
+    unit: days > 0 ? '天后' : '天前',
+    phrase: days > 0 ? `${days} 天后` : `已过 ${Math.abs(days)} 天`,
+  }
 }
 
 export function compareDateKeys(a: string, b: string) {

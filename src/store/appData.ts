@@ -37,7 +37,7 @@ export interface EventItem {
   id: string
   title: string
   date: string
-  type: 'countdown' | 'custom'
+  type: 'countdown' | 'countup' | 'annual'
   createdAt: string
 }
 
@@ -129,7 +129,7 @@ export const defaultAppData = (todayKey: string, reducedMotion = false): AppData
   ],
   datePlans: {},
   events: [
-    createEvent('月度复盘', todayKey, 'custom'),
+    createEvent('月度复盘', todayKey, 'countup'),
     createEvent('项目里程碑', shiftDateKey(todayKey, 12), 'countdown'),
   ],
   quotes: BUILTIN_QUOTES,

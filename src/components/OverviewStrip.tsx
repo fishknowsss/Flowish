@@ -1,4 +1,4 @@
-import { daysUntil, formatShortDate } from '../lib/date'
+import { formatShortDate, getEventDayCopy, getEventDays, getEventRelevantDateKey } from '../lib/date'
 import type { DatePlan, EventItem, Ritual, Task } from '../store/appData'
 
 interface OverviewStripProps {
@@ -13,8 +13,8 @@ interface OverviewStripProps {
 
 function getUpcomingEvent(events: EventItem[]) {
   return [...events]
-    .filter((event) => daysUntil(event.date) >= 0)
-    .sort((left, right) => left.date.localeCompare(right.date))[0]
+    .filter((event) => event.type === 'countup' || getEventDays(event) >= 0)
+    .sort((left, right) => getEventDays(left) - getEventDays(right))[0]
 }
 
 function getSelectedDateSummary(selectedDate: string, todayKey: string, plan: DatePlan, events: EventItem[]) {
@@ -90,18 +90,18 @@ export function OverviewStrip({
         </article>
 
         <article className="overview-line wide">
-          <span>最近节点</span>
+          <span>最近日期</span>
           {upcoming ? (
             <>
-              <strong>{daysUntil(upcoming.date) === 0 ? '今天' : `${daysUntil(upcoming.date)} 天`}</strong>
+              <strong>{getEventDayCopy(upcoming).phrase}</strong>
               <p>
-                {upcoming.title} · {formatShortDate(upcoming.date)}
+                {upcoming.title} · {formatShortDate(getEventRelevantDateKey(upcoming))}
               </p>
             </>
           ) : (
             <>
               <strong>空</strong>
-              <p>还没有下一个节点</p>
+              <p>还没有重要日期</p>
             </>
           )}
         </article>

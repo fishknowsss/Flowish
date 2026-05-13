@@ -34,7 +34,7 @@ export function getBaseCalendarSignal(dateKey: string, appData: AppData): Calend
     lunarFestival: null,
     isWeekend: weekday === 0 || weekday === 6,
     hasDateTasks: (appData.datePlans[dateKey]?.tasks.length ?? 0) > 0,
-    hasEvents: appData.events.some((event) => event.date === dateKey),
+    hasEvents: appData.events.some((event) => isEventOnDate(event, dateKey)),
     hasRitualCompletion: appData.rituals.some((ritual) => Boolean(ritual.completionHistory[dateKey])),
   }
 }
@@ -91,8 +91,14 @@ export async function getHydratedCalendarSignalMap(
 
 export function getEventsForDate(events: EventItem[], dateKey: string) {
   return events
-    .filter((event) => event.date === dateKey)
+    .filter((event) => isEventOnDate(event, dateKey))
     .sort((left, right) => compareDateKeys(left.date, right.date))
+}
+
+function isEventOnDate(event: EventItem, dateKey: string) {
+  if (event.date === dateKey) return true
+  if (event.type !== 'annual') return false
+  return event.date.slice(5) === dateKey.slice(5)
 }
 
 export function getRitualCompletionCount(rituals: Ritual[], dateKey: string) {

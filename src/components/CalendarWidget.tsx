@@ -29,7 +29,7 @@ function getSignalLabels(signal: CalendarSignal, plan?: DatePlan) {
   if (signal.holidayName) labels.push({ text: signal.holidayName, tone: 'warm' })
   if (signal.lunarFestival) labels.push({ text: signal.lunarFestival, tone: 'green' })
   if ((plan?.tasks.length ?? 0) > 0) labels.push({ text: `${plan?.tasks.length} 任务`, tone: 'blue' })
-  if (signal.hasEvents) labels.push({ text: '节点', tone: 'warm' })
+  if (signal.hasEvents) labels.push({ text: '日期', tone: 'warm' })
   if (signal.hasRitualCompletion) labels.push({ text: '节律', tone: 'green' })
   return labels
 }
@@ -184,9 +184,9 @@ export function CalendarWidget({
               )}
             </div>
             <div className="selected-date-section">
-              <strong>节点</strong>
+              <strong>重要日期</strong>
               {selectedEvents.length === 0 ? (
-                <p>没有节点</p>
+                <p>没有重要日期</p>
               ) : (
                 selectedEvents.slice(0, 3).map((event) => <p key={event.id}>{event.title}</p>)
               )}
