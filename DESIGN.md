@@ -69,6 +69,11 @@ typography:
     fontSize: "1.1rem"
     fontWeight: 600
     lineHeight: 1.2
+  milestone-legacy-value:
+    fontFamily: "Manrope, Noto Sans SC Variable, Noto Sans SC, PingFang SC, sans-serif"
+    fontSize: "1.2rem"
+    fontWeight: 650
+    lineHeight: 1.2
   meta:
     fontFamily: "Noto Sans SC Variable, Noto Sans SC, PingFang SC, sans-serif"
     fontSize: "0.72rem"
@@ -222,11 +227,13 @@ Chinese. Display tracking is tight; body text remains near normal tracking.
 
 ## Layout
 
-Desktop uses three vertical rails: today, time and capture inside the viewport.
-The page itself does not scroll at standard desktop sizes; long task, agenda,
-milestone and ritual lists scroll inside their panels. Below 1080px or 720px of
-height, the workspace stacks into a scrolling single column. Panels use 10px
-gaps and 14px internal padding on desktop, reducing to 8px gaps and 12px
+Desktop uses a task-first split. The main task board contains a three-part
+overview, today's focus and a wider backlog in one grid. A narrower utility rail
+holds a compact month calendar, fixed rituals and important dates. The page
+itself does not scroll at standard desktop sizes; long task and ritual lists
+scroll inside their panels. Below 1080px or 720px of height, the workspace
+stacks into a scrolling sequence while preserving task-board order. Panels use
+10px gaps and 14px internal padding on desktop, reducing to 8px gaps and 12px
 padding on narrow screens.
 
 ## Elevation & Depth
