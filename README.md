@@ -16,6 +16,8 @@ Flowish 是一个纯前端的个人计划面板，用来整理今日重点、积
 
 Flowish 没有内置云同步。任务、短记、节律记录、重要日期和偏好设置都保存在当前站点来源的 `localStorage` 中，主数据键为 `flowish_app`。检测到损坏或过新版本的数据时，应用会先把原始内容保存在 `flowish_app_recovery`，再回退到可启动状态。
 
+界面采用适配自 [Solid Glass](https://github.com/deeplethe/solid-glass) 的本地材质系统，保留 Flowish 原有功能和数据契约。来源与许可信息见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)，视觉规范见 [DESIGN.md](./DESIGN.md)。
+
 导入通过校验的备份前，应用会把当前数据保存在 `flowish_app_import_backup`。这个副本仍属于浏览器站点数据，不能替代手动导出的 JSON 文件。
 
 - 浏览器清除该站点数据后，本地记录会一并删除。清理前请先导出 JSON 备份。

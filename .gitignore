@@ -24,6 +24,7 @@ coverage/
 output/
 playwright-report/
 test-results/
+.impeccable/
 
 # Editor directories and files
 .vscode/*
