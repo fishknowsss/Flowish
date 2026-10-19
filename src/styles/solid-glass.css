@@ -1375,25 +1375,56 @@ textarea {
   }
 
   .topbar {
-    grid-template-columns: 1fr auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    padding: 8px 10px;
+    min-height: auto;
+  }
+
+  .brand-block {
+    display: flex;
+    align-items: center;
     gap: 8px;
   }
 
-  .quote-bar {
-    grid-row: 2;
-    grid-column: 1 / -1;
-    padding: 6px 0 0;
-    border-left: 0;
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 4px;
+    padding-top: 6px;
     border-top: 1px solid var(--border-soft);
   }
 
-  .workspace-board {
-    grid-template-columns: 1fr;
+  .quote-bar {
+    border-left: 0;
+    border-top: 1px solid var(--border-soft);
+    padding: 6px 0 0;
   }
 
+  .today-rail,
+  .tasks-rail,
   .time-rail {
-    grid-template-columns: 1fr;
+    display: contents;
   }
+
+  .workspace-board {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .overview-sheet { order: 1; }
+  .task-panel-focus { order: 2; }
+  .task-panel-backlog { order: 3; }
+  .rituals-panel { order: 4; }
+  .calendar-panel.sidebar { order: 5; height: auto; }
+  .countdown-panel { order: 6; max-height: none; }
 }
 
 /* Accessibility */
