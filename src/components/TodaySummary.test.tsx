@@ -22,10 +22,10 @@ describe('TodaySummary', () => {
       />,
     )
 
-    expect(screen.getByText('50%', { selector: '.today-summary-head strong' })).toBeInTheDocument()
-    expect(screen.getByText('1', { selector: '.today-summary-stats strong' })).toBeInTheDocument()
-    expect(screen.getByText('1/2')).toBeInTheDocument()
-    expect(screen.getByText('2', { selector: '.today-summary-stats strong' })).toBeInTheDocument()
+    expect(screen.getByText('50%')).toBeInTheDocument()
+    expect(screen.getByText('还剩 1 项')).toBeInTheDocument()
+    expect(screen.getAllByText('1/2')).toHaveLength(2)
+    expect(screen.getByText('2', { selector: '.overview-line strong' })).toBeInTheDocument()
     expect(screen.getByRole('progressbar', { name: '今日完成进度' })).toHaveAttribute('value', '2')
   })
 })

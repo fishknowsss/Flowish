@@ -255,104 +255,113 @@ function App() {
       />
 
       <main key={dataGeneration} id="main-content" className="workspace-board" tabIndex={-1}>
-        <TodaySummary
-          focusTasks={appData.focusTasks}
-          backlogTasks={appData.backlogTasks}
-          rituals={appData.rituals}
-          todayKey={todayKey}
-        />
+        <section className="today-rail" aria-label="今日工作区">
+          <TodaySummary
+            focusTasks={appData.focusTasks}
+            backlogTasks={appData.backlogTasks}
+            rituals={appData.rituals}
+            todayKey={todayKey}
+            selectedDate={selectedDate}
+            selectedPlan={selectedPlan}
+            events={appData.events}
+          />
 
-        <FocusPanel
-          tasks={appData.focusTasks}
-          onAdd={(text, schedule) => {
-            playFeedbackSound('add', appData.preferences.soundEnabled)
-            commands.tasks.add('focus', text, null, schedule)
-          }}
-          onToggle={(taskId) => {
-            playFeedbackSound('complete', appData.preferences.soundEnabled)
-            commands.tasks.toggle('focus', taskId)
-          }}
-          onDelete={(taskId) => {
-            playFeedbackSound('delete', appData.preferences.soundEnabled)
-            offerUndo(commands.tasks.remove('focus', taskId))
-          }}
-          onUpdate={(taskId, text) => commands.tasks.update('focus', taskId, text)}
-          onUpdateSchedule={(taskId, patch) => commands.tasks.updateSchedule('focus', taskId, patch)}
-          onDropTask={(sourceBucket, taskId, targetId) =>
-            commands.tasks.move('focus', sourceBucket, taskId, targetId)
-          }
-        />
+          <FocusPanel
+            tasks={appData.focusTasks}
+            onAdd={(text, schedule) => {
+              playFeedbackSound('add', appData.preferences.soundEnabled)
+              commands.tasks.add('focus', text, null, schedule)
+            }}
+            onToggle={(taskId) => {
+              playFeedbackSound('complete', appData.preferences.soundEnabled)
+              commands.tasks.toggle('focus', taskId)
+            }}
+            onDelete={(taskId) => {
+              playFeedbackSound('delete', appData.preferences.soundEnabled)
+              offerUndo(commands.tasks.remove('focus', taskId))
+            }}
+            onUpdate={(taskId, text) => commands.tasks.update('focus', taskId, text)}
+            onUpdateSchedule={(taskId, patch) => commands.tasks.updateSchedule('focus', taskId, patch)}
+            onDropTask={(sourceBucket, taskId, targetId) =>
+              commands.tasks.move('focus', sourceBucket, taskId, targetId)
+            }
+          />
+        </section>
 
-        <RitualsPanel
-          rituals={appData.rituals}
-          todayKey={todayKey}
-          onAdd={(text) => {
-            playFeedbackSound('add', appData.preferences.soundEnabled)
-            commands.rituals.add(text)
-          }}
-          onToggle={(ritualId, dateKey) => {
-            playFeedbackSound('complete', appData.preferences.soundEnabled)
-            commands.rituals.toggle(ritualId, dateKey)
-          }}
-          onDelete={(ritualId) => {
-            playFeedbackSound('delete', appData.preferences.soundEnabled)
-            offerUndo(commands.rituals.remove(ritualId))
-          }}
-          onUpdate={commands.rituals.update}
-          onDropRitual={commands.rituals.move}
-        />
+        <section className="time-board" aria-label="时间板">
+          <CalendarWidget
+            appData={appData}
+            todayKey={todayKey}
+            selectedDate={selectedDate}
+            viewDate={calendarMonth}
+            onPrevMonth={() => setCalendarMonthOverride(addMonths(calendarMonth, -1))}
+            onNextMonth={() => setCalendarMonthOverride(addMonths(calendarMonth, 1))}
+            onToday={() => selectDate(todayKey)}
+            onSelectDate={selectDate}
+            onOpenPlanner={() => setDatePlannerOpen(true)}
+            onOpenStage={() => {
+              playFeedbackSound('surface', appData.preferences.soundEnabled)
+              setCalendarStageOpen(true)
+            }}
+          />
 
-        <CalendarWidget
-          appData={appData}
-          todayKey={todayKey}
-          selectedDate={selectedDate}
-          viewDate={calendarMonth}
-          onPrevMonth={() => setCalendarMonthOverride(addMonths(calendarMonth, -1))}
-          onNextMonth={() => setCalendarMonthOverride(addMonths(calendarMonth, 1))}
-          onToday={() => selectDate(todayKey)}
-          onSelectDate={selectDate}
-          onOpenPlanner={() => setDatePlannerOpen(true)}
-          onOpenStage={() => {
-            playFeedbackSound('surface', appData.preferences.soundEnabled)
-            setCalendarStageOpen(true)
-          }}
-        />
+          <CountdownPanel
+            events={appData.events}
+            todayKey={todayKey}
+            onAdd={(title, date, type) => {
+              playFeedbackSound('add', appData.preferences.soundEnabled)
+              commands.events.add(title, date, type)
+            }}
+            onUpdate={commands.events.update}
+            onDelete={(eventId) => {
+              playFeedbackSound('delete', appData.preferences.soundEnabled)
+              offerUndo(commands.events.remove(eventId))
+            }}
+          />
+        </section>
 
-        <BacklogPanel
-          tasks={appData.backlogTasks}
-          onAdd={(text, schedule) => {
-            playFeedbackSound('add', appData.preferences.soundEnabled)
-            commands.tasks.add('backlog', text, null, schedule)
-          }}
-          onToggle={(taskId) => {
-            playFeedbackSound('complete', appData.preferences.soundEnabled)
-            commands.tasks.toggle('backlog', taskId)
-          }}
-          onDelete={(taskId) => {
-            playFeedbackSound('delete', appData.preferences.soundEnabled)
-            offerUndo(commands.tasks.remove('backlog', taskId))
-          }}
-          onUpdate={(taskId, text) => commands.tasks.update('backlog', taskId, text)}
-          onUpdateSchedule={(taskId, patch) => commands.tasks.updateSchedule('backlog', taskId, patch)}
-          onDropTask={(sourceBucket, taskId, targetId) =>
-            commands.tasks.move('backlog', sourceBucket, taskId, targetId)
-          }
-          onClearCompleted={() => offerUndo(commands.tasks.clearCompleted('backlog'))}
-        />
+        <aside className="capture-rail" aria-label="收纳区">
+          <BacklogPanel
+            tasks={appData.backlogTasks}
+            onAdd={(text, schedule) => {
+              playFeedbackSound('add', appData.preferences.soundEnabled)
+              commands.tasks.add('backlog', text, null, schedule)
+            }}
+            onToggle={(taskId) => {
+              playFeedbackSound('complete', appData.preferences.soundEnabled)
+              commands.tasks.toggle('backlog', taskId)
+            }}
+            onDelete={(taskId) => {
+              playFeedbackSound('delete', appData.preferences.soundEnabled)
+              offerUndo(commands.tasks.remove('backlog', taskId))
+            }}
+            onUpdate={(taskId, text) => commands.tasks.update('backlog', taskId, text)}
+            onUpdateSchedule={(taskId, patch) => commands.tasks.updateSchedule('backlog', taskId, patch)}
+            onDropTask={(sourceBucket, taskId, targetId) =>
+              commands.tasks.move('backlog', sourceBucket, taskId, targetId)
+            }
+            onClearCompleted={() => offerUndo(commands.tasks.clearCompleted('backlog'))}
+          />
 
-        <CountdownPanel
-          events={appData.events}
-          todayKey={todayKey}
-          onAdd={(title, date, type) => {
-            playFeedbackSound('add', appData.preferences.soundEnabled)
-            commands.events.add(title, date, type)
-          }}
-          onUpdate={commands.events.update}
-          onDelete={(eventId) => {
-            playFeedbackSound('delete', appData.preferences.soundEnabled)
-            offerUndo(commands.events.remove(eventId))
-          }}
-        />
+          <RitualsPanel
+            rituals={appData.rituals}
+            todayKey={todayKey}
+            onAdd={(text) => {
+              playFeedbackSound('add', appData.preferences.soundEnabled)
+              commands.rituals.add(text)
+            }}
+            onToggle={(ritualId, dateKey) => {
+              playFeedbackSound('complete', appData.preferences.soundEnabled)
+              commands.rituals.toggle(ritualId, dateKey)
+            }}
+            onDelete={(ritualId) => {
+              playFeedbackSound('delete', appData.preferences.soundEnabled)
+              offerUndo(commands.rituals.remove(ritualId))
+            }}
+            onUpdate={commands.rituals.update}
+            onDropRitual={commands.rituals.move}
+          />
+        </aside>
       </main>
 
       {calendarStageOpen ? (

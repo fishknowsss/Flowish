@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { formatTopbarDate } from '../lib/date'
 import type { Preferences } from '../store/appData'
-import { SearchIcon, SettingsIcon } from './Icon'
+import { DownloadIcon, InstallIcon, SearchIcon, SettingsIcon, ThemeIcon, UploadIcon, VolumeIcon } from './Icon'
 import { PomodoroTimer } from './PomodoroTimer'
 import { QuoteBar } from './QuoteBar'
 
@@ -111,6 +111,7 @@ export function TopBar({
         quoteText={quoteText}
         quoteAuthor={quoteAuthor}
         onNext={onNextQuote}
+        onManage={onManageQuotes}
       />
 
       <div className="toolbar">
@@ -130,8 +131,17 @@ export function TopBar({
           aria-keyshortcuts="Control+K Meta+K"
         >
           <SearchIcon width={18} height={18} />
-          <span>搜索</span>
+
         </button>
+        <button className="icon-button" type="button" onClick={onToggleSound} aria-label={preferences.soundEnabled ? '关闭音效' : '开启音效'}>
+          <VolumeIcon width={18} height={18} muted={!preferences.soundEnabled} />
+        </button>
+        <button className="icon-button" type="button" onClick={onToggleTheme} aria-label={`切换主题，当前为${getThemeLabel(preferences.theme)}`}>
+          <ThemeIcon width={18} height={18} />
+        </button>
+        <button className="icon-button" type="button" onClick={onExport} aria-label="导出数据"><DownloadIcon width={18} height={18} /></button>
+        <button className="icon-button" type="button" onClick={onImport} aria-label="导入数据"><UploadIcon width={18} height={18} /></button>
+        {installAvailable ? <button className="icon-button" type="button" onClick={onInstall} aria-label="安装应用"><InstallIcon width={18} height={18} /></button> : null}
         <div
           ref={moreRef}
           className="settings-wrap"
@@ -152,7 +162,7 @@ export function TopBar({
             aria-controls="topbar-more-panel"
           >
             <SettingsIcon width={18} height={18} />
-            <span>更多</span>
+
           </button>
           {showMore ? (
             <div
