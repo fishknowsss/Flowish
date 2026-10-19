@@ -227,14 +227,14 @@ Chinese. Display tracking is tight; body text remains near normal tracking.
 
 ## Layout
 
-Desktop uses a task-first split. The main task board contains a three-part
-overview, today's focus and a wider backlog in one grid. A narrower utility rail
-holds a compact month calendar, fixed rituals and important dates. The page
-itself does not scroll at standard desktop sizes; long task and ritual lists
-scroll inside their panels. Below 1080px or 720px of height, the workspace
-stacks into a scrolling sequence while preserving task-board order. Panels use
-10px gaps and 14px internal padding on desktop, reducing to 8px gaps and 12px
-padding on narrow screens.
+Desktop uses a task-first three-column architecture inside a strict single-page
+viewport (100dvh). Column 1 anchors daily focus: today's overview metrics, focus
+tasks, and a compact upcoming milestone countdown. Column 2 gives the backlog queue
+a dedicated, full-height, spacious workspace. Column 3 pairs a compact month
+calendar at the top with a generous fixed rituals tracking board below. The page
+itself does not scroll on desktop; lists scroll inside their respective panels.
+No gradients are used across panels or typography. Below 1080px or 700px height,
+the workspace transitions into two responsive columns or a single scrolling sequence.
 
 ## Elevation & Depth
 
