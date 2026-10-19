@@ -4,37 +4,36 @@
   --font-text: 'Noto Sans SC Variable', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB',
     'Microsoft YaHei', sans-serif;
 
-  --bg-app: #dedfd8;
-  --bg-paper: #f3f1e9;
-  --bg-paper-soft: #e6e6dc;
-  --bg-rail: #daddd1;
-  --bg-board: #f6f3eb;
-  --bg-paper-muted: #d4d7cc;
-  --bg-line: #d4d1c5;
-  --bg-line-strong: #b8b4a5;
+  --bg-app: #ecefeb;
+  --bg-paper: #fbfaf5;
+  --bg-paper-soft: #f5f3eb;
+  --bg-rail: #eef2ef;
+  --bg-board: #fdfcf7;
+  --bg-line: #d8d5ca;
+  --bg-line-strong: #aaa397;
 
-  --text-primary: #282b27;
-  --text-secondary: #555c53;
-  --text-muted: #696f66;
+  --text-primary: #20201c;
+  --text-secondary: #5a5a50;
+  --text-muted: #8a877d;
 
-  --brand-red: #bd3e27;
-  --brand-orange: #a3561d;
-  --brand-line: #9c301f;
-  --accent-focus: #bd3e27;
-  --accent-backlog: #3e6474;
-  --accent-ritual: #4c6743;
-  --accent-event: #a3561d;
+  --brand-red: #d73516;
+  --brand-orange: #f06d2f;
+  --brand-line: #b52110;
+  --accent-focus: #d73516;
+  --accent-backlog: #476a76;
+  --accent-ritual: #65765a;
+  --accent-event: #f06d2f;
   --accent-surface: #e2dfd4;
   --danger: #a04642;
 
-  --focus-soft: #f3d8cd;
-  --backlog-soft: #dce8eb;
-  --ritual-soft: #dfe9d8;
-  --event-soft: #eee0ce;
+  --focus-soft: #f6ded4;
+  --backlog-soft: #dfe9eb;
+  --ritual-soft: #e2ebdc;
+  --event-soft: #ece0d4;
 
-  --shadow-lg: 0 24px 60px -18px rgba(32, 37, 30, 0.28), 0 6px 16px -6px rgba(32, 37, 30, 0.14);
-  --shadow-md: 0 12px 32px -14px rgba(32, 37, 30, 0.24);
-  --shadow-sm: 0 1px 2px rgba(32, 37, 30, 0.06);
+  --shadow-lg: 0 18px 42px rgba(32, 32, 28, 0.1);
+  --shadow-md: 0 10px 24px rgba(32, 32, 28, 0.07);
+  --shadow-sm: none;
   --shadow-glow: none;
 
   --border-soft: var(--bg-line);
@@ -45,12 +44,12 @@
   --bg-glass: var(--bg-paper);
   --bg-glass-strong: var(--bg-paper-soft);
 
-  --radius-xl: 20px;
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
+  --radius-xl: 2px;
+  --radius-lg: 2px;
+  --radius-md: 2px;
+  --radius-sm: 2px;
 
-  --topbar-height: 56px;
+  --topbar-height: 58px;
   --drawer-width: clamp(320px, 24vw, 380px);
   --dashboard-gap: 10px;
   --main-gutter: 10px;
@@ -60,27 +59,12 @@
   --easing-spring: cubic-bezier(0.2, 0.8, 0.2, 1);
   --card-inner-glow: none;
 
-  --field-bg: rgba(255, 254, 249, 0.72);
-  --field-border: #c4c0b2;
-  --check-bg: rgba(255, 254, 249, 0.74);
-  --check-border: #abb3a2;
+  --field-bg: #fffefa;
+  --field-border: #d6d1c5;
+  --check-bg: #fffefa;
+  --check-border: #cfc8ba;
   --scrollbar-thumb: rgba(32, 32, 28, 0.18);
-  --overlay-bg: rgba(32, 37, 30, 0.28);
-
-  /* Solid Glass: thin work surface < card < nearly opaque floating pane. */
-  --glass-panel-fill: rgba(248, 246, 239, 0.88);
-  --glass-card-fill: rgba(251, 248, 240, 0.94);
-  --glass-popover-fill: rgba(249, 247, 240, 0.98);
-  --glass-rim: rgba(255, 255, 252, 0.98);
-  --brand-rim: #fffaf2;
-  --glass-inner: rgba(255, 255, 252, 0.44);
-  --glass-edge: rgba(62, 65, 50, 0.14);
-  --glass-under: rgba(62, 65, 50, 0.12);
-  --glass-control-fill: rgba(255, 254, 249, 0.66);
-  --glass-state: rgba(60, 70, 51, 0.075);
-  --glass-pane-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--glass-inner), 0 0 0 1px var(--glass-edge), var(--shadow-sm), var(--shadow-md);
-  --glass-control-shadow: inset 0 1px 0 var(--glass-rim), 0 1px 2px var(--glass-under);
-  --glass-floating-shadow: inset 0 1px 0 var(--glass-rim), inset 0 -1px 0 var(--glass-under), 0 0 0 1px var(--glass-edge), var(--shadow-lg);
+  --overlay-bg: rgba(32, 32, 28, 0.22);
 
   --p1-color: #d73516;
   --p2-color: #f06d2f;
@@ -88,26 +72,25 @@
 }
 
 :root[data-theme='obsidian'] {
-  --bg-app: #191b19;
-  --bg-paper: #252825;
-  --bg-paper-soft: #2d302c;
-  --bg-rail: #20231f;
-  --bg-board: #292c28;
-  --bg-paper-muted: #3c4239;
-  --bg-line: #3c423a;
-  --bg-line-strong: #565e52;
+  --bg-app: #151711;
+  --bg-paper: #20211a;
+  --bg-paper-soft: #282920;
+  --bg-rail: #1b1d17;
+  --bg-board: #24251e;
+  --bg-line: #424236;
+  --bg-line-strong: #66614e;
 
-  --text-primary: #eeefea;
-  --text-secondary: #c0c6b9;
-  --text-muted: #a3ac9b;
+  --text-primary: #ece8da;
+  --text-secondary: #b2aa98;
+  --text-muted: #807866;
 
-  --brand-red: #ed987e;
-  --brand-orange: #dfb27b;
-  --brand-line: #f3b39d;
-  --accent-focus: #ed987e;
+  --brand-red: #df5b35;
+  --brand-orange: #f08a51;
+  --brand-line: #c94a2a;
+  --accent-focus: #df5b35;
   --accent-backlog: #8aa7b0;
   --accent-ritual: #94aa83;
-  --accent-event: #dfb27b;
+  --accent-event: #f08a51;
   --accent-surface: #343429;
   --danger: #d4766d;
 
@@ -116,29 +99,17 @@
   --ritual-soft: rgba(148, 170, 131, 0.15);
   --event-soft: rgba(197, 154, 114, 0.15);
 
-  --shadow-lg: 0 24px 60px -18px rgba(0, 0, 0, 0.65), 0 6px 16px -6px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 12px 32px -14px rgba(0, 0, 0, 0.5);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.15);
-  --field-bg: rgba(255, 255, 255, 0.045);
-  --field-border: #50584b;
-  --check-bg: rgba(255, 255, 255, 0.06);
-  --check-border: #67715f;
+  --shadow-lg: 0 18px 42px rgba(0, 0, 0, 0.24);
+  --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.18);
+  --field-bg: #20211a;
+  --field-border: #4a4738;
+  --check-bg: #20211a;
+  --check-border: #4a4738;
   --scrollbar-thumb: rgba(236, 232, 218, 0.16);
   --overlay-bg: rgba(0, 0, 0, 0.55);
-
-  --glass-panel-fill: rgba(43, 47, 41, 0.8);
-  --glass-card-fill: rgba(48, 52, 46, 0.9);
-  --glass-popover-fill: rgba(39, 43, 37, 0.98);
-  --glass-rim: rgba(255, 255, 255, 0.18);
-  --glass-inner: rgba(255, 255, 255, 0.035);
-  --glass-edge: rgba(255, 255, 255, 0.07);
-  --glass-under: rgba(0, 0, 0, 0.24);
-  --glass-control-fill: rgba(255, 255, 255, 0.055);
-  --glass-state: rgba(255, 255, 255, 0.075);
-  --on-accent: #281e17;
 }
 
-/* Compatibility aliases for functional controls. */
+/* Current functional controls share the established Flowish palette. */
 :root {
   --font-sans: var(--font-text);
   --font-mono: ui-monospace, SFMono-Regular, monospace;
@@ -167,7 +138,6 @@
   --radius-control: var(--radius-sm);
   --radius-dialog: var(--radius-lg);
   --shadow-dialog: var(--shadow-lg);
-  --shadow-popover: var(--shadow-lg);
   --ease-out: var(--easing-fluid);
   --z-toast: 100;
 }

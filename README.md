@@ -2,6 +2,8 @@
 
 Flowish 是一个纯前端的个人计划面板，用来整理今日重点、积压事项、固定节律、日历信号和重要日期。项目使用 React、TypeScript 与 Vite，不需要后端或账号系统。
 
+视觉采用 Solid Glass 材质：在原始布局之后独立加载 `src/styles/solid-glass.css`，提供浅、深两种烟灰玻璃表面与边缘高光，不改变栏目顺序、尺寸或响应式断点。适配说明见 [docs/solid-glass-2026-10-19.md](docs/solid-glass-2026-10-19.md)，来源及许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
 ## 功能
 
 - 管理今日重点和积压事项，支持完成、编辑、删除与排序；可拖动，也可点击排序手柄或用方向键调整。
@@ -15,8 +17,6 @@ Flowish 是一个纯前端的个人计划面板，用来整理今日重点、积
 ## 数据与隐私
 
 Flowish 没有内置云同步。任务、短记、节律记录、重要日期和偏好设置都保存在当前站点来源的 `localStorage` 中，主数据键为 `flowish_app`。检测到损坏或过新版本的数据时，应用会先把原始内容保存在 `flowish_app_recovery`，再回退到可启动状态。
-
-界面采用适配自 [Solid Glass](https://github.com/deeplethe/solid-glass) 的本地材质系统，保留 Flowish 原有功能和数据契约。来源与许可信息见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)，视觉规范见 [DESIGN.md](./DESIGN.md)。
 
 导入通过校验的备份前，应用会把当前数据保存在 `flowish_app_import_backup`。这个副本仍属于浏览器站点数据，不能替代手动导出的 JSON 文件。
 

@@ -286,6 +286,24 @@ function App() {
               commands.tasks.move('focus', sourceBucket, taskId, targetId)
             }
           />
+        </section>
+
+        <section className="time-board" aria-label="时间板">
+          <CalendarWidget
+            appData={appData}
+            todayKey={todayKey}
+            selectedDate={selectedDate}
+            viewDate={calendarMonth}
+            onPrevMonth={() => setCalendarMonthOverride(addMonths(calendarMonth, -1))}
+            onNextMonth={() => setCalendarMonthOverride(addMonths(calendarMonth, 1))}
+            onToday={() => selectDate(todayKey)}
+            onSelectDate={selectDate}
+            onOpenPlanner={() => setDatePlannerOpen(true)}
+            onOpenStage={() => {
+              playFeedbackSound('surface', appData.preferences.soundEnabled)
+              setCalendarStageOpen(true)
+            }}
+          />
 
           <CountdownPanel
             events={appData.events}
@@ -302,7 +320,7 @@ function App() {
           />
         </section>
 
-        <section className="tasks-rail" aria-label="积压事项工作区">
+        <aside className="capture-rail" aria-label="收纳区">
           <BacklogPanel
             tasks={appData.backlogTasks}
             onAdd={(text, schedule) => {
@@ -323,24 +341,6 @@ function App() {
               commands.tasks.move('backlog', sourceBucket, taskId, targetId)
             }
             onClearCompleted={() => offerUndo(commands.tasks.clearCompleted('backlog'))}
-          />
-        </section>
-
-        <aside className="time-rail" aria-label="时间与节律">
-          <CalendarWidget
-            appData={appData}
-            todayKey={todayKey}
-            selectedDate={selectedDate}
-            viewDate={calendarMonth}
-            onPrevMonth={() => setCalendarMonthOverride(addMonths(calendarMonth, -1))}
-            onNextMonth={() => setCalendarMonthOverride(addMonths(calendarMonth, 1))}
-            onToday={() => selectDate(todayKey)}
-            onSelectDate={selectDate}
-            onOpenPlanner={() => setDatePlannerOpen(true)}
-            onOpenStage={() => {
-              playFeedbackSound('surface', appData.preferences.soundEnabled)
-              setCalendarStageOpen(true)
-            }}
           />
 
           <RitualsPanel
