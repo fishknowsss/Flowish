@@ -7,11 +7,8 @@ import { fileURLToPath } from 'node:url'
 const HOST = '127.0.0.1'
 const START_PORT = 4173
 const MAX_PORT = 4190
+const SERVER_START_TIMEOUT_MS = 30_000
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-
-function wait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
 
 function canListen(host, port) {
   return new Promise((resolve) => {
@@ -37,34 +34,50 @@ async function findAvailablePort() {
 function waitForServer(url, child) {
   return new Promise((resolve, reject) => {
     let settled = false
+    let retryTimer = null
 
-    const onExit = (code, signal) => {
+    const finish = (callback) => {
       if (settled) return
       settled = true
-      reject(new Error(`开发服务器提前退出，code=${code ?? 'null'} signal=${signal ?? 'null'}`))
+      clearTimeout(timeoutTimer)
+      if (retryTimer) clearTimeout(retryTimer)
+      child.off('exit', onExit)
+      callback()
+    }
+
+    const onExit = (code, signal) => {
+      finish(() =>
+        reject(new Error(`开发服务器提前退出，code=${code ?? 'null'} signal=${signal ?? 'null'}`)),
+      )
     }
 
     child.once('exit', onExit)
+
+    const timeoutTimer = setTimeout(() => {
+      if (!child.killed) child.kill()
+      finish(() => reject(new Error('开发服务器启动超时，请检查终端中的 Vite 输出。')))
+    }, SERVER_START_TIMEOUT_MS)
+
+    const retry = () => {
+      if (settled || retryTimer) return
+      retryTimer = setTimeout(() => {
+        retryTimer = null
+        tryRequest()
+      }, 400)
+    }
 
     const tryRequest = () => {
       const req = http.get(url, (res) => {
         res.resume()
         if (res.statusCode && res.statusCode < 500) {
-          if (settled) return
-          settled = true
-          child.off('exit', onExit)
-          resolve()
+          finish(resolve)
           return
         }
 
-        req.destroy()
+        retry()
       })
 
-      req.on('error', async () => {
-        if (settled) return
-        await wait(500)
-        tryRequest()
-      })
+      req.on('error', retry)
 
       req.setTimeout(1000, () => {
         req.destroy()

@@ -11,9 +11,19 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
 ldp-temp
 .agent/
 .agents/
+
+# Test and browser automation artifacts
+.playwright-cli/
+coverage/
+output/
+playwright-report/
+test-results/
 
 # Editor directories and files
 .vscode/*

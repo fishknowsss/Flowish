@@ -16,6 +16,7 @@ declare module 'lunar-javascript' {
     ) => {
       getName: () => string
       getTarget: () => string
+      isWork: () => boolean
     } | null
   }
 }

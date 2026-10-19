@@ -2,15 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { formatTopbarDate } from '../lib/date'
 import type { Preferences } from '../store/appData'
-import {
-  DownloadIcon,
-  InstallIcon,
-  SearchIcon,
-  SettingsIcon,
-  ThemeIcon,
-  UploadIcon,
-  VolumeIcon,
-} from './Icon'
+import { SearchIcon, SettingsIcon } from './Icon'
 import { PomodoroTimer } from './PomodoroTimer'
 import { QuoteBar } from './QuoteBar'
 
@@ -29,6 +21,7 @@ interface TopBarProps {
   onToggleMotion: () => void
   onToggleQuoteMode: () => void
   onToggleCalendarDefault: () => void
+  onPomodoroConfigChange: (config: Preferences['pomodoro']) => void
   onExport: () => void
   onImport: () => void
   onInstall: () => void
@@ -36,7 +29,7 @@ interface TopBarProps {
 }
 
 function getThemeLabel(theme: Preferences['theme']) {
-  return theme === 'pearl' ? '普通' : '深色'
+  return theme === 'pearl' ? '浅色' : '深色'
 }
 
 export function TopBar({
@@ -52,34 +45,55 @@ export function TopBar({
   onToggleMotion,
   onToggleQuoteMode,
   onToggleCalendarDefault,
+  onPomodoroConfigChange,
   onExport,
   onImport,
   onInstall,
   onOpenSearch,
 }: TopBarProps) {
-  const [showSettings, setShowSettings] = useState(false)
-  const settingsRef = useRef<HTMLDivElement | null>(null)
+  const [showMore, setShowMore] = useState(false)
+  const moreRef = useRef<HTMLDivElement | null>(null)
+  const moreButtonRef = useRef<HTMLButtonElement | null>(null)
+  const firstActionRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
-    if (!showSettings) return
+    if (!showMore) return
+
+    firstActionRef.current?.focus()
 
     const handlePointerDown = (event: PointerEvent) => {
-      if (!settingsRef.current?.contains(event.target as Node)) {
-        setShowSettings(false)
+      if (!moreRef.current?.contains(event.target as Node)) {
+        setShowMore(false)
       }
     }
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setShowSettings(false)
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        moreButtonRef.current?.focus({ preventScroll: true })
+        setShowMore(false)
+        return
+      }
+      if (event.key !== 'Escape') return
+      if (document.querySelector('dialog[open]')) return
+      event.preventDefault()
+      event.stopPropagation()
+      setShowMore(false)
+      moreButtonRef.current?.focus()
     }
 
     window.addEventListener('pointerdown', handlePointerDown)
-    window.addEventListener('keydown', handleEscape)
+    document.addEventListener('keydown', handleEscape, true)
     return () => {
       window.removeEventListener('pointerdown', handlePointerDown)
-      window.removeEventListener('keydown', handleEscape)
+      document.removeEventListener('keydown', handleEscape, true)
     }
-  }, [showSettings])
+  }, [showMore])
+
+  const runPanelAction = (action: () => void) => {
+    setShowMore(false)
+    moreButtonRef.current?.focus({ preventScroll: true })
+    action()
+  }
 
   return (
     <header className="topbar glass-panel">
@@ -97,80 +111,135 @@ export function TopBar({
         quoteText={quoteText}
         quoteAuthor={quoteAuthor}
         onNext={onNextQuote}
-        onManage={onManageQuotes}
       />
 
       <div className="toolbar">
         <PomodoroTimer
-          defaultMinutes={preferences.pomodoroMinutes}
+          config={preferences.pomodoro}
           soundEnabled={preferences.soundEnabled}
+          onConfigChange={onPomodoroConfigChange}
         />
         <button
           className="icon-button"
           type="button"
-          onClick={onOpenSearch}
+          onClick={() => {
+            setShowMore(false)
+            onOpenSearch()
+          }}
           aria-label="搜索"
-          title="搜索 (Ctrl+K)"
+          aria-keyshortcuts="Control+K Meta+K"
         >
           <SearchIcon width={18} height={18} />
+          <span>搜索</span>
         </button>
-        <button
-          className="icon-button"
-          type="button"
-          onClick={onToggleSound}
-          aria-label={preferences.soundEnabled ? '关闭音效' : '开启音效'}
-          title={preferences.soundEnabled ? '关闭音效' : '开启音效'}
+        <div
+          ref={moreRef}
+          className="settings-wrap"
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+              setShowMore(false)
+            }
+          }}
         >
-          <VolumeIcon width={18} height={18} muted={!preferences.soundEnabled} />
-        </button>
-        <button
-          className="icon-button"
-          type="button"
-          onClick={onToggleTheme}
-          aria-label={`切换主题，当前为${getThemeLabel(preferences.theme)}`}
-          title={`切换主题，当前为${getThemeLabel(preferences.theme)}`}
-        >
-          <ThemeIcon width={18} height={18} />
-        </button>
-        <button className="icon-button" type="button" onClick={onExport} aria-label="导出数据" title="导出数据">
-          <DownloadIcon width={18} height={18} />
-        </button>
-        <button className="icon-button" type="button" onClick={onImport} aria-label="导入数据" title="导入数据">
-          <UploadIcon width={18} height={18} />
-        </button>
-        {installAvailable ? (
-          <button className="icon-button" type="button" onClick={onInstall} aria-label="安装应用" title="安装应用">
-            <InstallIcon width={18} height={18} />
-          </button>
-        ) : null}
-        <div ref={settingsRef} className="settings-wrap">
           <button
+            ref={moreButtonRef}
             className="icon-button"
             type="button"
-            onClick={() => setShowSettings((value) => !value)}
-            aria-label="打开偏好设置"
-            aria-expanded={showSettings}
-            title="偏好设置"
+            onClick={() => setShowMore((value) => !value)}
+            aria-label={showMore ? '关闭更多' : '打开更多'}
+            aria-expanded={showMore}
+            aria-haspopup="dialog"
+            aria-controls="topbar-more-panel"
           >
             <SettingsIcon width={18} height={18} />
+            <span>更多</span>
           </button>
-          {showSettings ? (
-            <div className="settings-popover glass-panel">
-              <button className="toggle-row" type="button" onClick={onToggleTheme}>
-                <span>颜色模式</span>
+          {showMore ? (
+            <div
+              id="topbar-more-panel"
+              className="settings-popover glass-panel"
+              role="dialog"
+              aria-label="更多设置"
+            >
+              <button
+                ref={firstActionRef}
+                className="toggle-row"
+                type="button"
+                onClick={() => runPanelAction(onManageQuotes)}
+              >
+                <span>短句管理</span>
+                <strong>管理</strong>
+              </button>
+              {installAvailable ? (
+                <button
+                  className="toggle-row"
+                  type="button"
+                  onClick={() => runPanelAction(onInstall)}
+                >
+                  <span>安装应用</span>
+                  <strong>安装</strong>
+                </button>
+              ) : null}
+              <button
+                className="toggle-row"
+                type="button"
+                onClick={onToggleTheme}
+                aria-pressed={preferences.theme === 'obsidian'}
+              >
+                <span>主题</span>
                 <strong>{getThemeLabel(preferences.theme)}</strong>
               </button>
-              <button className="toggle-row" type="button" onClick={onToggleMotion}>
-                <span>动效节奏</span>
+              <button
+                className="toggle-row"
+                type="button"
+                onClick={onToggleSound}
+                aria-pressed={preferences.soundEnabled}
+              >
+                <span>音效</span>
+                <strong>{preferences.soundEnabled ? '开启' : '关闭'}</strong>
+              </button>
+              <button
+                className="toggle-row"
+                type="button"
+                onClick={onToggleMotion}
+                aria-pressed={preferences.reducedMotion}
+              >
+                <span>动效</span>
                 <strong>{preferences.reducedMotion ? '简化' : '标准'}</strong>
               </button>
-              <button className="toggle-row" type="button" onClick={onToggleQuoteMode}>
+              <button
+                className="toggle-row"
+                type="button"
+                onClick={onToggleQuoteMode}
+                aria-pressed={preferences.quoteMode === 'random'}
+              >
                 <span>短句模式</span>
-                <strong>{preferences.quoteMode === 'daily' ? '每日一句' : '随机切换'}</strong>
+                <strong>{preferences.quoteMode === 'daily' ? '每日' : '随机'}</strong>
               </button>
-              <button className="toggle-row" type="button" onClick={onToggleCalendarDefault}>
-                <span>启动即展开月历</span>
+              <button
+                className="toggle-row"
+                type="button"
+                onClick={onToggleCalendarDefault}
+                aria-pressed={preferences.calendarExpandedDefault}
+              >
+                <span>启动月历</span>
                 <strong>{preferences.calendarExpandedDefault ? '开启' : '关闭'}</strong>
+              </button>
+              <button
+                className="toggle-row"
+                type="button"
+                onClick={() => runPanelAction(onImport)}
+              >
+                <span>导入数据</span>
+                <strong>选择</strong>
+              </button>
+              <button
+                className="toggle-row"
+                type="button"
+                onClick={() => runPanelAction(onExport)}
+              >
+                <span>导出数据</span>
+                <strong>下载</strong>
               </button>
             </div>
           ) : null}

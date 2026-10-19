@@ -1,12 +1,26 @@
 import { BUILTIN_QUOTES } from '../lib/quotes'
 
-export const APP_DATA_VERSION = 1
+export const APP_DATA_VERSION = 2
 export const APP_DATA_STORAGE_KEY = 'flowish_app'
+export const DEFAULT_POMODORO_MINUTES = 25
+export const DEFAULT_POMODORO_SHORT_BREAK_MINUTES = 5
+export const DEFAULT_POMODORO_LONG_BREAK_MINUTES = 15
+export const DEFAULT_POMODORO_LONG_BREAK_INTERVAL = 4
+export const MIN_POMODORO_MINUTES = 1
+export const MAX_POMODORO_MINUTES = 180
+export const MIN_POMODORO_LONG_BREAK_INTERVAL = 2
+export const MAX_POMODORO_LONG_BREAK_INTERVAL = 12
 
 export type TaskBucket = 'focus' | 'backlog' | 'date'
 export type ThemeMode = 'pearl' | 'obsidian'
 export type QuoteMode = 'daily' | 'random'
 export type TaskPriority = 'p1' | 'p2' | 'p3' | null
+export type FocusTimeSlot = 'morning' | 'afternoon' | 'evening' | 'lateNight'
+
+export interface TaskSchedule {
+  timeSlot?: FocusTimeSlot | null
+  dueDate?: string | null
+}
 
 export interface Task {
   id: string
@@ -16,6 +30,8 @@ export interface Task {
   updatedAt: string
   bucket: TaskBucket
   priority: TaskPriority
+  timeSlot: FocusTimeSlot | null
+  dueDate: string | null
 }
 
 export interface Ritual {
@@ -49,6 +65,13 @@ export interface Quote {
   source: 'builtin' | 'custom'
 }
 
+export interface PomodoroConfig {
+  focusMinutes: number
+  shortBreakMinutes: number
+  longBreakMinutes: number
+  roundsPerCycle: number
+}
+
 export interface Preferences {
   soundEnabled: boolean
   theme: ThemeMode
@@ -56,7 +79,7 @@ export interface Preferences {
   quoteMode: QuoteMode
   calendarExpandedDefault: boolean
   lastActiveDate: string
-  pomodoroMinutes: number
+  pomodoro: PomodoroConfig
 }
 
 export interface AppData {
@@ -75,7 +98,12 @@ export const createId = (prefix: string) =>
 
 const makeTimestamp = () => new Date().toISOString()
 
-export const createTask = (text: string, bucket: TaskBucket, priority: TaskPriority = null): Task => {
+export const createTask = (
+  text: string,
+  bucket: TaskBucket,
+  priority: TaskPriority = null,
+  schedule: TaskSchedule = {},
+): Task => {
   const timestamp = makeTimestamp()
   return {
     id: createId(bucket),
@@ -85,6 +113,8 @@ export const createTask = (text: string, bucket: TaskBucket, priority: TaskPrior
     updatedAt: timestamp,
     bucket,
     priority,
+    timeSlot: bucket === 'focus' ? schedule.timeSlot ?? null : null,
+    dueDate: bucket === 'backlog' ? schedule.dueDate ?? null : null,
   }
 }
 
@@ -115,8 +145,8 @@ export const createEvent = (
 export const defaultAppData = (todayKey: string, reducedMotion = false): AppData => ({
   version: APP_DATA_VERSION,
   focusTasks: [
-    createTask('打磨今天最重要的 3 件事', 'focus', 'p1'),
-    createTask('把一个积压事项推进到可交付状态', 'focus', 'p2'),
+    createTask('打磨今天最重要的 3 件事', 'focus', 'p1', { timeSlot: 'morning' }),
+    createTask('把一个积压事项推进到可交付状态', 'focus', 'p2', { timeSlot: 'afternoon' }),
   ],
   backlogTasks: [
     createTask('整理灵感、链接与临时想法', 'backlog'),
@@ -132,7 +162,7 @@ export const defaultAppData = (todayKey: string, reducedMotion = false): AppData
     createEvent('月度复盘', todayKey, 'countup'),
     createEvent('项目里程碑', shiftDateKey(todayKey, 12), 'countdown'),
   ],
-  quotes: BUILTIN_QUOTES,
+  quotes: BUILTIN_QUOTES.map((quote) => ({ ...quote })),
   preferences: {
     soundEnabled: false,
     theme: 'pearl',
@@ -140,7 +170,12 @@ export const defaultAppData = (todayKey: string, reducedMotion = false): AppData
     quoteMode: 'daily',
     calendarExpandedDefault: false,
     lastActiveDate: todayKey,
-    pomodoroMinutes: 25,
+    pomodoro: {
+      focusMinutes: DEFAULT_POMODORO_MINUTES,
+      shortBreakMinutes: DEFAULT_POMODORO_SHORT_BREAK_MINUTES,
+      longBreakMinutes: DEFAULT_POMODORO_LONG_BREAK_MINUTES,
+      roundsPerCycle: DEFAULT_POMODORO_LONG_BREAK_INTERVAL,
+    },
   },
 })
 

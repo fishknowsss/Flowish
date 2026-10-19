@@ -14,8 +14,17 @@ const topbarDateFormatter = new Intl.DateTimeFormat('zh-CN', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
-  weekday: 'long',
+  weekday: 'short',
 })
+
+const DATE_KEY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
+const MILLISECONDS_PER_DAY = 86_400_000
+
+interface DateKeyParts {
+  year: number
+  month: number
+  day: number
+}
 
 export interface CalendarCell {
   dateKey: string
@@ -25,6 +34,41 @@ export interface CalendarCell {
 
 export const getTodayKey = () => toDateKey(new Date())
 
+function getDateKeyParts(dateKey: string): DateKeyParts | null {
+  const match = DATE_KEY_PATTERN.exec(dateKey)
+  if (!match) return null
+
+  const year = Number(match[1])
+  const month = Number(match[2])
+  const day = Number(match[3])
+  if (year < 1000 || month < 1 || month > 12 || day < 1) return null
+
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate()
+  if (day > daysInMonth) return null
+
+  return { year, month, day }
+}
+
+function requireDateKeyParts(dateKey: string): DateKeyParts {
+  const parts = getDateKeyParts(dateKey)
+  if (!parts) {
+    throw new RangeError(`无效日期：${dateKey}`)
+  }
+  return parts
+}
+
+function formatDateKey({ year, month, day }: DateKeyParts): string {
+  return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+}
+
+function isLeapYear(year: number): boolean {
+  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)
+}
+
+export function isDateKey(value: unknown): value is string {
+  return typeof value === 'string' && getDateKeyParts(value) !== null
+}
+
 export function toDateKey(date: Date): string {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -33,8 +77,17 @@ export function toDateKey(date: Date): string {
 }
 
 export function parseDateKey(dateKey: string): Date {
-  const [year, month, day] = dateKey.split('-').map(Number)
+  const { year, month, day } = requireDateKeyParts(dateKey)
   return new Date(year, month - 1, day, 12)
+}
+
+function getDateOrdinal(dateKey: string): number {
+  const { year, month, day } = requireDateKeyParts(dateKey)
+  return Math.floor(Date.UTC(year, month - 1, day) / MILLISECONDS_PER_DAY)
+}
+
+export function differenceInCalendarDays(targetDateKey: string, baseDateKey: string): number {
+  return getDateOrdinal(targetDateKey) - getDateOrdinal(baseDateKey)
 }
 
 export function formatTopbarDate(dateKey: string) {
@@ -82,38 +135,65 @@ export function buildCalendarGrid(viewDate: Date): CalendarCell[] {
   })
 }
 
-export function daysUntil(dateKey: string) {
-  const target = parseDateKey(dateKey)
-  const today = parseDateKey(getTodayKey())
-  return Math.ceil((target.getTime() - today.getTime()) / 86400000)
+export function daysUntil(dateKey: string, baseDateKey = getTodayKey()) {
+  return differenceInCalendarDays(dateKey, baseDateKey)
 }
 
 export function getEventTypeLabel(type: EventItem['type']) {
   if (type === 'countdown') return '倒数日'
-  if (type === 'countup') return '正数日'
-  return '年纪日'
+  if (type === 'countup') return '累计日'
+  return '每年'
 }
 
 export function getAnnualOccurrenceDateKey(dateKey: string, baseDateKey = getTodayKey()) {
-  const eventDate = parseDateKey(dateKey)
-  const baseDate = parseDateKey(baseDateKey)
-  const occurrence = new Date(baseDate.getFullYear(), eventDate.getMonth(), eventDate.getDate(), 12)
+  const eventDate = requireDateKeyParts(dateKey)
+  const baseDate = requireDateKeyParts(baseDateKey)
+  let occurrenceYear = baseDate.year
 
-  if (occurrence.getTime() < baseDate.getTime()) {
-    occurrence.setFullYear(baseDate.getFullYear() + 1)
+  if (eventDate.month === 2 && eventDate.day === 29) {
+    while (!isLeapYear(occurrenceYear)) {
+      occurrenceYear += 1
+    }
   }
 
-  return toDateKey(occurrence)
+  let occurrence = formatDateKey({
+    year: occurrenceYear,
+    month: eventDate.month,
+    day: eventDate.day,
+  })
+
+  if (differenceInCalendarDays(occurrence, baseDateKey) < 0) {
+    occurrenceYear += 1
+    if (eventDate.month === 2 && eventDate.day === 29) {
+      while (!isLeapYear(occurrenceYear)) {
+        occurrenceYear += 1
+      }
+    }
+    occurrence = formatDateKey({
+      year: occurrenceYear,
+      month: eventDate.month,
+      day: eventDate.day,
+    })
+  }
+
+  return occurrence
 }
 
 export function getEventRelevantDateKey(event: EventItem, baseDateKey = getTodayKey()) {
   return event.type === 'annual' ? getAnnualOccurrenceDateKey(event.date, baseDateKey) : event.date
 }
 
+export function eventOccursOnDate(event: EventItem, dateKey: string): boolean {
+  requireDateKeyParts(dateKey)
+  if (event.type !== 'annual') return event.date === dateKey
+
+  const eventDate = requireDateKeyParts(event.date)
+  const occurrenceDate = requireDateKeyParts(dateKey)
+  return eventDate.month === occurrenceDate.month && eventDate.day === occurrenceDate.day
+}
+
 export function getEventDays(event: EventItem, baseDateKey = getTodayKey()) {
-  const target = parseDateKey(getEventRelevantDateKey(event, baseDateKey))
-  const baseDate = parseDateKey(baseDateKey)
-  return Math.ceil((target.getTime() - baseDate.getTime()) / 86400000)
+  return differenceInCalendarDays(getEventRelevantDateKey(event, baseDateKey), baseDateKey)
 }
 
 export function getEventDayCopy(event: EventItem, baseDateKey = getTodayKey()) {
@@ -152,7 +232,7 @@ export function getEventDayCopy(event: EventItem, baseDateKey = getTodayKey()) {
 }
 
 export function compareDateKeys(a: string, b: string) {
-  return parseDateKey(a).getTime() - parseDateKey(b).getTime()
+  return differenceInCalendarDays(a, b)
 }
 
 export function getDailySeed(dateKey: string, modulo: number) {

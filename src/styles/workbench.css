@@ -1,0 +1,1509 @@
+/* Shared workbench geometry */
+
+.workspace-board {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(280px, 3fr) minmax(430px, 5fr) minmax(360px, 4fr);
+  grid-template-rows: 112px minmax(360px, auto) minmax(260px, auto);
+  grid-template-areas:
+    "summary rituals calendar"
+    "focus rituals calendar"
+    "focus backlog dates";
+  gap: 12px;
+  align-items: stretch;
+}
+
+.today-summary {
+  grid-area: summary;
+}
+
+.task-panel-focus {
+  grid-area: focus;
+}
+
+.rituals-panel {
+  grid-area: rituals;
+}
+
+.task-panel-backlog {
+  grid-area: backlog;
+}
+
+.calendar-panel.sidebar {
+  grid-area: calendar;
+}
+
+.countdown-panel {
+  grid-area: dates;
+}
+
+.task-panel-focus,
+.rituals-panel,
+.calendar-panel {
+  min-height: 440px;
+}
+
+.task-panel-backlog,
+.countdown-panel {
+  min-height: 250px;
+}
+
+.task-panel-focus,
+.today-summary {
+  border-left: 3px solid var(--accent);
+}
+
+.rituals-panel {
+  border-left: 3px solid var(--green);
+}
+
+.task-panel-backlog,
+.calendar-panel {
+  border-left: 3px solid var(--blue);
+}
+
+.countdown-panel {
+  border-left: 3px solid var(--orange);
+}
+
+.task-list,
+.ritual-chip-grid,
+.milestone-grid,
+.selected-agenda-list {
+  scrollbar-color: var(--line-strong) transparent;
+  scrollbar-width: thin;
+}
+
+.task-list::-webkit-scrollbar,
+.ritual-chip-grid::-webkit-scrollbar,
+.milestone-grid::-webkit-scrollbar,
+.selected-agenda-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.task-list::-webkit-scrollbar-thumb,
+.ritual-chip-grid::-webkit-scrollbar-thumb,
+.milestone-grid::-webkit-scrollbar-thumb,
+.selected-agenda-list::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background: var(--line-strong);
+}
+
+/* Today summary */
+
+.today-summary {
+  display: grid;
+  min-height: 112px;
+  grid-template-rows: auto 4px auto;
+  gap: 8px;
+  padding: 12px;
+}
+
+.today-summary-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.today-summary-head > div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.today-summary-head span,
+.today-summary-head p {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.today-summary-head strong {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.today-progress {
+  width: 100%;
+  height: 4px;
+}
+
+.today-summary-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.today-summary-stats > div {
+  min-width: 0;
+  padding-inline: 8px;
+  border-left: 1px solid var(--line);
+}
+
+.today-summary-stats > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.today-summary-stats > div:last-child {
+  padding-right: 0;
+}
+
+.today-summary-stats strong,
+.today-summary-stats span {
+  display: block;
+}
+
+.today-summary-stats strong {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.today-summary-stats span {
+  margin-top: 2px;
+  overflow: hidden;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.today-summary-stats .ritual-stat strong {
+  color: var(--green);
+}
+
+/* Task panels */
+
+.task-panel {
+  overflow: hidden;
+}
+
+.task-composer {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.task-panel-focus .task-composer {
+  grid-template-columns: minmax(0, 1fr) 36px;
+}
+
+.task-panel-focus .task-composer > .field {
+  grid-column: 1 / -1;
+}
+
+.composer-schedule-select,
+.composer-due-input {
+  min-height: 36px;
+  padding: 6px 8px;
+  background: var(--surface-subtle);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.composer-schedule-select {
+  width: 88px;
+}
+
+.composer-due-input {
+  width: 124px;
+}
+
+.task-schedule-select,
+.task-due-input {
+  min-height: 28px;
+  padding: 3px 6px;
+  background: var(--surface-subtle);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.task-schedule-select {
+  width: 78px;
+}
+
+.task-due-input {
+  width: 120px;
+}
+
+.task-list,
+.ritual-chip-grid,
+.milestone-grid {
+  min-width: 0;
+  min-height: 0;
+  margin-top: 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.task-card {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 64px;
+  grid-template-columns: 54px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  transition: background-color 140ms ease, opacity 140ms ease;
+}
+
+.task-card:last-child {
+  border-bottom: 0;
+}
+
+.task-card:hover,
+.task-card:focus-within {
+  background: var(--surface-subtle);
+}
+
+.task-card.dragging,
+.ritual-chip.dragging {
+  opacity: 0.5;
+}
+
+.task-card.drag-over,
+.ritual-chip.drag-over {
+  background: var(--blue-soft);
+  outline: 1px solid var(--blue);
+  outline-offset: -1px;
+}
+
+.task-card.just-completed {
+  animation: completion-pulse 420ms var(--ease-out);
+}
+
+.task-leading {
+  min-width: 0;
+  gap: 2px;
+}
+
+.check-button,
+.ritual-check {
+  display: inline-grid;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  min-height: 24px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 1px;
+  background: var(--surface);
+  color: var(--on-accent);
+}
+
+.task-card.completed .check-button,
+.ritual-check.checked {
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.check-button:hover,
+.ritual-check:hover {
+  border-color: var(--green);
+}
+
+.priority-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.priority-dot.p1 {
+  background: var(--accent);
+}
+
+.priority-dot.p2 {
+  background: var(--orange);
+}
+
+.priority-dot.p3 {
+  background: var(--blue);
+}
+
+.drag-button {
+  min-width: 22px;
+  min-height: 28px;
+  cursor: grab;
+  opacity: 0.62;
+}
+
+.drag-button:active {
+  cursor: grabbing;
+}
+
+.task-copy {
+  min-width: 0;
+}
+
+.task-title,
+.task-copy > p {
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  cursor: text;
+}
+
+.task-note,
+.task-copy > span {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.task-card.completed .task-title,
+.task-card.completed .task-copy > p,
+.stage-task-title.completed,
+.selected-agenda-item .completed {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.task-meta-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.task-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.task-card:hover .task-actions,
+.task-card:focus-within .task-actions,
+.task-actions.reordering {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.task-card.reordering .task-actions {
+  top: auto;
+  right: 8px;
+  bottom: 8px;
+}
+
+.order-button {
+  min-height: 28px;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+
+.task-card.reordering {
+  padding-bottom: 44px;
+}
+
+/* Ritual panel */
+
+.rituals-panel {
+  overflow: hidden;
+}
+
+.ritual-progress {
+  width: 100%;
+  height: 4px;
+  margin-top: 8px;
+}
+
+.ritual-progress::-webkit-progress-value {
+  background: var(--green);
+}
+
+.ritual-progress::-moz-progress-bar {
+  background: var(--green);
+}
+
+.rituals-panel .inline-composer {
+  grid-template-columns: minmax(0, 1fr) 36px;
+}
+
+.ritual-chip-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.ritual-chip {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 88px;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  transition: background-color 140ms ease, opacity 140ms ease;
+}
+
+.ritual-chip:last-child {
+  border-bottom: 0;
+}
+
+.ritual-chip:hover,
+.ritual-chip:focus-within {
+  background: var(--surface-subtle);
+}
+
+.ritual-chip.done {
+  background: var(--green-soft);
+}
+
+.ritual-chip-top {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+}
+
+.ritual-chip-body {
+  min-width: 0;
+}
+
+.ritual-chip-label {
+  display: block;
+  min-height: 20px;
+  padding-right: 68px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: text;
+}
+
+.ritual-chip.done .ritual-chip-label {
+  color: var(--ink-soft);
+}
+
+.ritual-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ritual-streak-icon.warm,
+.ritual-streak-icon.hot {
+  color: var(--orange);
+}
+
+.ritual-week {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 36px minmax(0, 1fr);
+  align-items: end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ritual-week-title {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.ritual-week-days {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(7, minmax(24px, 1fr));
+  gap: 4px;
+}
+
+.ritual-week-day {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  justify-items: center;
+}
+
+.ritual-week-day-label {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.ritual-week-day i {
+  width: 100%;
+  height: 4px;
+  border-radius: 0;
+}
+
+.ritual-week-day.complete .ritual-week-day-label {
+  color: var(--green);
+}
+
+.ritual-week-day.complete i {
+  background: var(--green);
+}
+
+.ritual-chip-footer {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  gap: 2px;
+  padding: 1px;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.ritual-chip-footer .ghost-button,
+.ritual-chip-footer .drag-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ritual-chip:hover .ritual-chip-footer,
+.ritual-chip:focus-within .ritual-chip-footer {
+  border-color: var(--line);
+  background: var(--surface);
+}
+
+.ritual-chip:hover .ritual-chip-footer .ghost-button,
+.ritual-chip:hover .ritual-chip-footer .drag-button,
+.ritual-chip:focus-within .ritual-chip-footer .ghost-button,
+.ritual-chip:focus-within .ritual-chip-footer .drag-button,
+.ritual-chip.reordering .ritual-chip-footer .order-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ritual-chip.reordering {
+  padding-bottom: 44px;
+}
+
+.ritual-chip.reordering .ritual-chip-footer {
+  top: auto;
+  bottom: 8px;
+  border-color: var(--line);
+}
+
+/* Calendar */
+
+.calendar-panel {
+  display: grid;
+  overflow: hidden;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.calendar-header {
+  min-width: 0;
+}
+
+.calendar-controls {
+  min-width: 0;
+  gap: 2px;
+}
+
+.calendar-controls .icon-button {
+  min-width: 30px;
+  min-height: 30px;
+  padding-inline: 6px;
+  font-size: 12px;
+}
+
+.calendar-label {
+  min-width: 72px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.calendar-body {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  grid-template-rows: minmax(264px, 1fr) auto;
+  gap: 8px;
+  padding: 8px 10px 10px;
+}
+
+.calendar-month {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  grid-template-rows: 22px minmax(0, 1fr);
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendar-weekdays {
+  align-items: center;
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.calendar-grid {
+  min-width: 0;
+  min-height: 0;
+  grid-template-rows: repeat(6, minmax(40px, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.calendar-day {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 40px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 1px;
+  padding: 3px 4px;
+  overflow: hidden;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.calendar-day:hover {
+  background: var(--surface-subtle);
+}
+
+.calendar-day.outside {
+  background: var(--paper-1);
+  color: var(--ink-faint);
+}
+
+.calendar-day.weekend:not(.selected):not(.today) {
+  background: color-mix(in srgb, var(--paper-1) 72%, var(--surface));
+}
+
+.calendar-day.selected {
+  background: var(--blue-soft);
+  color: var(--blue);
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+}
+
+.calendar-day.today,
+.calendar-day.today-selected {
+  color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.day-number-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+}
+
+.day-number-meta {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 2px;
+}
+
+.day-number {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.day-flag {
+  display: inline-grid;
+  width: 15px;
+  height: 15px;
+  place-items: center;
+  border-radius: 0;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.day-agenda-count {
+  display: inline-grid;
+  min-width: 15px;
+  height: 15px;
+  place-items: center;
+  padding-inline: 2px;
+  border: 1px solid color-mix(in srgb, var(--blue) 52%, var(--line));
+  color: var(--blue);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.day-signal,
+.compact-calendar-signal,
+.stage-task-title,
+.stage-task-more {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compact-calendar-signal,
+.calendar-panel.sidebar .stage-task-title {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.compact-calendar-signal {
+  color: var(--orange);
+}
+
+.day-signal.green {
+  color: var(--green);
+}
+
+.day-signal.blue {
+  color: var(--blue);
+}
+
+.day-signal.neutral {
+  color: var(--ink-soft);
+}
+
+.stage-task-preview {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.calendar-panel.sidebar .stage-task-title {
+  color: var(--blue);
+}
+
+.selected-date-card {
+  display: grid;
+  min-width: 0;
+  min-height: 80px;
+  grid-template-columns: minmax(142px, 0.82fr) minmax(0, 1.18fr);
+  gap: 12px;
+  padding: 9px 10px;
+  border-top: 1px solid var(--line-strong);
+  background: var(--surface-subtle);
+}
+
+.selected-date-heading {
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.selected-date-kicker {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.selected-date-heading h3 {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.selected-date-heading .secondary-button {
+  min-height: 30px;
+  padding: 4px 7px;
+  font-size: 12px;
+}
+
+.selected-date-overview {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 5px;
+}
+
+.selected-date-badges {
+  flex-wrap: wrap;
+}
+
+.selected-date-section {
+  min-width: 0;
+  min-height: 0;
+}
+
+.selected-date-section > p {
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.selected-agenda-list {
+  display: grid;
+  max-height: 66px;
+  gap: 3px;
+  overflow-y: auto;
+}
+
+.selected-agenda-item {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
+}
+
+.selected-agenda-item > span:last-child {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Expanded calendar */
+
+.calendar-panel.stage .calendar-body {
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
+  padding: 12px;
+}
+
+.calendar-grid.stage {
+  grid-template-rows: repeat(6, minmax(82px, 1fr));
+}
+
+.calendar-grid.stage .calendar-day {
+  min-height: 82px;
+  padding: 6px;
+}
+
+.calendar-grid.stage .day-number {
+  font-size: 13px;
+}
+
+.calendar-grid.stage .day-signal {
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.calendar-grid.stage .stage-task-title,
+.calendar-grid.stage .stage-task-more {
+  color: var(--blue);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+/* Important dates */
+
+.countdown-panel {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.countdown-form {
+  grid-template-columns: minmax(0, 1fr) 88px 36px;
+  padding: 10px 12px 2px;
+}
+
+.countdown-form > .field:first-child {
+  grid-column: 1 / -1;
+}
+
+.countdown-form .field.compact-date,
+.countdown-form .field.compact-select {
+  width: 100%;
+}
+
+.countdown-form .primary-button {
+  min-width: 36px;
+  padding-inline: 0;
+}
+
+.milestone-grid {
+  margin-top: 4px;
+  padding: 0 12px;
+}
+
+.milestone-card {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 58px;
+  grid-template-columns: 50px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 7px 6px;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+}
+
+.milestone-card:last-child {
+  border-bottom: 0;
+}
+
+.milestone-card:hover,
+.milestone-card:focus-within {
+  background: var(--surface-subtle);
+}
+
+.milestone-days {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  color: var(--blue);
+}
+
+.milestone-days strong {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.milestone-days span {
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+
+.milestone-card.urgent .milestone-days strong,
+.milestone-card.warm .milestone-days strong {
+  color: var(--orange);
+}
+
+.milestone-card.muted .milestone-days strong {
+  color: var(--ink-faint);
+}
+
+.milestone-info {
+  min-width: 0;
+  padding-right: 56px;
+  cursor: text;
+}
+
+.milestone-title {
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.milestone-meta {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.milestone-actions {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  gap: 2px;
+  padding: 1px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.milestone-card:hover .milestone-actions,
+.milestone-card:focus-within .milestone-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.milestone-edit-form {
+  display: grid;
+  min-width: 0;
+  grid-column: 2;
+  grid-template-columns: minmax(0, 1fr) 120px 84px;
+  gap: 6px;
+  padding-block: 2px;
+}
+
+.milestone-edit-form .field {
+  min-height: 32px;
+  padding: 5px 7px;
+  font-size: 12px;
+}
+
+.milestone-edit-form .compact-date,
+.milestone-edit-form .compact-select {
+  width: 100%;
+}
+
+.milestone-edit-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.milestone-edit-actions .primary-button,
+.milestone-edit-actions .tertiary-button {
+  min-height: 30px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* Panel-local responsive rules */
+
+.panel {
+  container-type: inline-size;
+}
+
+@container (max-width: 440px) {
+  .task-panel-backlog .task-composer {
+    grid-template-columns: minmax(0, 1fr) 36px;
+  }
+
+  .task-panel-backlog .task-composer > .field {
+    grid-column: 1 / -1;
+  }
+
+  .countdown-form {
+    grid-template-columns: minmax(0, 1fr) 84px 36px;
+  }
+
+  .milestone-edit-form {
+    grid-template-columns: minmax(0, 1fr) 1fr;
+  }
+
+  .milestone-edit-form > .field:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@container (max-width: 340px) {
+  .task-composer {
+    grid-template-columns: minmax(0, 1fr) 36px;
+  }
+
+  .task-composer > .field {
+    grid-column: 1 / -1;
+  }
+
+  .task-card {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .countdown-form {
+    grid-template-columns: minmax(0, 1fr) 36px;
+  }
+
+  .countdown-form .compact-date {
+    grid-column: 1 / -1;
+  }
+
+  .countdown-form .compact-select {
+    grid-column: 1;
+  }
+}
+
+/* Fixed single-page desktop: only when both dimensions can hold it. */
+
+@media (min-width: 1280px) and (min-height: 800px) {
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .app-shell {
+    display: grid;
+    height: 100dvh;
+    min-height: 0;
+    grid-template-rows: 56px minmax(0, 1fr);
+    gap: 12px;
+    padding-block: 12px;
+    overflow: hidden;
+  }
+
+  .topbar {
+    position: relative;
+    top: auto;
+    height: 56px;
+    margin-bottom: 0;
+  }
+
+  .workspace-board {
+    width: min(100%, 1480px);
+    height: min(100%, 820px);
+    min-height: 0;
+    grid-template-rows: 112px minmax(298px, 1fr) minmax(270px, 0.76fr);
+    align-self: start;
+  }
+
+  .task-panel-focus,
+  .rituals-panel,
+  .calendar-panel,
+  .task-panel-backlog,
+  .countdown-panel {
+    height: 100%;
+    min-height: 0;
+  }
+}
+
+/* Two-column workbench */
+
+@media (min-width: 900px) and (max-width: 1279px) {
+  .app-shell {
+    --shell-gutter: clamp(20px, 3vw, 32px);
+  }
+
+  .workspace-board {
+    grid-template-columns: minmax(300px, 3fr) minmax(440px, 5fr);
+    grid-template-rows: 112px minmax(440px, auto) minmax(400px, auto) minmax(270px, auto);
+    grid-template-areas:
+      "summary calendar"
+      "focus calendar"
+      "rituals rituals"
+      "backlog dates";
+  }
+
+  .calendar-panel.sidebar {
+    min-height: 484px;
+  }
+
+  .rituals-panel {
+    min-height: 400px;
+  }
+}
+
+/* Touch devices cannot rely on hover to reveal row operations. */
+
+@media (hover: none), (pointer: coarse) {
+  .task-card {
+    align-items: start;
+  }
+
+  .task-actions {
+    position: static;
+    grid-column: 2;
+    justify-self: end;
+    margin-top: 5px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .task-card.reordering {
+    padding-bottom: 9px;
+  }
+
+  .ritual-chip-footer {
+    position: static;
+    grid-column: 2;
+    justify-self: end;
+    margin-top: 4px;
+    border-color: var(--line);
+    background: var(--surface);
+  }
+
+  .ritual-chip-footer .ghost-button,
+  .ritual-chip-footer .drag-button {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .task-actions .ghost-button,
+  .task-actions .drag-button,
+  .task-actions .order-button,
+  .ritual-chip-footer .ghost-button,
+  .ritual-chip-footer .drag-button,
+  .ritual-chip-footer .order-button,
+  .milestone-actions .ghost-button {
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .ritual-chip.reordering {
+    padding-bottom: 8px;
+  }
+
+  .milestone-info {
+    padding-right: 0;
+  }
+
+  .milestone-actions {
+    position: static;
+    grid-column: 2;
+    justify-self: end;
+    margin-top: 4px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+}
+
+/* Narrow workbench */
+
+@media (max-width: 899px) {
+  .app-shell {
+    --shell-gutter: clamp(12px, 3vw, 20px);
+  }
+
+  .workspace-board {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+      "summary"
+      "focus"
+      "rituals"
+      "calendar"
+      "backlog"
+      "dates";
+    gap: 10px;
+  }
+
+  .today-summary,
+  .task-panel-focus,
+  .rituals-panel,
+  .calendar-panel.sidebar,
+  .task-panel-backlog,
+  .countdown-panel {
+    height: auto;
+    min-height: 0;
+  }
+
+  .task-panel-focus {
+    min-height: 360px;
+  }
+
+  .rituals-panel {
+    min-height: 390px;
+  }
+
+  .calendar-panel.sidebar {
+    min-height: 468px;
+  }
+
+  .task-panel-backlog,
+  .countdown-panel {
+    min-height: 270px;
+  }
+
+  .task-list,
+  .ritual-chip-grid,
+  .milestone-grid {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .panel-content,
+  .panel-side-layout,
+  .countdown-panel,
+  .calendar-panel {
+    height: auto;
+  }
+
+  .calendar-body {
+    grid-template-rows: 286px auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .workspace-board {
+    gap: 8px;
+  }
+
+  .panel-header,
+  .panel-side-header {
+    padding: 9px 10px;
+  }
+
+  .panel-content {
+    padding: 10px;
+  }
+
+  .task-panel-focus {
+    min-height: 340px;
+  }
+
+  .rituals-panel {
+    min-height: 378px;
+  }
+
+  .calendar-panel.sidebar {
+    min-height: 454px;
+  }
+
+  .calendar-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .calendar-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .calendar-controls .icon-button {
+    flex: 0 0 auto;
+  }
+
+  .calendar-label {
+    flex: 1;
+  }
+
+  .calendar-body {
+    grid-template-rows: 276px auto;
+    padding-inline: 8px;
+  }
+
+  .calendar-grid {
+    grid-template-rows: repeat(6, minmax(42px, 1fr));
+  }
+
+  .calendar-day {
+    padding-inline: 3px;
+  }
+
+  .selected-date-card {
+    grid-template-columns: minmax(132px, 0.72fr) minmax(0, 1.28fr);
+    gap: 8px;
+    padding-inline: 8px;
+  }
+
+  .selected-date-heading .secondary-button {
+    min-width: 30px;
+    padding-inline: 5px;
+  }
+
+  .task-card {
+    grid-template-columns: 46px minmax(0, 1fr);
+    align-items: start;
+    gap: 6px;
+    padding-inline: 6px;
+  }
+
+  .task-actions {
+    position: static;
+    grid-column: 2;
+    justify-self: end;
+    margin-top: 5px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .task-card.reordering {
+    padding-bottom: 9px;
+  }
+
+  .ritual-chip {
+    grid-template-columns: 40px minmax(0, 1fr);
+    padding-inline: 6px;
+  }
+
+  .ritual-chip-label {
+    padding-right: 56px;
+  }
+
+  .ritual-week {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .ritual-week-days {
+    grid-template-columns: repeat(7, minmax(20px, 1fr));
+    gap: 3px;
+  }
+
+  .ritual-chip-footer {
+    top: 6px;
+    right: 6px;
+  }
+
+  .ritual-chip-footer .ghost-button,
+  .ritual-chip-footer .drag-button {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .countdown-form,
+  .milestone-grid {
+    padding-inline: 10px;
+  }
+
+  .milestone-info {
+    padding-right: 0;
+  }
+
+  .milestone-actions {
+    position: static;
+    grid-column: 2;
+    justify-self: end;
+    margin-top: 4px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .milestone-edit-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .milestone-edit-form > .field,
+  .milestone-edit-form > .field:first-child {
+    grid-column: 1;
+  }
+
+  .calendar-grid.stage {
+    grid-template-rows: repeat(6, minmax(64px, 1fr));
+  }
+}

@@ -1,13 +1,14 @@
-import type { Task, TaskBucket } from '../store/appData'
+import type { Task, TaskBucket, TaskSchedule } from '../store/appData'
 import { StackIcon } from './Icon'
 import { TaskList } from './TaskList'
 
 interface BacklogPanelProps {
   tasks: Task[]
-  onAdd: (text: string) => void
+  onAdd: (text: string, schedule?: TaskSchedule) => void
   onToggle: (taskId: string) => void
   onDelete: (taskId: string) => void
   onUpdate: (taskId: string, text: string) => void
+  onUpdateSchedule: (taskId: string, patch: TaskSchedule) => void
   onDropTask: (fromBucket: Exclude<TaskBucket, 'date'>, taskId: string, targetId: string | null) => void
   onClearCompleted: () => void
 }
@@ -16,7 +17,6 @@ export function BacklogPanel(props: BacklogPanelProps) {
   return (
     <TaskList
       title="积压事项"
-      eyebrow="Open loops"
       titleIcon={<StackIcon width={16} height={16} />}
       bucket="backlog"
       tasks={props.tasks}
@@ -28,6 +28,7 @@ export function BacklogPanel(props: BacklogPanelProps) {
       onToggle={props.onToggle}
       onDelete={props.onDelete}
       onUpdate={props.onUpdate}
+      onUpdateSchedule={props.onUpdateSchedule}
       onDropTask={props.onDropTask}
       onClearCompleted={props.onClearCompleted}
     />

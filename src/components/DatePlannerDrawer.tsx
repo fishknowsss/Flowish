@@ -1,21 +1,40 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { formatLongDate, getEventTypeLabel } from '../lib/date'
+import {
+  getCalendarAgendaForDate,
+  type CalendarAgendaItem,
+} from '../lib/calendarAgenda'
+import { formatLongDate } from '../lib/date'
 import {
   getBaseCalendarSignal,
   getHydratedCalendarSignal,
   getRitualCompletionCount,
   type CalendarSignal,
 } from '../lib/holidays'
-import type { DatePlan, EventItem } from '../store/appData'
+import type { DatePlan } from '../store/appData'
 import { CheckIcon, CloseIcon, NoteIcon, PlusIcon, TrashIcon } from './Icon'
+import { DialogShell } from './DialogShell'
+
+const focusTimeSlotLabels = {
+  morning: '上午重点',
+  afternoon: '下午重点',
+  evening: '晚上重点',
+  lateNight: '深夜重点',
+} as const
+
+function getSyncedSourceLabel(item: CalendarAgendaItem) {
+  if (item.source === 'focus') {
+    return item.timeSlot ? focusTimeSlotLabels[item.timeSlot] : '今日重点'
+  }
+  if (item.source === 'backlog') return '截止'
+  if (item.source === 'ritual') return '固定节律'
+  return '重要日期'
+}
 
 interface DatePlannerDrawerProps {
   dateKey: string
   plan: DatePlan
   appData: import('../store/appData').AppData
-  events: EventItem[]
-  isOpen: boolean
   onClose: () => void
   onAddTask: (text: string) => void
   onToggleTask: (taskId: string) => void
@@ -28,8 +47,6 @@ export function DatePlannerDrawer({
   dateKey,
   plan,
   appData,
-  events,
-  isOpen,
   onClose,
   onAddTask,
   onToggleTask,
@@ -42,6 +59,13 @@ export function DatePlannerDrawer({
   const [editingValue, setEditingValue] = useState('')
   const [signal, setSignal] = useState<CalendarSignal | null>(null)
   const baseSignal = useMemo(() => getBaseCalendarSignal(dateKey, appData), [appData, dateKey])
+  const syncedAgenda = useMemo(
+    () =>
+      getCalendarAgendaForDate(appData, dateKey).filter(
+        (item) => item.source !== 'datePlan',
+      ),
+    [appData, dateKey],
+  )
 
   useEffect(() => {
     let active = true
@@ -57,40 +81,30 @@ export function DatePlannerDrawer({
   const displaySignal = signal ?? baseSignal
 
   return (
-    <aside className={`drawer glass-panel ${isOpen ? 'expanded' : 'collapsed'}`} aria-label="日期规划面板">
-      <div className="drawer-header">
+    <DialogShell ariaLabel={`${formatLongDate(dateKey)}的日期计划`} className="planner-dialog" onClose={onClose}>
+      <section className="dialog-surface date-planner">
+      <header className="drawer-header">
         <div className="panel-title">
           <span className="panel-icon-chip note">
             <NoteIcon width={16} height={16} />
           </span>
           <div>
-            <p className="eyebrow">Date agenda</p>
-            <h2>{isOpen ? formatLongDate(dateKey) : '选中日期后展开议程'}</h2>
-            {isOpen ? (
-              <div className="badge-row">
-                {displaySignal.holidayName ? <span className="badge warm">{displaySignal.holidayName}</span> : null}
-                {displaySignal.solarTerm ? <span className="badge green">{displaySignal.solarTerm}</span> : null}
-                {displaySignal.lunarFestival ? <span className="badge blue">{displaySignal.lunarFestival}</span> : null}
-                {ritualCount > 0 ? <span className="badge neutral">已完成 {ritualCount} 项节律</span> : null}
-              </div>
-            ) : null}
+            <h2>{formatLongDate(dateKey)}</h2>
+            <div className="badge-row">
+              {displaySignal.holidayName ? <span className="badge warm">{displaySignal.holidayName}</span> : null}
+              {displaySignal.solarTerm ? <span className="badge green">{displaySignal.solarTerm}</span> : null}
+              {displaySignal.lunarFestival ? <span className="badge blue">{displaySignal.lunarFestival}</span> : null}
+              {ritualCount > 0 ? <span className="badge neutral">节律 {ritualCount}</span> : null}
+            </div>
           </div>
         </div>
-        <button className="icon-button" type="button" onClick={onClose} aria-label="收起日期议程">
+        <button className="icon-button" type="button" onClick={onClose} aria-label="关闭日期计划">
           <CloseIcon width={18} height={18} />
         </button>
-      </div>
+      </header>
 
-      {!isOpen ? (
-        <div className="drawer-empty-state">
-          <p>从月历选一天。</p>
-        </div>
-      ) : null}
-
-      {isOpen ? (
-        <>
       <form
-        className="inline-composer glass-ridge"
+        className="inline-composer"
         onSubmit={(event) => {
           event.preventDefault()
           const value = inputValue.trim()
@@ -100,14 +114,18 @@ export function DatePlannerDrawer({
         }}
       >
         <input
+          autoFocus
           className="field"
+          name="date-task"
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
-          placeholder="为这一天写下一条具体计划"
+          placeholder="添加这天要做的事"
           aria-label="新增日期任务"
+          autoComplete="off"
         />
-        <button className="primary-button tertiary" type="submit" aria-label="新增日期任务">
+        <button className="primary-button" type="submit">
           <PlusIcon width={18} height={18} />
+          添加
         </button>
       </form>
 
@@ -117,10 +135,10 @@ export function DatePlannerDrawer({
           <strong>{plan.tasks.length}</strong>
         </div>
         <div className="date-task-list">
-          {plan.tasks.length === 0 ? <div className="empty-card">这一天还没有写下具体安排。</div> : null}
+          {plan.tasks.length === 0 ? <div className="empty-card">添加这天要做的事。</div> : null}
           {plan.tasks.map((task) => (
             <article key={task.id} className={`task-card date ${task.completed ? 'completed' : ''}`}>
-              <button className="check-button" type="button" onClick={() => onToggleTask(task.id)} aria-label="切换日期任务完成状态">
+              <button className="check-button" type="button" onClick={() => onToggleTask(task.id)} aria-label={`${task.completed ? '取消完成' : '完成'}“${task.text}”`}>
                 {task.completed ? <CheckIcon width={16} height={16} /> : null}
               </button>
               <div
@@ -134,6 +152,9 @@ export function DatePlannerDrawer({
                   <input
                     autoFocus
                     className="field inline-edit"
+                    name={`${task.id}-text`}
+                    autoComplete="off"
+                    aria-label="编辑日期任务内容"
                     value={editingValue}
                     onChange={(event) => setEditingValue(event.target.value)}
                     onBlur={() => {
@@ -157,9 +178,22 @@ export function DatePlannerDrawer({
                   </>
                 )}
               </div>
-              <button className="ghost-button danger" type="button" onClick={() => onDeleteTask(task.id)} aria-label="删除日期任务">
-                <TrashIcon width={16} height={16} />
-              </button>
+              <div className="task-actions">
+                <button
+                  className="ghost-button"
+                  type="button"
+                  onClick={() => {
+                    setEditingTaskId(task.id)
+                    setEditingValue(task.text)
+                  }}
+                  aria-label={`编辑“${task.text}”`}
+                >
+                  <NoteIcon width={16} height={16} />
+                </button>
+                <button className="ghost-button danger" type="button" onClick={() => onDeleteTask(task.id)} aria-label={`删除“${task.text}”`}>
+                  <TrashIcon width={16} height={16} />
+                </button>
+              </div>
             </article>
           ))}
         </div>
@@ -167,15 +201,22 @@ export function DatePlannerDrawer({
 
       <div className="drawer-section">
         <div className="subheading">
-          <span>当天事件</span>
-          <strong>{events.length}</strong>
+          <span>已同步</span>
+          <strong>{syncedAgenda.length}</strong>
         </div>
-        <div className="event-inline-list">
-          {events.length === 0 ? <div className="empty-card subtle">这一天没有重要日期。</div> : null}
-          {events.map((event) => (
-            <div key={event.id} className="inline-pill">
-              <span>{event.title}</span>
-              <small>{getEventTypeLabel(event.type)}</small>
+        <div className="event-inline-list synced-agenda-list" aria-label="已同步内容">
+          {syncedAgenda.length === 0 ? (
+            <div className="empty-card subtle">为这一天设置截止日期或重要日期。</div>
+          ) : null}
+          {syncedAgenda.map((item) => (
+            <div
+              key={item.key}
+              className={`inline-pill synced-agenda-item ${item.completed ? 'completed' : ''}`}
+            >
+              <span>{item.text}</span>
+              <small>
+                {getSyncedSourceLabel(item)}{item.completed ? ' · 已完成' : ''}
+              </small>
             </div>
           ))}
         </div>
@@ -188,14 +229,16 @@ export function DatePlannerDrawer({
         </div>
         <textarea
           className="note-field"
+          name="date-note"
           value={plan.note}
           maxLength={180}
           onChange={(event) => onNoteChange(event.target.value)}
-          placeholder="记录这一天的提醒、重点或想保留的氛围。"
+          placeholder="写下提醒或备注"
+          aria-label="日期短记"
+          autoComplete="off"
         />
       </div>
-        </>
-      ) : null}
-    </aside>
+      </section>
+    </DialogShell>
   )
 }
