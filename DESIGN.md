@@ -4,23 +4,24 @@ description: A calm personal planning workspace built from solid glass panes.
 colors:
   primary: "#bf442e"
   primary-hover: "#a13423"
-  canvas: "#e8e8e5"
-  pane: "#f7f7f4"
-  card: "#f8f8f6"
+  canvas: "#dedfd8"
+  pane: "#f3f1e9"
+  card: "#f6f3eb"
   ink: "#282b27"
   ink-secondary: "#555c53"
   ink-muted: "#696f66"
-  line: "#dedfda"
-  focus-wash: "#f6ded4"
-  backlog: "#456472"
-  ritual: "#526a49"
-  event: "#a45a24"
+  line: "#d4d1c5"
+  focus-wash: "#f3d8cd"
+  backlog: "#3e6474"
+  ritual: "#4c6743"
+  event: "#a3561d"
   dark-canvas: "#191b19"
   dark-pane: "#252825"
   dark-card: "#292c28"
   dark-ink: "#eeefea"
   dark-primary: "#ed987e"
   glass-rim: "#ffffff"
+  brand-rim: "#fffaf2"
   black: "#000000"
 typography:
   display:
@@ -58,6 +59,16 @@ typography:
     fontSize: "2.4rem"
     fontWeight: 600
     lineHeight: 1.1
+  compact-metric:
+    fontFamily: "Manrope, Noto Sans SC Variable, Noto Sans SC, PingFang SC, sans-serif"
+    fontSize: "2rem"
+    fontWeight: 600
+    lineHeight: 1.1
+  milestone-value:
+    fontFamily: "Manrope, Noto Sans SC Variable, Noto Sans SC, PingFang SC, sans-serif"
+    fontSize: "1.1rem"
+    fontWeight: 600
+    lineHeight: 1.2
   meta:
     fontFamily: "Noto Sans SC Variable, Noto Sans SC, PingFang SC, sans-serif"
     fontSize: "0.72rem"
@@ -113,6 +124,11 @@ typography:
     fontSize: "1.05rem"
     fontWeight: 700
     lineHeight: 1.2
+  compact-brand:
+    fontFamily: "Manrope, Noto Sans SC Variable, Noto Sans SC, PingFang SC, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 700
+    lineHeight: 1.2
   large-value:
     fontFamily: "Manrope, Noto Sans SC Variable, Noto Sans SC, PingFang SC, sans-serif"
     fontSize: "1.35rem"
@@ -124,6 +140,7 @@ rounded:
   hairline: "4px"
   micro: "7px"
   sm: "8px"
+  mini: "9px"
   compact: "10px"
   md: "12px"
   lg: "16px"
@@ -163,9 +180,9 @@ fine outline and a shadow gathered below. The product remains a working
 instrument, so the glass supports hierarchy without obscuring dates, task
 labels or state.
 
-The system uses warm neutral surfaces in light mode and smoky neutral panes in
-dark mode. Vermilion marks primary actions and today; muted blue, green and
-ochre distinguish backlog, rituals and dates.
+The system uses warm, lightly tinted surfaces in light mode and smoky neutral
+panes in dark mode. Vermilion marks primary actions and today; muted blue,
+green and ochre distinguish backdrop, rituals and dates.
 
 ## Colors
 
@@ -185,9 +202,9 @@ color is semantic and sparse.
 
 ### Neutral
 
-- Warm Canvas (`#e8e8e5`): page background.
-- Pane (`#f7f7f4`): primary work surfaces.
-- Card (`#f8f8f6`): overview and emphasized panes.
+- Warm Canvas (`#dedfd8`): page background, visibly darker than every pane.
+- Pane (`#f3f1e9`): primary work surfaces.
+- Card (`#f6f3eb`): overview and emphasized panes.
 - Ink (`#282b27`): primary text.
 - Muted Ink (`#696f66`): secondary labels at a readable contrast.
 
@@ -205,18 +222,22 @@ Chinese. Display tracking is tight; body text remains near normal tracking.
 
 ## Layout
 
-Desktop uses three vertical rails: today, time and capture. The grid becomes
-two columns below 1320px, one column below 1080px, and a single padded column
-below 640px. Panels use 18px gaps and 20px internal padding on desktop, reducing
-to 14px gaps and 16px padding on phones.
+Desktop uses three vertical rails: today, time and capture inside the viewport.
+The page itself does not scroll at standard desktop sizes; long task, agenda,
+milestone and ritual lists scroll inside their panels. Below 1080px or 720px of
+height, the workspace stacks into a scrolling single column. Panels use 10px
+gaps and 14px internal padding on desktop, reducing to 8px gaps and 12px
+padding on narrow screens.
 
 ## Elevation & Depth
 
 Depth comes from material thickness. Panels receive a bright inset rim, a faint
-inner line, a hairline outline and a soft shadow below. Overview cards use a
-more opaque fill. Popovers and dialogs form the thickest layer, using stronger
-edge definition and backdrop blur. Blur is not applied to ordinary in-flow
-panels.
+inner line, a hairline outline and a soft shadow below. Each working area has
+one restrained color wash and a matching top light edge. Overview rows keep
+the strongest vermilion tint; calendar details use blue-grey, important dates
+use ochre and rituals use moss. Popovers and dialogs form the thickest layer,
+using stronger edge definition and backdrop blur. Blur is not applied to
+ordinary in-flow panels.
 
 ## Shapes
 

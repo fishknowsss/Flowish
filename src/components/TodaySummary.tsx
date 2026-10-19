@@ -54,6 +54,16 @@ export function TodaySummary({
   const backlogPending = backlogTasks.filter((task) => !task.completed).length
   const upcoming = getUpcomingEvent(events, todayKey)
   const selectedSummary = getSelectedDateSummary(selectedDate, todayKey, selectedPlan, events.filter((event) => getEventRelevantDateKey(event, todayKey) === selectedDate))
+  const completionLabel =
+    progressTotal === 0
+      ? '写下第一件事'
+      : progressValue === 100
+        ? '今日完成'
+        : progressValue >= 60
+          ? '稳步收尾'
+          : progressValue > 0
+            ? '保持节奏'
+            : '准备开始'
 
   return (
     <section className="overview-sheet solid-panel" aria-label="首页总览">
@@ -105,6 +115,11 @@ export function TodaySummary({
             </>
           )}
         </article>
+      </div>
+
+      <div className="overview-status-line" aria-label="今日状态">
+        <span>{completionLabel}</span>
+        <span>{focusCompleted + ritualCompleted}/{progressTotal || 0} 项完成</span>
       </div>
     </section>
   )

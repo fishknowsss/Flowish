@@ -4,33 +4,33 @@
   --font-text: 'Noto Sans SC Variable', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB',
     'Microsoft YaHei', sans-serif;
 
-  --bg-app: #e8e8e5;
-  --bg-paper: #f7f7f4;
-  --bg-paper-soft: #edede9;
-  --bg-rail: #e3e4e0;
-  --bg-board: #f8f8f6;
-  --bg-paper-muted: #dddfd9;
-  --bg-line: #dedfda;
-  --bg-line-strong: #c3c6bf;
+  --bg-app: #dedfd8;
+  --bg-paper: #f3f1e9;
+  --bg-paper-soft: #e6e6dc;
+  --bg-rail: #daddd1;
+  --bg-board: #f6f3eb;
+  --bg-paper-muted: #d4d7cc;
+  --bg-line: #d4d1c5;
+  --bg-line-strong: #b8b4a5;
 
   --text-primary: #282b27;
   --text-secondary: #555c53;
   --text-muted: #696f66;
 
-  --brand-red: #bf442e;
-  --brand-orange: #a45a24;
-  --brand-line: #a13423;
-  --accent-focus: #bf442e;
-  --accent-backlog: #456472;
-  --accent-ritual: #526a49;
-  --accent-event: #a45a24;
+  --brand-red: #bd3e27;
+  --brand-orange: #a3561d;
+  --brand-line: #9c301f;
+  --accent-focus: #bd3e27;
+  --accent-backlog: #3e6474;
+  --accent-ritual: #4c6743;
+  --accent-event: #a3561d;
   --accent-surface: #e2dfd4;
   --danger: #a04642;
 
-  --focus-soft: #f6ded4;
-  --backlog-soft: #dfe9eb;
-  --ritual-soft: #e2ebdc;
-  --event-soft: #ece0d4;
+  --focus-soft: #f3d8cd;
+  --backlog-soft: #dce8eb;
+  --ritual-soft: #dfe9d8;
+  --event-soft: #eee0ce;
 
   --shadow-lg: 0 24px 60px -18px rgba(32, 37, 30, 0.28), 0 6px 16px -6px rgba(32, 37, 30, 0.14);
   --shadow-md: 0 12px 32px -14px rgba(32, 37, 30, 0.24);
@@ -50,33 +50,34 @@
   --radius-md: 12px;
   --radius-sm: 8px;
 
-  --topbar-height: 72px;
+  --topbar-height: 56px;
   --drawer-width: clamp(320px, 24vw, 380px);
-  --dashboard-gap: 18px;
-  --main-gutter: 18px;
-  --panel-padding: 20px;
+  --dashboard-gap: 10px;
+  --main-gutter: 10px;
+  --panel-padding: 14px;
 
   --easing-fluid: cubic-bezier(0.2, 0.8, 0.2, 1);
   --easing-spring: cubic-bezier(0.2, 0.8, 0.2, 1);
   --card-inner-glow: none;
 
-  --field-bg: rgba(255, 255, 253, 0.68);
-  --field-border: #c9cdc4;
-  --check-bg: rgba(255, 255, 253, 0.72);
-  --check-border: #b6bdb0;
+  --field-bg: rgba(255, 254, 249, 0.72);
+  --field-border: #c4c0b2;
+  --check-bg: rgba(255, 254, 249, 0.74);
+  --check-border: #abb3a2;
   --scrollbar-thumb: rgba(32, 32, 28, 0.18);
   --overlay-bg: rgba(32, 37, 30, 0.28);
 
   /* Solid Glass: thin work surface < card < nearly opaque floating pane. */
-  --glass-panel-fill: rgba(248, 248, 245, 0.74);
-  --glass-card-fill: rgba(252, 252, 249, 0.86);
-  --glass-popover-fill: rgba(250, 250, 247, 0.97);
-  --glass-rim: rgba(255, 255, 255, 0.95);
-  --glass-inner: rgba(255, 255, 255, 0.35);
-  --glass-edge: rgba(53, 66, 45, 0.13);
-  --glass-under: rgba(53, 66, 45, 0.1);
-  --glass-control-fill: rgba(255, 255, 253, 0.55);
-  --glass-state: rgba(48, 62, 43, 0.07);
+  --glass-panel-fill: rgba(248, 246, 239, 0.88);
+  --glass-card-fill: rgba(251, 248, 240, 0.94);
+  --glass-popover-fill: rgba(249, 247, 240, 0.98);
+  --glass-rim: rgba(255, 255, 252, 0.98);
+  --brand-rim: #fffaf2;
+  --glass-inner: rgba(255, 255, 252, 0.44);
+  --glass-edge: rgba(62, 65, 50, 0.14);
+  --glass-under: rgba(62, 65, 50, 0.12);
+  --glass-control-fill: rgba(255, 254, 249, 0.66);
+  --glass-state: rgba(60, 70, 51, 0.075);
   --glass-pane-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--glass-inner), 0 0 0 1px var(--glass-edge), var(--shadow-sm), var(--shadow-md);
   --glass-control-shadow: inset 0 1px 0 var(--glass-rim), 0 1px 2px var(--glass-under);
   --glass-floating-shadow: inset 0 1px 0 var(--glass-rim), inset 0 -1px 0 var(--glass-under), 0 0 0 1px var(--glass-edge), var(--shadow-lg);

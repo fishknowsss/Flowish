@@ -26,6 +26,7 @@ describe('TodaySummary', () => {
     expect(screen.getByText('还剩 1 项')).toBeInTheDocument()
     expect(screen.getAllByText('1/2')).toHaveLength(2)
     expect(screen.getByText('2', { selector: '.overview-line strong' })).toBeInTheDocument()
+    expect(screen.getByText('保持节奏', { selector: '.overview-status-line span' })).toBeInTheDocument()
     expect(screen.getByRole('progressbar', { name: '今日完成进度' })).toHaveAttribute('value', '2')
   })
 })
