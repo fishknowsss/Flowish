@@ -17,19 +17,19 @@
   --text-primary: #302e28;
   --text-secondary: #575246;
   --text-muted: #554f42;
-  --brand-red: #8f3524;
-  --brand-line: #752c1c;
-  --brand-orange: #8b4e29;
+  --brand-red: #784936;
+  --brand-line: #714735;
+  --brand-orange: #79563b;
   --accent-focus: var(--brand-red);
-  --accent-backlog: #355b60;
-  --accent-ritual: #3d5c3d;
+  --accent-backlog: #44585a;
+  --accent-ritual: #4b5943;
   --accent-event: var(--brand-orange);
   --accent-surface: #adb8a5;
   --danger: #963b2c;
-  --focus-soft: #dfc3a9;
-  --backlog-soft: #c5ceca;
-  --ritual-soft: #c5cdbb;
-  --event-soft: #dfd0b6;
+  --focus-soft: #d8c6b0;
+  --backlog-soft: #d4d7d0;
+  --ritual-soft: #d4d7c8;
+  --event-soft: #d8cdb8;
   --p1-color: var(--brand-red);
   --p2-color: var(--brand-orange);
   --p3-color: var(--accent-ritual);
@@ -42,7 +42,7 @@
   --field-border: #9c927d;
   --check-bg: #e7e2d4;
   --check-border: #91856e;
-  --scrollbar-thumb: rgb(63 81 58 / 40%);
+  --scrollbar-thumb: rgb(101 88 65 / 40%);
   --overlay-bg: rgb(29 29 36 / 36%);
 
   --sg-pane: #e1dccf;
@@ -56,10 +56,10 @@
   --sg-control: #e5dfd1;
   --sg-state: #d3cbb9;
   --sg-state-edge: #97866c;
-  --sg-focus-panel: #dcc5aa;
-  --sg-backlog-panel: #c9d0cf;
-  --sg-ritual-panel: #c9d0c4;
-  --sg-event-panel: #ddd6c6;
+  --sg-focus-panel: #dac8b5;
+  --sg-backlog-panel: #cdd4d4;
+  --sg-ritual-panel: #d0d5c6;
+  --sg-event-panel: #ddd6c7;
   --sg-primary-rim: rgb(255 255 255 / 30%);
   --sg-primary-foot: rgb(0 0 0 / 20%);
   --sg-on-primary: #fff;
@@ -71,27 +71,29 @@
 }
 
 :root[data-theme='obsidian'] {
-  --bg-app: #202620;
-  --bg-paper: #2b332b;
-  --bg-paper-soft: #333e33;
-  --bg-paper-muted: #485345;
-  --bg-rail: #263026;
-  --bg-board: #303a30;
-  --bg-line: #495548;
-  --bg-line-strong: #75826e;
-  --text-primary: #eceee3;
-  --text-secondary: #c7cfbe;
-  --text-muted: #b0bea5;
-  --brand-red: #f1987e;
+  --bg-app: #272623;
+  --bg-paper: #34322e;
+  --bg-paper-soft: #3e3b35;
+  --bg-paper-muted: #565147;
+  --bg-rail: #2c2a26;
+  --bg-board: #393631;
+  --bg-line: #555046;
+  --bg-line-strong: #83796b;
+  --text-primary: #eee9df;
+  --text-secondary: #cec5b8;
+  --text-muted: #bfb4a3;
+  --brand-red: #d7a18a;
+  --accent-focus: var(--brand-red);
+  --accent-event: var(--brand-orange);
   --brand-line: #d78068;
-  --brand-orange: #e8ad7f;
-  --accent-backlog: #a2c3d9;
-  --accent-ritual: #aec6a5;
+  --brand-orange: #d4b18c;
+  --accent-backlog: #a9bdbd;
+  --accent-ritual: #b3c0a3;
   --accent-surface: #51515b;
   --danger: #f4a09a;
   --focus-soft: #49332f;
-  --backlog-soft: #2d3e4a;
-  --ritual-soft: #323f31;
+  --backlog-soft: #363d3c;
+  --ritual-soft: #3a3e32;
   --event-soft: #463a30;
   --field-bg: rgb(15 15 19 / 34%);
   --field-border: #777783;
@@ -100,24 +102,24 @@
   --scrollbar-thumb: rgb(226 226 240 / 27%);
   --overlay-bg: rgb(0 0 0 / 60%);
 
-  --sg-pane: #2d362d;
-  --sg-card: rgb(255 255 255 / 4%);
-  --sg-popover: #303a30;
+  --sg-pane: #36332e;
+  --sg-card: #403b34;
+  --sg-popover: #393631;
   --sg-edge: rgb(255 255 255 / 12%);
   --sg-rim: rgb(255 255 255 / 17%);
   --sg-inner: rgb(255 255 255 / 3%);
   --sg-contact: rgb(0 0 0 / 14%);
   --sg-lift: rgb(0 0 0 / 18%);
   --sg-control: rgb(255 255 255 / 6%);
-  --sg-state: #43503d;
+  --sg-state: #4c463d;
   --sg-state-edge: rgb(255 255 255 / 26%);
   --sg-primary-rim: rgb(255 255 255 / 35%);
   --sg-primary-foot: rgb(0 0 0 / 24%);
   --sg-on-primary: #211d1b;
-  --sg-focus-panel: #37382e;
-  --sg-backlog-panel: #2b3a35;
-  --sg-ritual-panel: #313d2c;
-  --sg-event-panel: #383a2e;
+  --sg-focus-panel: #40372f;
+  --sg-backlog-panel: #333c3d;
+  --sg-ritual-panel: #383e32;
+  --sg-event-panel: #3b372f;
 }
 
 body { background-image: none; }
@@ -200,7 +202,6 @@ body { background-image: none; }
 .side-cleanup-btn,
 .chip-toggle,
 .check-button,
-.drag-button,
 .ritual-check {
   border-radius: var(--radius-sm);
   background: var(--sg-control);
@@ -222,13 +223,13 @@ body { background-image: none; }
     inset 0 -1px 0 var(--sg-primary-foot), 0 2px 3px var(--sg-contact);
 }
 
-.icon-button:hover,
-.ghost-button:hover,
-.secondary-button:hover,
-.tertiary-button:hover,
-.order-button:hover,
-.side-cleanup-btn:hover,
-.chip-toggle:hover,
+.icon-button:hover:not(:disabled),
+.ghost-button:hover:not(:disabled),
+.secondary-button:hover:not(:disabled),
+.tertiary-button:hover:not(:disabled),
+.order-button:hover:not(:disabled),
+.side-cleanup-btn:hover:not(:disabled),
+.chip-toggle:hover:not(:disabled),
 .toggle-row:hover,
 .search-result-item:hover,
 .search-result-item:focus-visible {
@@ -278,9 +279,9 @@ body { background-image: none; }
 
 /* A nested panel belongs to its dialog surface, not a second floating pane. */
 .dialog-surface .calendar-panel { border-color: transparent; background: transparent; box-shadow: none; }
-.icon-button:disabled, .ghost-button:disabled, .order-button:disabled, .drag-button:disabled { opacity: 0.45; cursor: default; }
-.icon-button[aria-expanded='true'], .drag-button[aria-expanded='true'], .chip-toggle.active { background: var(--sg-state); border-color: var(--sg-state-edge); }
-.check-button:hover, .ritual-check:hover { background: var(--ritual-soft); border-color: var(--accent-ritual); }
+.icon-button:disabled, .ghost-button:disabled, .order-button:disabled { opacity: 0.45; cursor: default; }
+.icon-button[aria-expanded='true'], .chip-toggle.active { background: var(--sg-state); border-color: var(--sg-state-edge); }
+.check-button:hover:not(:disabled), .ritual-check:hover:not(:disabled) { background: var(--ritual-soft); border-color: var(--accent-ritual); }
 .task-card.completed .check-button { background: var(--accent-ritual); color: var(--sg-on-primary); border-color: var(--accent-ritual); }
 .task-card.completed, .milestone-card.muted { opacity: 1; }
 .task-card.completed .task-title, .milestone-card.muted .milestone-title { color: var(--text-secondary); }

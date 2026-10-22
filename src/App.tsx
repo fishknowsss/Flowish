@@ -162,9 +162,11 @@ function App() {
 
     window.setTimeout(() => {
       const target = document.querySelector<HTMLElement>(`[data-search-id="${CSS.escape(result.id)}"]`)
-      target?.scrollIntoView({
+      const destination = target?.closest<HTMLElement>('.card-page') ?? target
+      destination?.scrollIntoView({
         behavior: appData.preferences.reducedMotion ? 'auto' : 'smooth',
-        block: 'center',
+        block: 'nearest',
+        inline: 'start',
       })
       target?.focus({ preventScroll: true })
     })

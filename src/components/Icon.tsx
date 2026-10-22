@@ -195,17 +195,6 @@ export const QuoteIcon = (props: IconProps) => (
   </IconBase>
 )
 
-export const DragIcon = (props: IconProps) => (
-  <IconBase {...props}>
-    <path d="M9 6h.01" />
-    <path d="M15 6h.01" />
-    <path d="M9 12h.01" />
-    <path d="M15 12h.01" />
-    <path d="M9 18h.01" />
-    <path d="M15 18h.01" />
-  </IconBase>
-)
-
 export const SearchIcon = (props: IconProps) => (
   <IconBase {...props}>
     <circle cx="11" cy="11" r="7" />

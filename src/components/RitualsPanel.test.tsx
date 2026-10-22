@@ -94,8 +94,10 @@ describe('RitualsPanel', () => {
       onDropRitual: vi.fn(),
     }
     const { rerender } = render(<RitualsPanel {...props} />)
-    fireEvent.click(screen.getByRole('button', { name: /调整“节律甲”顺序/ }))
-    fireEvent.click(screen.getByRole('button', { name: '下移“节律甲”' }))
+    const card = screen.getByLabelText('节律甲，可拖动排序')
+    expect(card).toHaveAttribute('draggable', 'true')
+    expect(screen.queryByRole('button', { name: /调整.*顺序/ })).not.toBeInTheDocument()
+    fireEvent.keyDown(card, { key: 'ArrowDown', altKey: true })
     expect(screen.getByText('已将“节律甲”下移到第 2 项')).toBeInTheDocument()
 
     rerender(<RitualsPanel {...props} rituals={[]} />)

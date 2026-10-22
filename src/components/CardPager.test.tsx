@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { CardPager } from './CardPager'
@@ -43,17 +43,24 @@ describe('CardPager', () => {
     expect(scroll).toHaveBeenCalledTimes(1)
   })
 
-  it('ignores height-only observation so content growth cannot interrupt a page turn', () => {
+  it('switches to complete single rows on short screens and preserves the visible item', () => {
     let notify: (entries: { contentRect: { width: number; height: number } }[]) => void
     vi.stubGlobal('ResizeObserver', class {
       constructor(callback: typeof notify) { notify = callback }
-      observe() { notify([{ contentRect: { width: 600, height: 200 } }]) }
+      observe() { notify([{ contentRect: { width: 600, height: 300 } }]) }
       disconnect() {}
     })
     render(<CardPager label="日期" columns={4} minCardWidth={104}>{cards}</CardPager>)
     const viewport = screen.getByRole('region')
+    Object.defineProperty(viewport, 'clientWidth', { configurable: true, value: 600 })
+    fireEvent.scroll(viewport, { target: { scrollLeft: 600 } })
+    act(() => notify!([{ contentRect: { width: 600, height: 200 } }]))
+    expect(screen.getAllByRole('group')).toHaveLength(3)
+    expect(within(screen.getByRole('group', { name: '日期第 1 页' })).getAllByRole('button')).toHaveLength(4)
+    expect(viewport.scrollLeft).toBe(1200)
+    expect(within(screen.getByRole('group', { name: '日期第 3 页' })).getByRole('button', { name: '编辑日期 9' })).toBeInTheDocument()
     const scroll = vi.spyOn(viewport, 'scrollTo')
-    notify!([{ contentRect: { width: 600, height: 300 } }])
+    act(() => notify!([{ contentRect: { width: 600, height: 210 } }]))
     expect(scroll).not.toHaveBeenCalled()
   })
 })

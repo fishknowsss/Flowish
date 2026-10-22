@@ -768,7 +768,6 @@ button {
 }
 
 .check-button,
-.drag-button,
 .ritual-check {
   display: inline-grid;
   place-items: center;
@@ -782,10 +781,6 @@ button {
   transition: background 140ms var(--easing-fluid), border-color 140ms var(--easing-fluid);
 }
 
-.drag-button {
-  color: var(--text-muted);
-  cursor: grab;
-}
 
 .check-button:hover,
 .ritual-check:hover {

@@ -5,27 +5,33 @@
   --motion-settle: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.focus-rail, .backlog-rail { min-width: 0; }
-.focus-rail { grid-template-rows: minmax(260px, 0.7fr) minmax(min-content, 1fr); }
-.backlog-rail { grid-template-rows: auto minmax(360px, 1fr); }
-.task-list { max-height: 580px; }
-.focus-rail .task-list { max-height: 240px; }
-.backlog-rail .task-panel-backlog { min-height: 420px; }
-.time-board { grid-template-rows: auto minmax(min-content, 1fr); }
-.calendar-panel.sidebar { height: clamp(360px, 48dvh, 460px); max-height: clamp(360px, 48dvh, 460px); }
-
-.rituals-panel, .countdown-panel { min-height: min-content; }
-.rituals-panel .panel-content { flex: none; }
+/* The shell owns the viewport; overflow belongs to lists and card pages. */
+html, body, #root { height: 100%; overflow: hidden; }
+.app-shell { height: 100dvh; min-height: 0; overflow: hidden; }
+.workspace-board { min-height: 0; grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr) minmax(0, 1.15fr); align-items: stretch; }
+.focus-rail, .backlog-rail, .time-board { min-width: 0; min-height: 0; }
+.focus-rail { grid-template-rows: minmax(0, 0.42fr) minmax(0, 0.58fr); }
+.backlog-rail { grid-template-rows: auto minmax(0, 1fr); }
+.time-board { grid-template-rows: minmax(0, 0.42fr) minmax(0, 0.58fr); }
+.task-list, .focus-rail .task-list { flex: 1; max-height: none; }
+.backlog-rail .task-panel-backlog, .rituals-panel, .countdown-panel { min-height: 0; }
+.calendar-panel.sidebar { height: auto; min-height: 0; max-height: none; }
+.rituals-panel .panel-content { flex: 1; gap: 10px; }
+.rituals-panel .inline-composer, .countdown-form, .task-composer { flex-shrink: 0; }
 .ritual-chip-grid, .milestone-grid {
-  display: block;
-  flex: none;
-  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
   padding: 0;
   max-height: none;
 }
-.card-pager { min-width: 0; width: 100%; overflow: clip; }
+.card-pager { display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0; width: 100%; overflow: clip; }
 .card-page-viewport {
   display: flex;
+  flex: 1;
+  min-height: 0;
   align-items: stretch;
   width: 100%;
   min-width: 0;
@@ -43,17 +49,20 @@
   flex: 0 0 100%;
   min-width: 0;
   grid-template-columns: 1fr;
-  grid-auto-rows: max-content;
+  grid-template-rows: minmax(0, max-content);
+  align-items: start;
   align-content: start;
   gap: 8px;
   padding: 2px;
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }
+.card-page[data-rows='2'] { grid-template-rows: repeat(2, minmax(0, max-content)); }
+.card-page > article { max-height: 100%; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-width: thin; }
 .card-page[data-columns='2'] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .card-page[data-columns='3'] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .card-page[data-columns='4'] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.card-page-controls { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.card-page-controls { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 6px; flex-shrink: 0; }
 .card-page-controls[hidden] { display: none; }
 .card-page-controls .icon-button { min-height: 28px; min-width: 28px; }
 .card-page-status { color: var(--text-secondary); font-size: 0.72rem; font-variant-numeric: tabular-nums; }
@@ -73,8 +82,8 @@
 .milestone-info { min-width: 0; }
 .milestone-title { line-height: 1.45; }
 .milestone-meta { display: block; margin-top: 5px; overflow-wrap: anywhere; }
-.milestone-card.editing { grid-column: span 2; }
-.card-page[data-columns='1'] .milestone-card.editing { grid-column: auto; }
+.milestone-card.editing { grid-column: auto; padding: 10px; }
+.milestone-edit-form > .field { width: 100%; min-width: 0; }
 .milestone-edit-form { width: 100%; }
 .milestone-edit-actions { flex-wrap: wrap; }
 .milestone-actions { top: 4px; right: 4px; }
@@ -90,28 +99,27 @@
 .ritual-week-day i { display: block; height: 7px; border-radius: 3px; background: var(--bg-line-strong); }
 .ritual-week-day.complete i { background: var(--accent-ritual); }
 .ritual-chip-footer { position: absolute; right: 5px; top: 7px; gap: 2px; flex-wrap: nowrap; margin: 0; }
-.ritual-chip-footer .ghost-button, .ritual-chip-footer .drag-button { width: 20px; height: 20px; min-width: 20px; min-height: 20px; padding: 0; }
-.ritual-chip.reordering .ritual-chip-footer { position: static; flex-wrap: wrap; margin-top: 2px; }
-.ritual-chip.reordering .order-button { min-height: 26px; padding: 2px 4px; font-size: 0.68rem; }
+.ritual-chip-footer .ghost-button { width: 20px; height: 20px; min-width: 20px; min-height: 20px; padding: 0; }
 .ritual-streak { margin-left: auto; }
 .ritual-chip:hover .ritual-streak, .ritual-chip:focus-within .ritual-streak { visibility: hidden; }
 
+.task-card { position: relative; grid-template-columns: auto minmax(0, 1fr); }
+
 /* Secondary row controls occupy the metadata line, never a separate blank row. */
-.task-card, .task-card.reordering { position: relative; grid-template-columns: auto minmax(0, 1fr); }
 .task-leading { align-self: start; }
 .task-meta-row { padding-right: 66px; min-height: 28px; }
-.task-actions { position: absolute; right: 2px; bottom: 8px; padding: 2px; border-radius: var(--radius-sm); background: var(--sg-popover); }
+.task-actions { position: absolute; right: 2px; bottom: 8px; padding: 2px; border-radius: var(--radius-sm); background: transparent; }
 .task-actions .ghost-button { min-width: 28px; min-height: 28px; padding: 0; }
-.task-card.reordering .task-actions { position: static; grid-column: 1 / -1; justify-self: end; }
-.task-actions.reordering { background: transparent; }
 
 .app-shell button, .dialog-shell button {
   transition: background-color var(--motion-quick) ease-out, border-color var(--motion-quick) ease-out,
     color var(--motion-quick) ease-out, opacity var(--motion-quick) ease-out, scale var(--motion-quick) var(--motion-settle);
   -webkit-tap-highlight-color: transparent;
 }
-.primary-button:hover { transform: none; filter: brightness(1.05); }
-.app-shell button:active:not(:disabled), .dialog-shell button:active:not(:disabled) { transform: none; scale: 0.96; transition-duration: 70ms; }
+.primary-button:hover { transform: none; filter: none; background: color-mix(in srgb, var(--brand-red) 90%, var(--text-primary)); }
+.primary-button.secondary:hover { background: color-mix(in srgb, var(--accent-ritual) 90%, var(--text-primary)); }
+.primary-button.warm:hover { background: color-mix(in srgb, var(--brand-orange) 90%, var(--text-primary)); }
+.app-shell button:active:not(:disabled), .dialog-shell button:active:not(:disabled) { transform: none; scale: 0.98; transition-duration: 70ms; }
 .task-card, .ritual-chip, .milestone-card { transition: background-color var(--motion-quick) ease-out, border-color var(--motion-quick) ease-out; }
 .ritual-chip:hover, .milestone-card:hover { border-color: var(--sg-state-edge); }
 .ghost-button.danger:hover { color: var(--danger); background: var(--focus-soft); }
@@ -128,8 +136,8 @@
     pointer-events: none;
     transition: opacity var(--motion-quick) ease-out;
   }
-  .task-card:hover .task-actions, .task-card:focus-within .task-actions, .task-actions.reordering,
-  .ritual-chip:hover .ritual-chip-footer, .ritual-chip:focus-within .ritual-chip-footer, .ritual-chip.reordering .ritual-chip-footer,
+  .task-card:hover .task-actions, .task-card:focus-within .task-actions,
+  .ritual-chip:hover .ritual-chip-footer, .ritual-chip:focus-within .ritual-chip-footer,
   .milestone-card:hover .milestone-actions, .milestone-card:focus-within .milestone-actions,
   .quote-item:hover .quote-item-actions, .quote-item:focus-within .quote-item-actions {
     opacity: 1;
@@ -140,22 +148,41 @@
   .ritual-streak { margin-left: 0; }
   .ritual-chip-top { padding-right: 60px; flex-wrap: wrap; }
   .ritual-chip:hover .ritual-streak { visibility: visible; }
-  .ritual-chip-footer .ghost-button, .ritual-chip-footer .drag-button { width: 24px; height: 24px; min-width: 24px; min-height: 24px; }
+  .ritual-chip-footer .ghost-button { width: 24px; height: 24px; min-width: 24px; min-height: 24px; }
   .milestone-actions .ghost-button { min-width: 24px; min-height: 24px; }
 }
-@media (max-width: 1259px) {
-  .focus-rail { grid-template-rows: auto auto; }
-  .backlog-rail { grid-template-columns: minmax(240px, 0.65fr) minmax(0, 1fr); grid-template-rows: auto; }
-  .workspace-board { align-items: start; }
-  .time-board { grid-template-rows: auto auto; }
-  .backlog-rail .task-panel-backlog { min-height: 0; }
+@media (min-width: 1100px) {
+  .backlog-rail { grid-column: auto; grid-template-columns: 1fr; align-items: stretch; }
+  .calendar-body { grid-template-columns: minmax(0, 1fr) minmax(140px, 0.62fr); }
+  .calendar-panel.sidebar .calendar-month { min-height: 0; }
+  .selected-date-card { min-height: 0; max-height: none; }
 }
-@media (max-width: 899px) {
-  .backlog-rail { grid-template-columns: 1fr; }
-  .workspace-board { min-height: 0; }
+@media (max-width: 1099px) {
+  /* Narrow layouts scroll within the workspace; the toolbar stays in view. */
+  .workspace-board { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); overflow-y: auto; overscroll-behavior: contain; align-content: start; grid-auto-rows: max-content; }
+  .focus-rail { height: 690px; grid-template-rows: 300px 380px; }
+  .time-board { height: 690px; grid-template-rows: 340px 340px; }
+  .calendar-body { flex: 1; }
+  .calendar-panel.sidebar .calendar-month { min-height: 0; }
+  .backlog-rail { grid-column: 1 / -1; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr); height: 340px; grid-template-rows: 340px; align-items: stretch; }
+}
+@media (max-width: 699px) {
+  .workspace-board, .backlog-rail { grid-template-columns: minmax(0, 1fr); }
+  .focus-rail { grid-template-rows: 300px 380px; }
+  .time-board { height: 890px; grid-template-rows: 480px 400px; }
+  .backlog-rail { height: auto; grid-template-rows: auto 420px; }
+  .overview-sheet { min-height: 180px; }
+  .calendar-panel.sidebar .calendar-month { min-height: 0; }
+  .calendar-body { flex: 1; }
   .milestone-card { padding-top: 28px; }
-  .task-list, .focus-rail .task-list { max-height: 440px; }
-  .calendar-panel.sidebar { height: auto; max-height: none; }
+}
+@media (min-width: 1100px) and (max-height: 720px) {
+  .app-shell { padding: 8px; gap: 8px; }
+  .panel { padding: 10px; }
+  .panel-side-layout { gap: 8px; }
+  .panel-header, .panel-side-header { padding-bottom: 6px; }
+  .focus-rail { grid-template-rows: minmax(0, 0.45fr) minmax(0, 0.55fr); }
+  .time-board { grid-template-rows: minmax(0, 0.42fr) minmax(0, 0.58fr); }
 }
 @media (prefers-reduced-motion: reduce) {
   .card-page-viewport { scroll-behavior: auto; }
@@ -172,4 +199,38 @@
 }
 @media (prefers-contrast: more) {
   .panel, .overview-sheet, .topbar, .ritual-chip, .milestone-card, .field, button { border-color: var(--text-secondary); }
+}
+
+/* Quiet, consistent feedback; selected and completed states retain their hue. */
+.ghost-button { background: transparent; }
+.task-card:hover, .task-card:focus-within { background: color-mix(in srgb, var(--sg-state) 55%, transparent); }
+.task-card, .ritual-chip, .milestone-card { cursor: default; }
+[draggable='true'] { cursor: grab; }
+[draggable='true']:active { cursor: grabbing; }
+.ritual-chip:hover, .milestone-card:hover { background: color-mix(in srgb, var(--sg-card) 85%, var(--sg-state)); }
+.ritual-chip.done:hover { background: var(--ritual-soft); }
+.check-button:hover { background: var(--focus-soft); border-color: var(--accent-focus); }
+.check-button:active, .ritual-check:active, .calendar-day:active { scale: 1 !important; }
+.ritual-chip-footer { border-radius: var(--radius-sm); background: var(--sg-card); }
+.card-page > article:focus-visible { outline-offset: -2px; }
+
+.task-card.just-completed { animation: none; }
+
+/* Inline date editing uses the whole current page without shifting other pages. */
+.card-page { position: relative; }
+.card-page:has(.milestone-card.editing) > article:not(.editing) { visibility: hidden; }
+.card-page > .milestone-card.editing {
+  position: absolute;
+  inset: 2px;
+  z-index: 1;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-content: start;
+  gap: 12px;
+  padding: 10px;
+}
+.milestone-edit-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.milestone-edit-form > input:first-child, .milestone-edit-actions { grid-column: 1 / -1; }
+.milestone-edit-actions { margin-top: 0; }
+@media (hover: none), (pointer: coarse) {
+  .ritual-chip-footer { background: transparent; }
 }

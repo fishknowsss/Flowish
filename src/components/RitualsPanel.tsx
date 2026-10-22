@@ -4,7 +4,7 @@ import { CardPager } from './CardPager'
 
 import { formatShortDate, parseDateKey, toDateKey } from '../lib/date'
 import type { Ritual } from '../store/appData'
-import { CheckIcon, DragIcon, FireIcon, LoopIcon, NoteIcon, PlusIcon, TrashIcon } from './Icon'
+import { CheckIcon, FireIcon, LoopIcon, NoteIcon, PlusIcon, TrashIcon } from './Icon'
 
 interface RitualsPanelProps {
   rituals: Ritual[]
@@ -58,12 +58,8 @@ export function RitualsPanel({
   const [editingValue, setEditingValue] = useState('')
   const [dragId, setDragId] = useState<string | null>(null)
   const [dragOverId, setDragOverId] = useState<string | null>(null)
-  const [orderingId, setOrderingId] = useState<string | null>(null)
   const [orderAnnouncement, setOrderAnnouncement] = useState('')
   const [announcedRitual, setAnnouncedRitual] = useState<{ id: string; text: string } | null>(null)
-  const activeOrderingId = orderingId && rituals.some((ritual) => ritual.id === orderingId)
-    ? orderingId
-    : null
   const visibleOrderAnnouncement = announcedRitual && rituals.some(
     (ritual) => ritual.id === announcedRitual.id && ritual.text === announcedRitual.text,
   )
@@ -135,14 +131,13 @@ export function RitualsPanel({
             }}
           >
             {rituals.length === 0 ? <div className="empty-card">添加一个每天重复的动作。</div> : null}
-            <CardPager label="固定节律" columns={3} minCardWidth={110}>
+            <CardPager label="固定节律" columns={3} minCardWidth={96} minCardHeight={92}>
               {rituals.map((ritual, index) => {
                 const done = Boolean(ritual.completionHistory[todayKey])
                 const streak = computeStreak(ritual, todayKey)
                 const isDragging = dragId === ritual.id
                 const isDragOver = dragOverId === ritual.id
                 const isEditing = editingId === ritual.id
-                const isReordering = activeOrderingId === ritual.id
                 const startEditing = () => {
                   setEditingId(ritual.id)
                   setEditingValue(ritual.text)
@@ -164,8 +159,15 @@ export function RitualsPanel({
                   <article
                     key={ritual.id}
                     data-search-id={ritual.id}
-                    tabIndex={-1}
-                    className={`ritual-chip ${isEditing ? 'editing' : ''} ${done ? 'done' : ''} ${isDragging ? 'dragging' : ''} ${isDragOver ? 'drag-over' : ''} ${isReordering ? 'reordering' : ''}`}
+                    tabIndex={0}
+                    aria-label={`${ritual.text}，可拖动排序`}
+                    aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown"
+                    onKeyDown={(event) => {
+                      if (event.target !== event.currentTarget || !event.altKey) return
+                      if (event.key === 'ArrowUp') { event.preventDefault(); moveUp() }
+                      if (event.key === 'ArrowDown') { event.preventDefault(); moveDown() }
+                    }}
+                    className={`ritual-chip ${isEditing ? 'editing' : ''} ${done ? 'done' : ''} ${isDragging ? 'dragging' : ''} ${isDragOver ? 'drag-over' : ''}`}
                     draggable={!isEditing}
                     onDragStart={(e) => {
                       e.dataTransfer.setData('text/plain', ritual.id)
@@ -266,59 +268,22 @@ export function RitualsPanel({
                       </div>
                     </div>
                     <div className="ritual-chip-footer">
-                      {isReordering ? (
-                        <>
-                          <button className="order-button" type="button" onClick={moveUp} disabled={index === 0} aria-label={`上移“${ritual.text}”`}>
-                            上移
-                          </button>
-                          <button className="order-button" type="button" onClick={moveDown} disabled={index >= rituals.length - 1} aria-label={`下移“${ritual.text}”`}>
-                            下移
-                          </button>
-                          <button className="order-button" type="button" onClick={() => setOrderingId(null)} aria-label={`收起“${ritual.text}”排序`}>
-                            收起
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            className="drag-button ritual-order-button"
-                            type="button"
-                            disabled={rituals.length < 2}
-                            onClick={() => setOrderingId(ritual.id)}
-                            onKeyDown={(event) => {
-                              if (event.key === 'ArrowUp' && index > 0) {
-                                event.preventDefault()
-                                moveUp()
-                              }
-                              if (event.key === 'ArrowDown' && index < rituals.length - 1) {
-                                event.preventDefault()
-                                moveDown()
-                              }
-                            }}
-                            aria-label={`调整“${ritual.text}”顺序，第 ${index + 1}/${rituals.length} 项`}
-                            aria-keyshortcuts="ArrowUp ArrowDown"
-                            aria-expanded={false}
-                          >
-                            <DragIcon width={12} height={12} />
-                          </button>
-                          <button
-                            className="ghost-button small"
-                            type="button"
-                            onClick={startEditing}
-                            aria-label={`编辑“${ritual.text}”`}
-                          >
-                            <NoteIcon width={12} height={12} />
-                          </button>
-                          <button
-                            className="ghost-button danger small"
-                            type="button"
-                            onClick={() => onDelete(ritual.id)}
-                            aria-label={`删除“${ritual.text}”`}
-                          >
-                            <TrashIcon width={12} height={12} />
-                          </button>
-                        </>
-                      )}
+                      <button
+                        className="ghost-button small"
+                        type="button"
+                        onClick={startEditing}
+                        aria-label={`编辑“${ritual.text}”`}
+                      >
+                        <NoteIcon width={12} height={12} />
+                      </button>
+                      <button
+                        className="ghost-button danger small"
+                        type="button"
+                        onClick={() => onDelete(ritual.id)}
+                        aria-label={`删除“${ritual.text}”`}
+                      >
+                        <TrashIcon width={12} height={12} />
+                      </button>
                     </div>
                   </article>
                 )

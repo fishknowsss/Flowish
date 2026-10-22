@@ -622,9 +622,6 @@
 .task-schedule-select { width: 76px; }
 .task-due-input { width: 112px; }
 .task-meta-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
-.task-actions.reordering { opacity: 1; }
-.task-card.reordering { grid-template-columns: auto minmax(0, 1fr); }
-.task-card.reordering .task-actions { grid-column: 1 / -1; justify-content: flex-end; }
 
 .pomodoro-open-button {
   display: inline-flex;

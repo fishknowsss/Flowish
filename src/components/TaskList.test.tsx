@@ -121,19 +121,21 @@ describe('TaskList', () => {
     expect(props.onAdd).toHaveBeenCalledWith('提交材料', { dueDate: '2026-07-22' })
   })
 
-  it('offers click and arrow-key ordering without requiring drag and drop', () => {
+  it('sorts focused cards with Alt and arrows while keeping native dragging', () => {
     const onDropTask = vi.fn()
     renderTaskList(
       [makeTask('task-a', '任务甲'), makeTask('task-b', '任务乙')],
       onDropTask,
     )
 
-    fireEvent.click(screen.getByRole('button', { name: /调整“任务甲”顺序/ }))
-    fireEvent.click(screen.getByRole('button', { name: '下移“任务甲”' }))
+    const card = screen.getByLabelText('任务甲，可拖动排序')
+    expect(card).toHaveAttribute('draggable', 'true')
+    expect(screen.queryByRole('button', { name: /调整.*顺序/ })).not.toBeInTheDocument()
+    fireEvent.keyDown(card, { key: 'ArrowDown', altKey: true })
     expect(onDropTask).toHaveBeenLastCalledWith('focus', 'task-a', null)
 
-    fireEvent.keyDown(screen.getByRole('button', { name: /调整“任务乙”顺序/ }), {
-      key: 'ArrowUp',
+    fireEvent.keyDown(screen.getByLabelText('任务乙，可拖动排序'), {
+      key: 'ArrowUp', altKey: true,
     })
     expect(onDropTask).toHaveBeenLastCalledWith('focus', 'task-b', 'task-a')
   })
@@ -143,8 +145,10 @@ describe('TaskList', () => {
       makeTask('task-a', '任务甲'),
       makeTask('task-b', '任务乙'),
     ])
-    fireEvent.click(screen.getByRole('button', { name: /调整“任务甲”顺序/ }))
-    fireEvent.click(screen.getByRole('button', { name: '下移“任务甲”' }))
+    const card = screen.getByLabelText('任务甲，可拖动排序')
+    expect(card).toHaveAttribute('draggable', 'true')
+    expect(screen.queryByRole('button', { name: /调整.*顺序/ })).not.toBeInTheDocument()
+    fireEvent.keyDown(card, { key: 'ArrowDown', altKey: true })
     expect(screen.getByText('已将“任务甲”下移到第 2 项')).toBeInTheDocument()
 
     rerender(<TaskList {...props} tasks={[makeTask('imported', '导入任务')]} />)

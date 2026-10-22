@@ -6,6 +6,7 @@ interface CardPagerProps {
   label: string
   columns: number
   minCardWidth: number
+  minCardHeight?: number
   children: ReactNode
 }
 
@@ -14,65 +15,45 @@ function reducedMotion() {
 }
 
 /** Keep every page mounted: search, keyboard focus and drag ordering can reach it. */
-export function CardPager({ label, columns: maxColumns, minCardWidth, children }: CardPagerProps) {
+export function CardPager({ label, columns: maxColumns, minCardWidth, minCardHeight = 128, children }: CardPagerProps) {
   const viewportRef = useRef<HTMLDivElement>(null)
-  const [columns, setColumns] = useState(maxColumns)
+  const [{ columns, rows }, setLayout] = useState({ columns: maxColumns, rows: 2 })
   const [requestedPage, setRequestedPage] = useState(0)
   const pageRef = useRef(0)
   const items = Children.toArray(children)
-  const pageSize = columns * 2
+  const pageSize = columns * rows
+  const previousPageSize = useRef(pageSize)
   const pageCount = Math.max(1, Math.ceil(items.length / pageSize))
   const page = Math.min(requestedPage, pageCount - 1)
 
   useEffect(() => {
     const viewport = viewportRef.current!
-    let previousWidth = 0
     const observer = new ResizeObserver(([entry]) => {
-      if (Math.abs(entry.contentRect.width - previousWidth) < 0.1) return
-      previousWidth = entry.contentRect.width
-      setColumns(Math.max(1, Math.min(maxColumns, Math.floor((entry.contentRect.width + 8) / (minCardWidth + 8)))))
-      viewport.scrollTo({ left: pageRef.current * entry.contentRect.width, behavior: 'instant' })
+      const bounds = viewport.getBoundingClientRect()
+      const { width, height } = bounds.width ? bounds : entry.contentRect
+      const fittedWidth = height < minCardHeight + 10 ? Math.max(minCardWidth, 280) : height < minCardHeight + 55 ? Math.max(minCardWidth, 190) : minCardWidth
+      const cardHeight = Math.max(minCardHeight, ...Array.from(viewport.querySelectorAll<HTMLElement>('.card-page > article'), (card) => card.scrollHeight))
+      const next = {
+        columns: Math.max(1, Math.min(maxColumns, Math.floor((width + 8) / (fittedWidth + 8)))),
+        // Short screens show one complete row rather than half of the second.
+        rows: height < cardHeight * 2 + 12 ? 1 : 2,
+      }
+      if (viewport.querySelector('.editing')) return
+      setLayout((previous) => previous.columns === next.columns && previous.rows === next.rows ? previous : next)
     })
     observer.observe(viewport)
+    // Observe natural text boxes, not the constrained card frames.
+    viewport.querySelectorAll('.ritual-chip-body, .milestone-info').forEach((content) => observer.observe(content))
     return () => observer.disconnect()
-  }, [maxColumns, minCardWidth])
+  }, [maxColumns, minCardWidth, minCardHeight, children])
 
   useEffect(() => {
     const viewport = viewportRef.current!
-    viewport.scrollTo({ left: Math.min(pageRef.current, pageCount - 1) * viewport.clientWidth, behavior: 'instant' })
-  }, [columns, pageCount])
-
-  useEffect(() => {
-    const viewport = viewportRef.current!
-    let frame = 0
-    let previous = 0
-    let offset = 0
-    let velocity = 0
-    const settle = (now: number) => {
-      if (reducedMotion()) { frame = 0; viewport.style.translate = ''; return }
-      const dt = Math.min((now - previous) / 1000 || 1 / 60, 1 / 30)
-      previous = now
-      velocity += (-260 * offset - 26 * velocity) * dt
-      offset += velocity * dt
-      viewport.style.translate = `${offset}px 0`
-      if (Math.abs(offset) > 0.05 || Math.abs(velocity) > 0.1) frame = requestAnimationFrame(settle)
-      else { frame = 0; viewport.style.translate = ''; previous = 0 }
-    }
-    const onWheel = (event: WheelEvent) => {
-      if (reducedMotion() || Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return
-      const atStart = viewport.scrollLeft <= 1 && event.deltaX < 0
-      const atEnd = viewport.scrollLeft >= viewport.scrollWidth - viewport.clientWidth - 1 && event.deltaX > 0
-      if (!atStart && !atEnd) return
-      velocity = Math.max(-240, Math.min(240, velocity - Math.sign(event.deltaX) * Math.min(Math.abs(event.deltaX) * 3, 150)))
-      if (!frame) { previous = performance.now(); frame = requestAnimationFrame(settle) }
-    }
-    viewport.addEventListener('wheel', onWheel, { passive: true })
-    return () => {
-      viewport.removeEventListener('wheel', onWheel)
-      cancelAnimationFrame(frame)
-      viewport.style.translate = ''
-    }
-  }, [])
+    const anchor = pageRef.current * previousPageSize.current
+    pageRef.current = Math.min(Math.floor(anchor / pageSize), pageCount - 1)
+    previousPageSize.current = pageSize
+    viewport.scrollTo({ left: pageRef.current * viewport.clientWidth, behavior: 'instant' })
+  }, [columns, pageSize, pageCount])
 
   const goTo = (next: number) => {
     const viewport = viewportRef.current!
@@ -104,7 +85,7 @@ export function CardPager({ label, columns: maxColumns, minCardWidth, children }
         }}
       >
         {Array.from({ length: pageCount }, (_, index) => (
-          <div className="card-page" data-columns={columns} role="group" aria-label={`${label}第 ${index + 1} 页`} key={index}>
+          <div className="card-page" data-columns={columns} data-rows={rows} role="group" aria-label={`${label}第 ${index + 1} 页`} key={index}>
             {items.slice(index * pageSize, (index + 1) * pageSize)}
           </div>
         ))}

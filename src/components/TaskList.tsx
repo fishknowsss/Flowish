@@ -2,7 +2,7 @@ import type { FormEvent, ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import type { FocusTimeSlot, Task, TaskBucket, TaskSchedule } from '../store/appData'
-import { CheckIcon, DragIcon, NoteIcon, PlusIcon, TrashIcon } from './Icon'
+import { CheckIcon, NoteIcon, PlusIcon, TrashIcon } from './Icon'
 
 interface TaskListProps {
   title: string
@@ -36,8 +36,6 @@ interface TaskRowProps {
   canMoveDown: boolean
   onMoveUp: () => void
   onMoveDown: () => void
-  position: number
-  total: number
 }
 
 const TIME_SLOT_OPTIONS: Array<{ value: FocusTimeSlot; label: string }> = [
@@ -72,15 +70,12 @@ function TaskRow({
   canMoveDown,
   onMoveUp,
   onMoveDown,
-  position,
-  total,
 }: TaskRowProps) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(task.text)
   const [dragging, setDragging] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const [justCompleted, setJustCompleted] = useState(false)
-  const [reordering, setReordering] = useState(false)
   const completionTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null)
 
   useEffect(() => () => {
@@ -116,7 +111,14 @@ function TaskRow({
   return (
     <article
       data-search-id={task.id}
-      tabIndex={-1}
+      tabIndex={0}
+      aria-label={`${task.text}，可拖动排序`}
+      aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown"
+      onKeyDown={(event) => {
+        if (event.target !== event.currentTarget || !event.altKey) return
+        if (event.key === 'ArrowUp' && canMoveUp) { event.preventDefault(); onMoveUp() }
+        if (event.key === 'ArrowDown' && canMoveDown) { event.preventDefault(); onMoveDown() }
+      }}
       className={[
         'task-card',
         accent,
@@ -124,7 +126,6 @@ function TaskRow({
         dragging ? 'dragging' : '',
         dragOver ? 'drag-over' : '',
         justCompleted ? 'just-completed' : '',
-        reordering ? 'reordering' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -158,27 +159,7 @@ function TaskRow({
           {task.completed ? <CheckIcon width={16} height={16} /> : null}
         </button>
         {task.priority ? <span className={`priority-dot ${task.priority}`} aria-hidden="true" /> : null}
-        <button
-          className="drag-button"
-          type="button"
-          disabled={!canMoveUp && !canMoveDown}
-          aria-label={`调整“${task.text}”顺序，第 ${position}/${total} 项`}
-          aria-keyshortcuts="ArrowUp ArrowDown"
-          aria-expanded={reordering}
-          onClick={() => setReordering((value) => !value)}
-          onKeyDown={(event) => {
-            if (event.key === 'ArrowUp' && canMoveUp) {
-              event.preventDefault()
-              onMoveUp()
-            }
-            if (event.key === 'ArrowDown' && canMoveDown) {
-              event.preventDefault()
-              onMoveDown()
-            }
-          }}
-        >
-          <DragIcon width={16} height={16} />
-        </button>
+
       </div>
 
       <div className="task-copy">
@@ -233,34 +214,18 @@ function TaskRow({
         )}
       </div>
 
-      <div className={`task-actions ${reordering ? 'reordering' : ''}`}>
-        {reordering ? (
-          <>
-            <button className="order-button" type="button" onClick={onMoveUp} disabled={!canMoveUp} aria-label={`上移“${task.text}”`}>
-              上移
-            </button>
-            <button className="order-button" type="button" onClick={onMoveDown} disabled={!canMoveDown} aria-label={`下移“${task.text}”`}>
-              下移
-            </button>
-            <button className="order-button" type="button" onClick={() => setReordering(false)} aria-label={`收起“${task.text}”排序`}>
-              收起
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              className="ghost-button"
-              type="button"
-              onClick={startEditing}
-              aria-label={`编辑“${task.text}”`}
-            >
-              <NoteIcon width={16} height={16} />
-            </button>
-            <button className="ghost-button danger" type="button" onClick={() => onDelete(task.id)} aria-label={`删除“${task.text}”`}>
-              <TrashIcon width={16} height={16} />
-            </button>
-          </>
-        )}
+      <div className="task-actions">
+        <button
+          className="ghost-button"
+          type="button"
+          onClick={startEditing}
+          aria-label={`编辑“${task.text}”`}
+        >
+          <NoteIcon width={16} height={16} />
+        </button>
+        <button className="ghost-button danger" type="button" onClick={() => onDelete(task.id)} aria-label={`删除“${task.text}”`}>
+          <TrashIcon width={16} height={16} />
+        </button>
       </div>
     </article>
   )
@@ -402,8 +367,6 @@ export function TaskList({
                 onDropTask={onDropTask}
                 canMoveUp={index > 0}
                 canMoveDown={index < tasks.length - 1}
-                position={index + 1}
-                total={tasks.length}
                 onMoveUp={() => {
                   onDropTask(bucket, task.id, tasks[index - 1]?.id ?? null)
                   setOrderAnnouncement(`已将“${task.text}”上移到第 ${index} 项`)
