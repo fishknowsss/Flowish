@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { CardPager } from './CardPager'
+
 import { formatShortDate, parseDateKey, toDateKey } from '../lib/date'
 import type { Ritual } from '../store/appData'
 import { CheckIcon, DragIcon, FireIcon, LoopIcon, NoteIcon, PlusIcon, TrashIcon } from './Icon'
@@ -133,193 +135,195 @@ export function RitualsPanel({
             }}
           >
             {rituals.length === 0 ? <div className="empty-card">添加一个每天重复的动作。</div> : null}
-            {rituals.map((ritual, index) => {
-              const done = Boolean(ritual.completionHistory[todayKey])
-              const streak = computeStreak(ritual, todayKey)
-              const isDragging = dragId === ritual.id
-              const isDragOver = dragOverId === ritual.id
-              const isEditing = editingId === ritual.id
-              const isReordering = activeOrderingId === ritual.id
-              const startEditing = () => {
-                setEditingId(ritual.id)
-                setEditingValue(ritual.text)
-              }
-              const moveUp = () => {
-                if (index === 0) return
-                onDropRitual(ritual.id, rituals[index - 1]?.id ?? null)
-                setOrderAnnouncement(`已将“${ritual.text}”上移到第 ${index} 项`)
-                setAnnouncedRitual({ id: ritual.id, text: ritual.text })
-              }
-              const moveDown = () => {
-                if (index >= rituals.length - 1) return
-                onDropRitual(ritual.id, rituals[index + 2]?.id ?? null)
-                setOrderAnnouncement(`已将“${ritual.text}”下移到第 ${index + 2} 项`)
-                setAnnouncedRitual({ id: ritual.id, text: ritual.text })
-              }
+            <CardPager label="固定节律" columns={3} minCardWidth={110}>
+              {rituals.map((ritual, index) => {
+                const done = Boolean(ritual.completionHistory[todayKey])
+                const streak = computeStreak(ritual, todayKey)
+                const isDragging = dragId === ritual.id
+                const isDragOver = dragOverId === ritual.id
+                const isEditing = editingId === ritual.id
+                const isReordering = activeOrderingId === ritual.id
+                const startEditing = () => {
+                  setEditingId(ritual.id)
+                  setEditingValue(ritual.text)
+                }
+                const moveUp = () => {
+                  if (index === 0) return
+                  onDropRitual(ritual.id, rituals[index - 1]?.id ?? null)
+                  setOrderAnnouncement(`已将“${ritual.text}”上移到第 ${index} 项`)
+                  setAnnouncedRitual({ id: ritual.id, text: ritual.text })
+                }
+                const moveDown = () => {
+                  if (index >= rituals.length - 1) return
+                  onDropRitual(ritual.id, rituals[index + 2]?.id ?? null)
+                  setOrderAnnouncement(`已将“${ritual.text}”下移到第 ${index + 2} 项`)
+                  setAnnouncedRitual({ id: ritual.id, text: ritual.text })
+                }
 
-              return (
-                <article 
-                  key={ritual.id} 
-                  data-search-id={ritual.id}
-                  tabIndex={-1}
-                  className={`ritual-chip ${done ? 'done' : ''} ${isDragging ? 'dragging' : ''} ${isDragOver ? 'drag-over' : ''} ${isReordering ? 'reordering' : ''}`}
-                  draggable={!isEditing}
-                  onDragStart={(e) => {
-                    e.dataTransfer.setData('text/plain', ritual.id)
-                    setDragId(ritual.id)
-                  }}
-                  onDragEnd={() => {
-                    setDragId(null)
-                    setDragOverId(null)
-                  }}
-                  onDragOver={(e) => {
-                    e.preventDefault()
-                    if (dragId !== ritual.id) setDragOverId(ritual.id)
-                  }}
-                  onDragLeave={() => setDragOverId(null)}
-                  onDrop={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    const sourceId = e.dataTransfer.getData('text/plain')
-                    if (sourceId && sourceId !== ritual.id) {
-                      onDropRitual(sourceId, ritual.id)
-                    }
-                    setDragOverId(null)
-                  }}
-                >
-                  <div className="ritual-chip-top">
-                    <button
-                      className={`ritual-check small ${done ? 'checked' : ''}`}
-                      type="button"
-                      onClick={() => onToggle(ritual.id, todayKey)}
-                      aria-label={`${done ? '取消完成' : '完成'}“${ritual.text}”`}
-                    >
-                      {done ? <CheckIcon width={12} height={12} /> : null}
-                    </button>
-                    {streak > 0 ? (
-                      <span className="ritual-streak">
-                        <FireIcon
-                          width={11}
-                          height={11}
-                          className={`ritual-streak-icon ${streak >= 7 ? 'hot' : streak >= 3 ? 'warm' : ''}`}
-                        />
-                        {streak}天
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="ritual-chip-body">
-                    {isEditing ? (
-                      <input
-                        autoFocus
-                        className="field inline-edit small"
-                        name={`${ritual.id}-text`}
-                        autoComplete="off"
-                        aria-label="编辑循环任务内容"
-                        value={editingValue}
-                        onChange={(event) => setEditingValue(event.target.value)}
-                        onBlur={() => {
-                          const nextValue = editingValue.trim()
-                          if (nextValue) onUpdate(ritual.id, nextValue)
-                          setEditingId(null)
-                        }}
-                        onKeyDown={(event) => {
-                          if (event.key === 'Enter') {
+                return (
+                  <article
+                    key={ritual.id}
+                    data-search-id={ritual.id}
+                    tabIndex={-1}
+                    className={`ritual-chip ${isEditing ? 'editing' : ''} ${done ? 'done' : ''} ${isDragging ? 'dragging' : ''} ${isDragOver ? 'drag-over' : ''} ${isReordering ? 'reordering' : ''}`}
+                    draggable={!isEditing}
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData('text/plain', ritual.id)
+                      setDragId(ritual.id)
+                    }}
+                    onDragEnd={() => {
+                      setDragId(null)
+                      setDragOverId(null)
+                    }}
+                    onDragOver={(e) => {
+                      e.preventDefault()
+                      if (dragId !== ritual.id) setDragOverId(ritual.id)
+                    }}
+                    onDragLeave={() => setDragOverId(null)}
+                    onDrop={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      const sourceId = e.dataTransfer.getData('text/plain')
+                      if (sourceId && sourceId !== ritual.id) {
+                        onDropRitual(sourceId, ritual.id)
+                      }
+                      setDragOverId(null)
+                    }}
+                  >
+                    <div className="ritual-chip-top">
+                      <button
+                        className={`ritual-check small ${done ? 'checked' : ''}`}
+                        type="button"
+                        onClick={() => onToggle(ritual.id, todayKey)}
+                        aria-label={`${done ? '取消完成' : '完成'}“${ritual.text}”`}
+                      >
+                        {done ? <CheckIcon width={12} height={12} /> : null}
+                      </button>
+                      {streak > 0 ? (
+                        <span className="ritual-streak">
+                          <FireIcon
+                            width={11}
+                            height={11}
+                            className={`ritual-streak-icon ${streak >= 7 ? 'hot' : streak >= 3 ? 'warm' : ''}`}
+                          />
+                          {streak}天
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="ritual-chip-body">
+                      {isEditing ? (
+                        <input
+                          autoFocus
+                          className="field inline-edit small"
+                          name={`${ritual.id}-text`}
+                          autoComplete="off"
+                          aria-label="编辑循环任务内容"
+                          value={editingValue}
+                          onChange={(event) => setEditingValue(event.target.value)}
+                          onBlur={() => {
                             const nextValue = editingValue.trim()
                             if (nextValue) onUpdate(ritual.id, nextValue)
                             setEditingId(null)
-                          }
-                          if (event.key === 'Escape') setEditingId(null)
-                        }}
-                      />
-                    ) : (
-                      <strong className="ritual-chip-label" onDoubleClick={startEditing}>
-                        {ritual.text}
-                      </strong>
-                    )}
-                    <div
-                      className="ritual-week"
-                    >
-                      <span className="ritual-week-title">本周</span>
-                      <span
-                        className="ritual-week-days"
-                        role="list"
-                        aria-label={`“${ritual.text}”本周完成 ${weekDates.filter(({ dateKey }) => ritual.completionHistory[dateKey]).length} 天`}
-                      >
-                        {weekDates.map(({ dateKey, label }) => {
-                          const complete = Boolean(ritual.completionHistory[dateKey])
-                          return (
-                            <span
-                              key={dateKey}
-                              className={`ritual-week-day ${complete ? 'complete' : ''}`}
-                              role="listitem"
-                              aria-label={`周${label}，${formatShortDate(dateKey)}，${complete ? '已完成' : '未完成'}`}
-                            >
-                              <span className="ritual-week-day-label" aria-hidden="true">{label}</span>
-                              <i aria-hidden="true" />
-                            </span>
-                          )
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="ritual-chip-footer">
-                    {isReordering ? (
-                      <>
-                        <button className="order-button" type="button" onClick={moveUp} disabled={index === 0} aria-label={`上移“${ritual.text}”`}>
-                          上移
-                        </button>
-                        <button className="order-button" type="button" onClick={moveDown} disabled={index >= rituals.length - 1} aria-label={`下移“${ritual.text}”`}>
-                          下移
-                        </button>
-                        <button className="order-button" type="button" onClick={() => setOrderingId(null)} aria-label={`收起“${ritual.text}”排序`}>
-                          收起
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="drag-button ritual-order-button"
-                          type="button"
-                          disabled={rituals.length < 2}
-                          onClick={() => setOrderingId(ritual.id)}
-                          onKeyDown={(event) => {
-                            if (event.key === 'ArrowUp' && index > 0) {
-                              event.preventDefault()
-                              moveUp()
-                            }
-                            if (event.key === 'ArrowDown' && index < rituals.length - 1) {
-                              event.preventDefault()
-                              moveDown()
-                            }
                           }}
-                          aria-label={`调整“${ritual.text}”顺序，第 ${index + 1}/${rituals.length} 项`}
-                          aria-keyshortcuts="ArrowUp ArrowDown"
-                          aria-expanded={false}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                              const nextValue = editingValue.trim()
+                              if (nextValue) onUpdate(ritual.id, nextValue)
+                              setEditingId(null)
+                            }
+                            if (event.key === 'Escape') setEditingId(null)
+                          }}
+                        />
+                      ) : (
+                        <strong className="ritual-chip-label" onDoubleClick={startEditing}>
+                          {ritual.text}
+                        </strong>
+                      )}
+                      <div
+                        className="ritual-week"
+                      >
+                        <span className="sr-only">本周</span>
+                        <span
+                          className="ritual-week-days"
+                          role="list"
+                          aria-label={`“${ritual.text}”本周完成 ${weekDates.filter(({ dateKey }) => ritual.completionHistory[dateKey]).length} 天`}
                         >
-                          <DragIcon width={12} height={12} />
-                        </button>
-                        <button
-                          className="ghost-button small"
-                          type="button"
-                          onClick={startEditing}
-                          aria-label={`编辑“${ritual.text}”`}
-                        >
-                          <NoteIcon width={12} height={12} />
-                        </button>
-                        <button
-                          className="ghost-button danger small"
-                          type="button"
-                          onClick={() => onDelete(ritual.id)}
-                          aria-label={`删除“${ritual.text}”`}
-                        >
-                          <TrashIcon width={12} height={12} />
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </article>
-              )
-            })}
+                          {weekDates.map(({ dateKey, label }) => {
+                            const complete = Boolean(ritual.completionHistory[dateKey])
+                            return (
+                              <span
+                                key={dateKey}
+                                className={`ritual-week-day ${complete ? 'complete' : ''}`}
+                                role="listitem"
+                                aria-label={`周${label}，${formatShortDate(dateKey)}，${complete ? '已完成' : '未完成'}`}
+                                title={`周${label} · ${formatShortDate(dateKey)} · ${complete ? '已完成' : '未完成'}`}
+                              >
+                                <i aria-hidden="true" />
+                              </span>
+                            )
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="ritual-chip-footer">
+                      {isReordering ? (
+                        <>
+                          <button className="order-button" type="button" onClick={moveUp} disabled={index === 0} aria-label={`上移“${ritual.text}”`}>
+                            上移
+                          </button>
+                          <button className="order-button" type="button" onClick={moveDown} disabled={index >= rituals.length - 1} aria-label={`下移“${ritual.text}”`}>
+                            下移
+                          </button>
+                          <button className="order-button" type="button" onClick={() => setOrderingId(null)} aria-label={`收起“${ritual.text}”排序`}>
+                            收起
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            className="drag-button ritual-order-button"
+                            type="button"
+                            disabled={rituals.length < 2}
+                            onClick={() => setOrderingId(ritual.id)}
+                            onKeyDown={(event) => {
+                              if (event.key === 'ArrowUp' && index > 0) {
+                                event.preventDefault()
+                                moveUp()
+                              }
+                              if (event.key === 'ArrowDown' && index < rituals.length - 1) {
+                                event.preventDefault()
+                                moveDown()
+                              }
+                            }}
+                            aria-label={`调整“${ritual.text}”顺序，第 ${index + 1}/${rituals.length} 项`}
+                            aria-keyshortcuts="ArrowUp ArrowDown"
+                            aria-expanded={false}
+                          >
+                            <DragIcon width={12} height={12} />
+                          </button>
+                          <button
+                            className="ghost-button small"
+                            type="button"
+                            onClick={startEditing}
+                            aria-label={`编辑“${ritual.text}”`}
+                          >
+                            <NoteIcon width={12} height={12} />
+                          </button>
+                          <button
+                            className="ghost-button danger small"
+                            type="button"
+                            onClick={() => onDelete(ritual.id)}
+                            aria-label={`删除“${ritual.text}”`}
+                          >
+                            <TrashIcon width={12} height={12} />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </article>
+                )
+              })}
+            </CardPager>
             <span className="sr-only" aria-live="polite" aria-atomic="true">
               {visibleOrderAnnouncement}
             </span>

@@ -40,7 +40,8 @@ describe('RitualsPanel', () => {
 
     const week = screen.getByRole('list', { name: '“晨间规划”本周完成 2 天' })
     const days = within(week).getAllByRole('listitem')
-    expect(days.map((day) => day.textContent)).toEqual(['一', '二', '三', '四', '五', '六', '日'])
+    expect(days).toHaveLength(7)
+    expect(days.every((day) => day.textContent === '')).toBe(true)
     expect(days.map((day) => day.getAttribute('aria-label'))).toEqual([
       '周一，7月13日，已完成',
       '周二，7月14日，未完成',

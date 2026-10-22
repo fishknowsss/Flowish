@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 
 import { formatShortDate, getEventDayCopy, getEventDays, getEventTypeLabel } from '../lib/date'
 import type { EventItem } from '../store/appData'
+import { CardPager } from './CardPager'
 import { MilestoneIcon, NoteIcon, PlusIcon, TrashIcon } from './Icon'
 
 interface CountdownPanelProps {
@@ -109,85 +110,87 @@ export function CountdownPanel({ events, todayKey, onAdd, onUpdate, onDelete }: 
 
       <div className="milestone-grid">
         {sorted.length === 0 ? <div className="empty-card">先添加一个重要日期。</div> : null}
-        {sorted.map((event) => {
-          const remainingDays = getEventDays(event, todayKey)
-          const dayCopy = getEventDayCopy(event, todayKey)
-          const tone =
-            remainingDays < 0
-              ? 'muted'
-              : remainingDays === 0
-                ? 'urgent'
-                : remainingDays <= 3
-                  ? 'warm'
-                  : 'cool'
+        <CardPager label="重要日期" columns={4} minCardWidth={104}>
+          {sorted.map((event) => {
+            const remainingDays = getEventDays(event, todayKey)
+            const dayCopy = getEventDayCopy(event, todayKey)
+            const tone =
+              remainingDays < 0
+                ? 'muted'
+                : remainingDays === 0
+                  ? 'urgent'
+                  : remainingDays <= 3
+                    ? 'warm'
+                    : 'cool'
 
-          return (
-            <article key={event.id} data-search-id={event.id} tabIndex={-1} className={`milestone-card ${tone}`}>
-              <div className="milestone-days">
-                <strong>{dayCopy.value}</strong>
-                {dayCopy.unit ? <span>{dayCopy.unit}</span> : null}
-              </div>
-              {editingId === event.id ? (
-                <form
-                  className="milestone-edit-form"
-                  onSubmit={(submitEvent) => {
-                    submitEvent.preventDefault()
-                    commitEditing(event.id)
-                  }}
-                  onKeyDown={(keyEvent) => {
-                    if (keyEvent.key === 'Escape') cancelEditing()
-                  }}
-                >
-                  <input
-                    autoFocus
-                    className="field"
-                    value={editTitle}
-                    aria-label="编辑日期名称"
-                    onChange={(changeEvent) => setEditTitle(changeEvent.target.value)}
-                    required
-                  />
-                  <input
-                    className="field compact-date"
-                    type="date"
-                    value={editDate}
-                    aria-label="编辑日期"
-                    onChange={(changeEvent) => setEditDate(changeEvent.target.value)}
-                    required
-                  />
-                  <select
-                    className="field compact-select"
-                    value={editType}
-                    aria-label="编辑类型"
-                    onChange={(changeEvent) => setEditType(changeEvent.target.value as EventItem['type'])}
+            return (
+              <article key={event.id} data-search-id={event.id} tabIndex={-1} className={`milestone-card ${tone} ${editingId === event.id ? 'editing' : ''}`}>
+                <div className="milestone-days">
+                  <strong>{dayCopy.value}</strong>
+                  {dayCopy.unit ? <span>{dayCopy.unit}</span> : null}
+                </div>
+                {editingId === event.id ? (
+                  <form
+                    className="milestone-edit-form"
+                    onSubmit={(submitEvent) => {
+                      submitEvent.preventDefault()
+                      commitEditing(event.id)
+                    }}
+                    onKeyDown={(keyEvent) => {
+                      if (keyEvent.key === 'Escape') cancelEditing()
+                    }}
                   >
-                    <option value="countdown">倒数日</option>
-                    <option value="countup">累计日</option>
-                    <option value="annual">每年</option>
-                  </select>
-                  <div className="milestone-edit-actions">
-                    <button className="primary-button" type="submit">保存</button>
-                    <button className="tertiary-button" type="button" onClick={cancelEditing}>取消</button>
-                  </div>
-                </form>
-              ) : (
-                <>
-                  <div className="milestone-info" onDoubleClick={() => startEditing(event)}>
-                    <p className="milestone-title">{event.title}</p>
-                    <span className="milestone-meta">{formatShortDate(event.date)} · {getEventTypeLabel(event.type)}</span>
-                  </div>
-                  <div className="milestone-actions">
-                    <button className="ghost-button small" type="button" onClick={() => startEditing(event)} aria-label={`编辑“${event.title}”`}>
-                      <NoteIcon width={14} height={14} />
-                    </button>
-                    <button className="ghost-button danger small" type="button" onClick={() => onDelete(event.id)} aria-label={`删除“${event.title}”`}>
-                      <TrashIcon width={14} height={14} />
-                    </button>
-                  </div>
-                </>
-              )}
-            </article>
-          )
-        })}
+                    <input
+                      autoFocus
+                      className="field"
+                      value={editTitle}
+                      aria-label="编辑日期名称"
+                      onChange={(changeEvent) => setEditTitle(changeEvent.target.value)}
+                      required
+                    />
+                    <input
+                      className="field compact-date"
+                      type="date"
+                      value={editDate}
+                      aria-label="编辑日期"
+                      onChange={(changeEvent) => setEditDate(changeEvent.target.value)}
+                      required
+                    />
+                    <select
+                      className="field compact-select"
+                      value={editType}
+                      aria-label="编辑类型"
+                      onChange={(changeEvent) => setEditType(changeEvent.target.value as EventItem['type'])}
+                    >
+                      <option value="countdown">倒数日</option>
+                      <option value="countup">累计日</option>
+                      <option value="annual">每年</option>
+                    </select>
+                    <div className="milestone-edit-actions">
+                      <button className="primary-button" type="submit">保存</button>
+                      <button className="tertiary-button" type="button" onClick={cancelEditing}>取消</button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <div className="milestone-info" onDoubleClick={() => startEditing(event)}>
+                      <p className="milestone-title">{event.title}</p>
+                      <span className="milestone-meta">{formatShortDate(event.date)} · {getEventTypeLabel(event.type)}</span>
+                    </div>
+                    <div className="milestone-actions">
+                      <button className="ghost-button small" type="button" onClick={() => startEditing(event)} aria-label={`编辑“${event.title}”`}>
+                        <NoteIcon width={14} height={14} />
+                      </button>
+                      <button className="ghost-button danger small" type="button" onClick={() => onDelete(event.id)} aria-label={`删除“${event.title}”`}>
+                        <TrashIcon width={14} height={14} />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </article>
+            )
+          })}
+        </CardPager>
       </div>
     </section>
   )

@@ -1,0 +1,175 @@
+/* Shared interaction surfaces and complete-page card navigation. */
+:root {
+  --motion-quick: 140ms;
+  --motion-surface: 220ms;
+  --motion-settle: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.focus-rail, .backlog-rail { min-width: 0; }
+.focus-rail { grid-template-rows: minmax(260px, 0.7fr) minmax(min-content, 1fr); }
+.backlog-rail { grid-template-rows: auto minmax(360px, 1fr); }
+.task-list { max-height: 580px; }
+.focus-rail .task-list { max-height: 240px; }
+.backlog-rail .task-panel-backlog { min-height: 420px; }
+.time-board { grid-template-rows: auto minmax(min-content, 1fr); }
+.calendar-panel.sidebar { height: clamp(360px, 48dvh, 460px); max-height: clamp(360px, 48dvh, 460px); }
+
+.rituals-panel, .countdown-panel { min-height: min-content; }
+.rituals-panel .panel-content { flex: none; }
+.ritual-chip-grid, .milestone-grid {
+  display: block;
+  flex: none;
+  overflow: visible;
+  padding: 0;
+  max-height: none;
+}
+.card-pager { min-width: 0; width: 100%; overflow: clip; }
+.card-page-viewport {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  border-radius: var(--radius-md);
+}
+.card-page-viewport::-webkit-scrollbar { display: none; }
+.card-page-viewport:focus-visible { outline-offset: -2px; }
+.card-page {
+  display: grid;
+  flex: 0 0 100%;
+  min-width: 0;
+  grid-template-columns: 1fr;
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: 8px;
+  padding: 2px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.card-page[data-columns='2'] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.card-page[data-columns='3'] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.card-page[data-columns='4'] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.card-page-controls { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.card-page-controls[hidden] { display: none; }
+.card-page-controls .icon-button { min-height: 28px; min-width: 28px; }
+.card-page-status { color: var(--text-secondary); font-size: 0.72rem; font-variant-numeric: tabular-nums; }
+.card-page-total { color: var(--text-muted); }
+
+.milestone-card {
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  justify-items: start;
+  gap: 8px;
+  min-width: 0;
+  min-height: 116px;
+  padding: 28px 10px 10px;
+}
+.milestone-days { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: flex-start; gap: 4px; min-height: 24px; padding: 0; background: transparent; box-shadow: none; }
+.milestone-days strong { font-size: 1.3rem; }
+.milestone-info { min-width: 0; }
+.milestone-title { line-height: 1.45; }
+.milestone-meta { display: block; margin-top: 5px; overflow-wrap: anywhere; }
+.milestone-card.editing { grid-column: span 2; }
+.card-page[data-columns='1'] .milestone-card.editing { grid-column: auto; }
+.milestone-edit-form { width: 100%; }
+.milestone-edit-actions { flex-wrap: wrap; }
+.milestone-actions { top: 4px; right: 4px; }
+.milestone-actions .ghost-button { min-width: 22px; min-height: 22px; padding: 0; opacity: 1; }
+
+.ritual-chip { position: relative; min-width: 0; min-height: 108px; padding: 8px; gap: 7px; }
+.ritual-chip-top { min-height: 22px; padding-right: 0; }
+.ritual-chip-label { font-size: 0.76rem; line-height: 1.45; }
+.ritual-chip-body { display: flex; flex-direction: column; gap: 8px; }
+.ritual-week { margin-top: auto; padding-top: 2px; }
+.ritual-week-days { gap: 3px; }
+.ritual-week-day { display: block; }
+.ritual-week-day i { display: block; height: 7px; border-radius: 3px; background: var(--bg-line-strong); }
+.ritual-week-day.complete i { background: var(--accent-ritual); }
+.ritual-chip-footer { position: absolute; right: 5px; top: 7px; gap: 2px; flex-wrap: nowrap; margin: 0; }
+.ritual-chip-footer .ghost-button, .ritual-chip-footer .drag-button { width: 20px; height: 20px; min-width: 20px; min-height: 20px; padding: 0; }
+.ritual-chip.reordering .ritual-chip-footer { position: static; flex-wrap: wrap; margin-top: 2px; }
+.ritual-chip.reordering .order-button { min-height: 26px; padding: 2px 4px; font-size: 0.68rem; }
+.ritual-streak { margin-left: auto; }
+.ritual-chip:hover .ritual-streak, .ritual-chip:focus-within .ritual-streak { visibility: hidden; }
+
+/* Secondary row controls occupy the metadata line, never a separate blank row. */
+.task-card, .task-card.reordering { position: relative; grid-template-columns: auto minmax(0, 1fr); }
+.task-leading { align-self: start; }
+.task-meta-row { padding-right: 66px; min-height: 28px; }
+.task-actions { position: absolute; right: 2px; bottom: 8px; padding: 2px; border-radius: var(--radius-sm); background: var(--sg-popover); }
+.task-actions .ghost-button { min-width: 28px; min-height: 28px; padding: 0; }
+.task-card.reordering .task-actions { position: static; grid-column: 1 / -1; justify-self: end; }
+.task-actions.reordering { background: transparent; }
+
+.app-shell button, .dialog-shell button {
+  transition: background-color var(--motion-quick) ease-out, border-color var(--motion-quick) ease-out,
+    color var(--motion-quick) ease-out, opacity var(--motion-quick) ease-out, scale var(--motion-quick) var(--motion-settle);
+  -webkit-tap-highlight-color: transparent;
+}
+.primary-button:hover { transform: none; filter: brightness(1.05); }
+.app-shell button:active:not(:disabled), .dialog-shell button:active:not(:disabled) { transform: none; scale: 0.96; transition-duration: 70ms; }
+.task-card, .ritual-chip, .milestone-card { transition: background-color var(--motion-quick) ease-out, border-color var(--motion-quick) ease-out; }
+.ritual-chip:hover, .milestone-card:hover { border-color: var(--sg-state-edge); }
+.ghost-button.danger:hover { color: var(--danger); background: var(--focus-soft); }
+.field:focus-visible, .note-field:focus-visible, .composer-schedule-select:focus-visible, .composer-due-input:focus-visible, .task-schedule-select:focus-visible, .task-due-input:focus-visible {
+  outline: 2px solid var(--focus-ring); outline-offset: 1px; border-color: var(--focus-ring);
+}
+.dialog-shell[open] > .dialog-surface { animation: surface-arrive var(--motion-surface) var(--motion-settle); }
+.settings-popover { transform-origin: top right; animation: surface-arrive var(--motion-surface) var(--motion-settle); }
+@keyframes surface-arrive { from { opacity: 0.5; transform: translateY(5px) scale(0.985); } to { opacity: 1; transform: none; } }
+
+@media (hover: hover) and (pointer: fine) {
+  .task-actions, .ritual-chip-footer, .milestone-actions, .quote-item-actions {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--motion-quick) ease-out;
+  }
+  .task-card:hover .task-actions, .task-card:focus-within .task-actions, .task-actions.reordering,
+  .ritual-chip:hover .ritual-chip-footer, .ritual-chip:focus-within .ritual-chip-footer, .ritual-chip.reordering .ritual-chip-footer,
+  .milestone-card:hover .milestone-actions, .milestone-card:focus-within .milestone-actions,
+  .quote-item:hover .quote-item-actions, .quote-item:focus-within .quote-item-actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+@media (hover: none), (pointer: coarse) {
+  .ritual-streak { margin-left: 0; }
+  .ritual-chip-top { padding-right: 60px; flex-wrap: wrap; }
+  .ritual-chip:hover .ritual-streak { visibility: visible; }
+  .ritual-chip-footer .ghost-button, .ritual-chip-footer .drag-button { width: 24px; height: 24px; min-width: 24px; min-height: 24px; }
+  .milestone-actions .ghost-button { min-width: 24px; min-height: 24px; }
+}
+@media (max-width: 1259px) {
+  .focus-rail { grid-template-rows: auto auto; }
+  .backlog-rail { grid-template-columns: minmax(240px, 0.65fr) minmax(0, 1fr); grid-template-rows: auto; }
+  .workspace-board { align-items: start; }
+  .time-board { grid-template-rows: auto auto; }
+  .backlog-rail .task-panel-backlog { min-height: 0; }
+}
+@media (max-width: 899px) {
+  .backlog-rail { grid-template-columns: 1fr; }
+  .workspace-board { min-height: 0; }
+  .milestone-card { padding-top: 28px; }
+  .task-list, .focus-rail .task-list { max-height: 440px; }
+  .calendar-panel.sidebar { height: auto; max-height: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-page-viewport { scroll-behavior: auto; }
+  .dialog-shell[open] > .dialog-surface, .settings-popover { animation: none; }
+  .app-shell button, .dialog-shell button { transition: none; }
+  .app-shell button:active:not(:disabled), .dialog-shell button:active:not(:disabled) { scale: 1; }
+}
+:root[data-motion='reduce'] .card-page-viewport { scroll-behavior: auto; }
+:root[data-motion='reduce'] button { scale: 1; }
+:root[data-motion='reduce'] .app-shell button:active:not(:disabled), :root[data-motion='reduce'] .dialog-shell button:active:not(:disabled) { scale: 1; }
+:root[data-motion='reduce'] .dialog-shell[open] > .dialog-surface, :root[data-motion='reduce'] .settings-popover { animation: none; }
+@media (prefers-reduced-transparency: reduce) {
+  .settings-popover, .dialog-surface, .drawer, .calendar-stage, .quote-manager { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+@media (prefers-contrast: more) {
+  .panel, .overview-sheet, .topbar, .ritual-chip, .milestone-card, .field, button { border-color: var(--text-secondary); }
+}

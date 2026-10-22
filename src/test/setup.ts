@@ -30,3 +30,30 @@ if (!window.requestAnimationFrame) {
     return 0
   }
 }
+
+// jsdom has no layout, ResizeObserver, or scrolling implementation.
+globalThis.ResizeObserver = class {
+  private callback: ResizeObserverCallback
+  constructor(callback: ResizeObserverCallback) { this.callback = callback }
+  observe(target: Element) {
+    this.callback([{ target, contentRect: { width: 600 } } as ResizeObserverEntry], this as unknown as ResizeObserver)
+  }
+  unobserve() {}
+  disconnect() {}
+} as unknown as typeof ResizeObserver
+
+HTMLElement.prototype.scrollTo = function scrollTo(options: ScrollToOptions | number = {}, y?: number) {
+  this.scrollLeft = typeof options === 'number' ? options : options.left ?? this.scrollLeft
+  this.scrollTop = typeof options === 'number' ? y ?? 0 : options.top ?? this.scrollTop
+}
+
+window.matchMedia = (query: string) => ({
+  matches: false,
+  media: query,
+  onchange: null,
+  addListener() {},
+  removeListener() {},
+  addEventListener() {},
+  removeEventListener() {},
+  dispatchEvent: () => true,
+})

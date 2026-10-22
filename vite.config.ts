@@ -31,8 +31,8 @@ export default defineConfig(({ command }) => ({
         start_url: '.',
         scope: '.',
         display: 'standalone',
-        background_color: '#bfc4bc',
-        theme_color: '#d9ddd3',
+        background_color: '#d2cdbf',
+        theme_color: '#e1dccf',
         categories: ['productivity'],
         icons: [
           {

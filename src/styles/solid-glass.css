@@ -6,17 +6,17 @@
  */
 
 :root {
-  --bg-app: #bfc4bc;
-  --bg-paper: #d9dcd3;
-  --bg-paper-soft: #cdd3c8;
-  --bg-paper-muted: #b6beb1;
-  --bg-rail: #c6cdc2;
-  --bg-board: #dce0d7;
-  --bg-line: #b6beb2;
-  --bg-line-strong: #8c9786;
-  --text-primary: #262f29;
-  --text-secondary: #465448;
-  --text-muted: #495745;
+  --bg-app: #d2cdbf;
+  --bg-paper: #e3ded1;
+  --bg-paper-soft: #d9d4c7;
+  --bg-paper-muted: #c4beaf;
+  --bg-rail: #d7d1c3;
+  --bg-board: #e8e3d7;
+  --bg-line: #c4bdad;
+  --bg-line-strong: #9b917d;
+  --text-primary: #302e28;
+  --text-secondary: #575246;
+  --text-muted: #554f42;
   --brand-red: #8f3524;
   --brand-line: #752c1c;
   --brand-orange: #8b4e29;
@@ -26,9 +26,9 @@
   --accent-event: var(--brand-orange);
   --accent-surface: #adb8a5;
   --danger: #963b2c;
-  --focus-soft: #dfc9b9;
-  --backlog-soft: #c3d4d0;
-  --ritual-soft: #c4d3b8;
+  --focus-soft: #dfc3a9;
+  --backlog-soft: #c5ceca;
+  --ritual-soft: #c5cdbb;
   --event-soft: #dfd0b6;
   --p1-color: var(--brand-red);
   --p2-color: var(--brand-orange);
@@ -38,28 +38,28 @@
   --radius-lg: 14px;
   --radius-md: 10px;
   --radius-sm: 7px;
-  --field-bg: #e3e6de;
-  --field-border: #879280;
-  --check-bg: #e0e5da;
-  --check-border: #738169;
+  --field-bg: #eae5d9;
+  --field-border: #9c927d;
+  --check-bg: #e7e2d4;
+  --check-border: #91856e;
   --scrollbar-thumb: rgb(63 81 58 / 40%);
   --overlay-bg: rgb(29 29 36 / 36%);
 
-  --sg-pane: #d9ddd3;
-  --sg-card: #d1d8c9;
-  --sg-popover: #dfe3d9;
-  --sg-edge: rgb(66 83 57 / 26%);
+  --sg-pane: #e1dccf;
+  --sg-card: #e7e2d5;
+  --sg-popover: #e8e3d8;
+  --sg-edge: rgb(92 80 57 / 24%);
   --sg-rim: rgb(255 255 241 / 48%);
   --sg-inner: rgb(255 255 241 / 12%);
-  --sg-contact: rgb(39 52 32 / 7%);
-  --sg-lift: rgb(39 52 32 / 5%);
-  --sg-control: #dce2d5;
-  --sg-state: #bdcbb4;
-  --sg-state-edge: #78886c;
-  --sg-focus-panel: #ded9cc;
-  --sg-backlog-panel: #ced9d4;
-  --sg-ritual-panel: #ccd7c1;
-  --sg-event-panel: #d6d4c5;
+  --sg-contact: rgb(70 57 35 / 7%);
+  --sg-lift: rgb(70 57 35 / 5%);
+  --sg-control: #e5dfd1;
+  --sg-state: #d3cbb9;
+  --sg-state-edge: #97866c;
+  --sg-focus-panel: #dcc5aa;
+  --sg-backlog-panel: #c9d0cf;
+  --sg-ritual-panel: #c9d0c4;
+  --sg-event-panel: #ddd6c6;
   --sg-primary-rim: rgb(255 255 255 / 30%);
   --sg-primary-foot: rgb(0 0 0 / 20%);
   --sg-on-primary: #fff;
@@ -126,8 +126,8 @@ body { background-image: none; }
 
 .topbar,
 .panel,
-.today-rail > .panel,
-.capture-rail > .panel,
+.focus-rail > .panel,
+.backlog-rail > .panel,
 .time-board > .panel,
 .overview-sheet {
   border-color: var(--sg-edge);
@@ -138,9 +138,9 @@ body { background-image: none; }
 
 .topbar { backdrop-filter: none; -webkit-backdrop-filter: none; }
 
-.today-rail > .task-panel-focus { background: var(--sg-focus-panel); }
-.capture-rail > .task-panel-backlog { background: var(--sg-backlog-panel); }
-.capture-rail > .rituals-panel { background: var(--sg-ritual-panel); }
+.focus-rail > .task-panel-focus { background: var(--sg-focus-panel); }
+.backlog-rail > .task-panel-backlog { background: var(--sg-backlog-panel); }
+.focus-rail > .rituals-panel { background: var(--sg-ritual-panel); }
 .time-board > .countdown-panel { background: var(--sg-event-panel); }
 
 .brand-glyph,

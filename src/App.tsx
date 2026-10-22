@@ -255,17 +255,7 @@ function App() {
       />
 
       <main key={dataGeneration} id="main-content" className="workspace-board" tabIndex={-1}>
-        <section className="today-rail" aria-label="今日工作区">
-          <TodaySummary
-            focusTasks={appData.focusTasks}
-            backlogTasks={appData.backlogTasks}
-            rituals={appData.rituals}
-            todayKey={todayKey}
-            selectedDate={selectedDate}
-            selectedPlan={selectedPlan}
-            events={appData.events}
-          />
-
+        <section className="focus-rail" aria-label="重点与节律">
           <FocusPanel
             tasks={appData.focusTasks}
             onAdd={(text, schedule) => {
@@ -285,6 +275,24 @@ function App() {
             onDropTask={(sourceBucket, taskId, targetId) =>
               commands.tasks.move('focus', sourceBucket, taskId, targetId)
             }
+          />
+          <RitualsPanel
+            rituals={appData.rituals}
+            todayKey={todayKey}
+            onAdd={(text) => {
+              playFeedbackSound('add', appData.preferences.soundEnabled)
+              commands.rituals.add(text)
+            }}
+            onToggle={(ritualId, dateKey) => {
+              playFeedbackSound('complete', appData.preferences.soundEnabled)
+              commands.rituals.toggle(ritualId, dateKey)
+            }}
+            onDelete={(ritualId) => {
+              playFeedbackSound('delete', appData.preferences.soundEnabled)
+              offerUndo(commands.rituals.remove(ritualId))
+            }}
+            onUpdate={commands.rituals.update}
+            onDropRitual={commands.rituals.move}
           />
         </section>
 
@@ -320,7 +328,17 @@ function App() {
           />
         </section>
 
-        <aside className="capture-rail" aria-label="收纳区">
+        <aside className="backlog-rail" aria-label="总览与积压">
+          <TodaySummary
+            focusTasks={appData.focusTasks}
+            backlogTasks={appData.backlogTasks}
+            rituals={appData.rituals}
+            todayKey={todayKey}
+            selectedDate={selectedDate}
+            selectedPlan={selectedPlan}
+            events={appData.events}
+          />
+
           <BacklogPanel
             tasks={appData.backlogTasks}
             onAdd={(text, schedule) => {
@@ -341,25 +359,6 @@ function App() {
               commands.tasks.move('backlog', sourceBucket, taskId, targetId)
             }
             onClearCompleted={() => offerUndo(commands.tasks.clearCompleted('backlog'))}
-          />
-
-          <RitualsPanel
-            rituals={appData.rituals}
-            todayKey={todayKey}
-            onAdd={(text) => {
-              playFeedbackSound('add', appData.preferences.soundEnabled)
-              commands.rituals.add(text)
-            }}
-            onToggle={(ritualId, dateKey) => {
-              playFeedbackSound('complete', appData.preferences.soundEnabled)
-              commands.rituals.toggle(ritualId, dateKey)
-            }}
-            onDelete={(ritualId) => {
-              playFeedbackSound('delete', appData.preferences.soundEnabled)
-              offerUndo(commands.rituals.remove(ritualId))
-            }}
-            onUpdate={commands.rituals.update}
-            onDropRitual={commands.rituals.move}
           />
         </aside>
       </main>

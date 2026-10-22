@@ -20,7 +20,8 @@ html {
 
 body {
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: var(--bg-app);
   background-image: none;
   color: var(--text-primary);
@@ -52,10 +53,11 @@ button {
   grid-template-rows: auto minmax(0, 1fr);
   gap: var(--dashboard-gap);
   width: min(100%, 1680px);
-  height: 100dvh;
+  min-height: 100dvh;
+  height: auto;
   margin: 0 auto;
   padding: 12px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .glass-panel,
@@ -245,30 +247,30 @@ button {
 
 .workspace-board {
   display: grid;
-  grid-template-columns: minmax(300px, 1fr) minmax(500px, 1.55fr) minmax(320px, 1.1fr);
+  grid-template-columns: minmax(340px, 1fr) minmax(480px, 1.45fr) minmax(360px, 1.15fr);
   gap: var(--main-gutter);
-  min-height: 0;
+  min-height: calc(100dvh - 94px);
 }
 
-.today-rail,
+.backlog-rail,
 .time-board,
-.capture-rail {
+.focus-rail {
   display: grid;
   gap: var(--dashboard-gap);
   min-height: 0;
   min-width: 0;
 }
 
-.today-rail {
+.backlog-rail {
   grid-template-rows: auto minmax(0, 1fr);
 }
 
 .time-board {
-  grid-template-rows: minmax(340px, 1fr) clamp(230px, 33dvh, 300px);
+  grid-template-rows: minmax(340px, 1fr) auto;
 }
 
-.capture-rail {
-  grid-template-rows: minmax(230px, 1fr) clamp(320px, 48dvh, 440px);
+.focus-rail {
+  grid-template-rows: minmax(220px, 0.7fr) auto;
 }
 
 .panel {
@@ -281,8 +283,8 @@ button {
   border-color: var(--border-strong);
 }
 
-.today-rail > .panel,
-.capture-rail > .panel,
+.backlog-rail > .panel,
+.focus-rail > .panel,
 .time-board > .panel,
 .overview-sheet {
   background: var(--bg-board);
@@ -1757,7 +1759,7 @@ button {
   }
 }
 
-@media (max-width: 1199px), (max-height: 719px) {
+@media (max-width: 1259px) {
   body {
     overflow-x: hidden;
     overflow-y: auto;
@@ -1770,11 +1772,12 @@ button {
   }
 
   .workspace-board {
+    min-height: 0;
     grid-template-columns: minmax(0, 1.15fr) minmax(330px, 1fr);
     align-items: start;
   }
 
-  .today-rail {
+  .backlog-rail {
     grid-column: 1 / -1;
     grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1fr);
     grid-template-rows: auto;
@@ -1782,18 +1785,18 @@ button {
   }
 
   .time-board { grid-template-rows: auto auto; }
-  .capture-rail { grid-template-rows: auto auto; }
+  .focus-rail { grid-template-rows: auto auto; }
   .calendar-panel.sidebar { min-height: 420px; }
   .task-list { max-height: 440px; flex: none; }
-  .ritual-chip-grid { max-height: 360px; flex: none; }
-  .milestone-grid { max-height: 320px; flex: none; }
+
+
   .countdown-panel { min-height: 0; }
 }
 
 @media (max-width: 899px) {
   .topbar,
   .workspace-board,
-  .today-rail {
+  .backlog-rail {
     grid-template-columns: 1fr;
   }
 
@@ -1803,7 +1806,7 @@ button {
   }
 
   .time-board,
-  .capture-rail {
+  .focus-rail {
     min-height: 0;
   }
 

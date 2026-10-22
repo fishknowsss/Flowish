@@ -2,7 +2,7 @@
 
 Flowish 是一个纯前端的个人计划面板，用来整理今日重点、积压事项、固定节律、日历信号和重要日期。项目使用 React、TypeScript 与 Vite，不需要后端或账号系统。
 
-视觉沿用 Solid Glass 的边缘高光与实体表面，提供暖灰绿浅色和深色主题，无渐变。保留今日工作区、时间板和收纳区的位置，布局按内容与屏幕尺寸适配。当前修复及验收见 [docs/ui-review-2026-10-22.md](docs/ui-review-2026-10-22.md)，来源及许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+视觉沿用 Solid Glass 的边缘高光与实体表面，浅色采用米白、淡米黄底，保留低饱和橙、绿、青蓝语义色，另有深色主题，全站无渐变。桌面左侧为今日重点和固定节律，中间为日历和重要日期，右侧为总览与较大的积压事项。日期及节律支持整页吸附翻页、方向键与触屏滑动。当前实现与验收见 [docs/paged-workspace-2026-10-23.md](docs/paged-workspace-2026-10-23.md)，来源及许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
 ## 功能
 
