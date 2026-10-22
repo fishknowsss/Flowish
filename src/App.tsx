@@ -257,7 +257,17 @@ function App() {
       />
 
       <main key={dataGeneration} id="main-content" className="workspace-board" tabIndex={-1}>
-        <section className="focus-rail" aria-label="重点与节律">
+        <aside className="focus-rail" aria-label="总览与重点">
+          <TodaySummary
+            focusTasks={appData.focusTasks}
+            backlogTasks={appData.backlogTasks}
+            rituals={appData.rituals}
+            todayKey={todayKey}
+            selectedDate={selectedDate}
+            selectedPlan={selectedPlan}
+            events={appData.events}
+          />
+
           <FocusPanel
             tasks={appData.focusTasks}
             onAdd={(text, schedule) => {
@@ -277,6 +287,30 @@ function App() {
             onDropTask={(sourceBucket, taskId, targetId) =>
               commands.tasks.move('focus', sourceBucket, taskId, targetId)
             }
+          />
+        </aside>
+
+        <section className="backlog-rail" aria-label="积压与节律">
+          <BacklogPanel
+            tasks={appData.backlogTasks}
+            onAdd={(text, schedule) => {
+              playFeedbackSound('add', appData.preferences.soundEnabled)
+              commands.tasks.add('backlog', text, null, schedule)
+            }}
+            onToggle={(taskId) => {
+              playFeedbackSound('complete', appData.preferences.soundEnabled)
+              commands.tasks.toggle('backlog', taskId)
+            }}
+            onDelete={(taskId) => {
+              playFeedbackSound('delete', appData.preferences.soundEnabled)
+              offerUndo(commands.tasks.remove('backlog', taskId))
+            }}
+            onUpdate={(taskId, text) => commands.tasks.update('backlog', taskId, text)}
+            onUpdateSchedule={(taskId, patch) => commands.tasks.updateSchedule('backlog', taskId, patch)}
+            onDropTask={(sourceBucket, taskId, targetId) =>
+              commands.tasks.move('backlog', sourceBucket, taskId, targetId)
+            }
+            onClearCompleted={() => offerUndo(commands.tasks.clearCompleted('backlog'))}
           />
           <RitualsPanel
             rituals={appData.rituals}
@@ -329,40 +363,6 @@ function App() {
             }}
           />
         </section>
-
-        <aside className="backlog-rail" aria-label="总览与积压">
-          <TodaySummary
-            focusTasks={appData.focusTasks}
-            backlogTasks={appData.backlogTasks}
-            rituals={appData.rituals}
-            todayKey={todayKey}
-            selectedDate={selectedDate}
-            selectedPlan={selectedPlan}
-            events={appData.events}
-          />
-
-          <BacklogPanel
-            tasks={appData.backlogTasks}
-            onAdd={(text, schedule) => {
-              playFeedbackSound('add', appData.preferences.soundEnabled)
-              commands.tasks.add('backlog', text, null, schedule)
-            }}
-            onToggle={(taskId) => {
-              playFeedbackSound('complete', appData.preferences.soundEnabled)
-              commands.tasks.toggle('backlog', taskId)
-            }}
-            onDelete={(taskId) => {
-              playFeedbackSound('delete', appData.preferences.soundEnabled)
-              offerUndo(commands.tasks.remove('backlog', taskId))
-            }}
-            onUpdate={(taskId, text) => commands.tasks.update('backlog', taskId, text)}
-            onUpdateSchedule={(taskId, patch) => commands.tasks.updateSchedule('backlog', taskId, patch)}
-            onDropTask={(sourceBucket, taskId, targetId) =>
-              commands.tasks.move('backlog', sourceBucket, taskId, targetId)
-            }
-            onClearCompleted={() => offerUndo(commands.tasks.clearCompleted('backlog'))}
-          />
-        </aside>
       </main>
 
       {calendarStageOpen ? (

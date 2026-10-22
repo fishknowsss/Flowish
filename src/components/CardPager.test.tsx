@@ -30,6 +30,18 @@ describe('CardPager', () => {
     expect(viewport.scrollLeft).toBe(0)
   })
 
+  it('keeps compact cards side by side when one complete row fits', () => {
+    vi.stubGlobal('ResizeObserver', class {
+      private callback: ResizeObserverCallback
+      constructor(callback: ResizeObserverCallback) { this.callback = callback }
+      observe(target: Element) { this.callback([{ target, contentRect: { width: 600, height: 120 } } as ResizeObserverEntry], this as unknown as ResizeObserver) }
+      disconnect() {}
+    })
+    render(<CardPager label="日期" columns={4} minCardWidth={104} minCardHeight={92}>{cards}</CardPager>)
+    expect(within(screen.getByRole('group', { name: '日期第 1 页' })).getAllByRole('button')).toHaveLength(4)
+    expect(screen.getAllByRole('group')).toHaveLength(3)
+  })
+
   it('supports keyboard paging and the in-app reduced motion preference', () => {
     render(<CardPager label="日期" columns={4} minCardWidth={104}>{cards}</CardPager>)
     const viewport = screen.getByRole('region')

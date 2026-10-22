@@ -131,7 +131,7 @@ export function RitualsPanel({
             }}
           >
             {rituals.length === 0 ? <div className="empty-card">添加一个每天重复的动作。</div> : null}
-            <CardPager label="固定节律" columns={3} minCardWidth={96} minCardHeight={92}>
+            <CardPager label="固定节律" columns={3} minCardWidth={96} minCardHeight={76}>
               {rituals.map((ritual, index) => {
                 const done = Boolean(ritual.completionHistory[todayKey])
                 const streak = computeStreak(ritual, todayKey)

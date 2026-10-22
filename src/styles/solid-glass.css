@@ -140,10 +140,10 @@ body { background-image: none; }
 
 .topbar { backdrop-filter: none; -webkit-backdrop-filter: none; }
 
-.focus-rail > .task-panel-focus { background: var(--sg-focus-panel); }
-.backlog-rail > .task-panel-backlog { background: var(--sg-backlog-panel); }
-.focus-rail > .rituals-panel { background: var(--sg-ritual-panel); }
-.time-board > .countdown-panel { background: var(--sg-event-panel); }
+.workspace-board .task-panel-focus { background: var(--sg-focus-panel); }
+.workspace-board .task-panel-backlog { background: var(--sg-backlog-panel); }
+.workspace-board .rituals-panel { background: var(--sg-ritual-panel); }
+.workspace-board .countdown-panel { background: var(--sg-event-panel); }
 
 .brand-glyph,
 .panel-icon-chip,
@@ -300,3 +300,20 @@ body { background-image: none; }
     box-shadow: none;
   }
 }
+
+/* Controls inherit the role of their own panel, independent of its column. */
+.panel { --panel-accent: var(--accent-backlog); --panel-surface: var(--sg-pane); }
+.task-panel-focus { --panel-accent: var(--accent-focus); --panel-surface: var(--sg-focus-panel); }
+.task-panel-backlog { --panel-accent: var(--accent-backlog); --panel-surface: var(--sg-backlog-panel); }
+.rituals-panel { --panel-accent: var(--accent-ritual); --panel-surface: var(--sg-ritual-panel); }
+.countdown-panel { --panel-accent: var(--accent-event); --panel-surface: var(--sg-event-panel); }
+.panel {
+  --sg-control: color-mix(in srgb, var(--bg-board) 72%, var(--panel-surface));
+  --sg-state: color-mix(in srgb, var(--panel-accent) 13%, var(--bg-board));
+  --sg-state-edge: color-mix(in srgb, var(--panel-accent) 68%, var(--bg-line));
+}
+.panel .primary-button { background: var(--panel-accent); border-color: var(--panel-accent); }
+.panel .primary-button:hover { background: color-mix(in srgb, var(--panel-accent) 90%, var(--text-primary)); }
+.panel .panel-icon-chip, .panel .icon-button, .panel .secondary-button, .panel .side-cleanup-btn { color: var(--panel-accent); }
+.task-card:not(.completed) .check-button:hover { background: var(--sg-state); border-color: var(--panel-accent); }
+.panel .field:focus-visible, .panel select:focus-visible, .panel input:focus-visible { outline-color: var(--panel-accent); border-color: var(--panel-accent); }

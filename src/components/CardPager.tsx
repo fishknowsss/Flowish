@@ -31,7 +31,7 @@ export function CardPager({ label, columns: maxColumns, minCardWidth, minCardHei
     const observer = new ResizeObserver(([entry]) => {
       const bounds = viewport.getBoundingClientRect()
       const { width, height } = bounds.width ? bounds : entry.contentRect
-      const fittedWidth = height < minCardHeight + 10 ? Math.max(minCardWidth, 280) : height < minCardHeight + 55 ? Math.max(minCardWidth, 190) : minCardWidth
+      const fittedWidth = height < minCardHeight ? Math.max(minCardWidth, 160) : minCardWidth
       const cardHeight = Math.max(minCardHeight, ...Array.from(viewport.querySelectorAll<HTMLElement>('.card-page > article'), (card) => card.scrollHeight))
       const next = {
         columns: Math.max(1, Math.min(maxColumns, Math.floor((width + 8) / (fittedWidth + 8)))),

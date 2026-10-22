@@ -110,7 +110,7 @@ export function CountdownPanel({ events, todayKey, onAdd, onUpdate, onDelete }: 
 
       <div className="milestone-grid">
         {sorted.length === 0 ? <div className="empty-card">先添加一个重要日期。</div> : null}
-        <CardPager label="重要日期" columns={4} minCardWidth={104}>
+        <CardPager label="重要日期" columns={4} minCardWidth={104} minCardHeight={92}>
           {sorted.map((event) => {
             const remainingDays = getEventDays(event, todayKey)
             const dayCopy = getEventDayCopy(event, todayKey)
