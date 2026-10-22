@@ -6,30 +6,30 @@
  */
 
 :root {
-  --bg-app: #e6e7e9;
-  --bg-paper: #f6f6f7;
-  --bg-paper-soft: #ededef;
-  --bg-paper-muted: #dedee2;
-  --bg-rail: #e8e8eb;
-  --bg-board: #f8f8f9;
-  --bg-line: #d3d3d8;
-  --bg-line-strong: #bcbcc4;
-  --text-primary: #252529;
-  --text-secondary: #55555e;
-  --text-muted: #666670;
-  --brand-red: #b63820;
-  --brand-line: #992c19;
-  --brand-orange: #a94b20;
+  --bg-app: #bfc4bc;
+  --bg-paper: #d9dcd3;
+  --bg-paper-soft: #cdd3c8;
+  --bg-paper-muted: #b6beb1;
+  --bg-rail: #c6cdc2;
+  --bg-board: #dce0d7;
+  --bg-line: #b6beb2;
+  --bg-line-strong: #8c9786;
+  --text-primary: #262f29;
+  --text-secondary: #465448;
+  --text-muted: #495745;
+  --brand-red: #8f3524;
+  --brand-line: #752c1c;
+  --brand-orange: #8b4e29;
   --accent-focus: var(--brand-red);
-  --accent-backlog: #365e75;
-  --accent-ritual: #4c6846;
+  --accent-backlog: #355b60;
+  --accent-ritual: #3d5c3d;
   --accent-event: var(--brand-orange);
-  --accent-surface: #c9c9ce;
-  --danger: #b3342b;
-  --focus-soft: #f3e2dd;
-  --backlog-soft: #dfe8ee;
-  --ritual-soft: #e2eadf;
-  --event-soft: #f1e5db;
+  --accent-surface: #adb8a5;
+  --danger: #963b2c;
+  --focus-soft: #dfc9b9;
+  --backlog-soft: #c3d4d0;
+  --ritual-soft: #c4d3b8;
+  --event-soft: #dfd0b6;
   --p1-color: var(--brand-red);
   --p2-color: var(--brand-orange);
   --p3-color: var(--accent-ritual);
@@ -38,46 +38,50 @@
   --radius-lg: 14px;
   --radius-md: 10px;
   --radius-sm: 7px;
-  --field-bg: rgb(255 255 255 / 64%);
-  --field-border: #8b8b96;
-  --check-bg: rgb(255 255 255 / 72%);
-  --check-border: #83838e;
-  --scrollbar-thumb: rgb(64 64 78 / 28%);
+  --field-bg: #e3e6de;
+  --field-border: #879280;
+  --check-bg: #e0e5da;
+  --check-border: #738169;
+  --scrollbar-thumb: rgb(63 81 58 / 40%);
   --overlay-bg: rgb(29 29 36 / 36%);
 
-  --sg-pane: rgb(250 250 251 / 78%);
-  --sg-card: rgb(255 255 255 / 55%);
-  --sg-popover: rgb(250 250 251 / 97%);
-  --sg-edge: rgb(78 78 96 / 19%);
-  --sg-rim: rgb(255 255 255 / 94%);
-  --sg-inner: rgb(255 255 255 / 40%);
-  --sg-contact: rgb(37 37 50 / 6%);
-  --sg-lift: rgb(37 37 50 / 8%);
-  --sg-control: rgb(255 255 255 / 56%);
-  --sg-state: rgb(74 74 92 / 9%);
-  --sg-state-edge: rgb(74 74 92 / 27%);
+  --sg-pane: #d9ddd3;
+  --sg-card: #d1d8c9;
+  --sg-popover: #dfe3d9;
+  --sg-edge: rgb(66 83 57 / 26%);
+  --sg-rim: rgb(255 255 241 / 48%);
+  --sg-inner: rgb(255 255 241 / 12%);
+  --sg-contact: rgb(39 52 32 / 7%);
+  --sg-lift: rgb(39 52 32 / 5%);
+  --sg-control: #dce2d5;
+  --sg-state: #bdcbb4;
+  --sg-state-edge: #78886c;
+  --sg-focus-panel: #ded9cc;
+  --sg-backlog-panel: #ced9d4;
+  --sg-ritual-panel: #ccd7c1;
+  --sg-event-panel: #d6d4c5;
   --sg-primary-rim: rgb(255 255 255 / 30%);
   --sg-primary-foot: rgb(0 0 0 / 20%);
   --sg-on-primary: #fff;
   --shadow-sm: inset 0 1px 0 var(--sg-rim), 0 1px 2px var(--sg-contact);
   --shadow-md: inset 0 1px 0 var(--sg-rim), inset 0 0 0 1px var(--sg-inner),
-    0 2px 3px var(--sg-contact), 0 8px 18px var(--sg-lift);
+    0 2px 3px var(--sg-contact), 0 4px 10px var(--sg-lift);
   --shadow-lg: inset 0 1px 0 var(--sg-rim), inset 0 0 0 1px var(--sg-inner),
     0 4px 8px var(--sg-contact), 0 18px 40px var(--sg-lift);
 }
 
 :root[data-theme='obsidian'] {
-  --bg-app: #19191c;
-  --bg-paper: #26262a;
-  --bg-paper-soft: #303035;
-  --bg-paper-muted: #3c3c43;
-  --bg-rail: #222226;
-  --bg-board: #2a2a2f;
-  --bg-line: #414148;
-  --bg-line-strong: #60606b;
-  --text-primary: #f0f0f3;
-  --text-secondary: #c1c1cb;
-  --text-muted: #aaaab7;
+  --bg-app: #202620;
+  --bg-paper: #2b332b;
+  --bg-paper-soft: #333e33;
+  --bg-paper-muted: #485345;
+  --bg-rail: #263026;
+  --bg-board: #303a30;
+  --bg-line: #495548;
+  --bg-line-strong: #75826e;
+  --text-primary: #eceee3;
+  --text-secondary: #c7cfbe;
+  --text-muted: #b0bea5;
   --brand-red: #f1987e;
   --brand-line: #d78068;
   --brand-orange: #e8ad7f;
@@ -96,20 +100,24 @@
   --scrollbar-thumb: rgb(226 226 240 / 27%);
   --overlay-bg: rgb(0 0 0 / 60%);
 
-  --sg-pane: rgb(48 48 53 / 74%);
+  --sg-pane: #2d362d;
   --sg-card: rgb(255 255 255 / 4%);
-  --sg-popover: rgb(42 42 47 / 97%);
+  --sg-popover: #303a30;
   --sg-edge: rgb(255 255 255 / 12%);
   --sg-rim: rgb(255 255 255 / 17%);
   --sg-inner: rgb(255 255 255 / 3%);
   --sg-contact: rgb(0 0 0 / 14%);
   --sg-lift: rgb(0 0 0 / 18%);
   --sg-control: rgb(255 255 255 / 6%);
-  --sg-state: rgb(255 255 255 / 10%);
+  --sg-state: #43503d;
   --sg-state-edge: rgb(255 255 255 / 26%);
   --sg-primary-rim: rgb(255 255 255 / 35%);
   --sg-primary-foot: rgb(0 0 0 / 24%);
   --sg-on-primary: #211d1b;
+  --sg-focus-panel: #37382e;
+  --sg-backlog-panel: #2b3a35;
+  --sg-ritual-panel: #313d2c;
+  --sg-event-panel: #383a2e;
 }
 
 body { background-image: none; }
@@ -128,13 +136,12 @@ body { background-image: none; }
   box-shadow: var(--shadow-md);
 }
 
-/* The old decorative rails are paint only, so their geometry stays intact. */
-.today-rail > .panel::after,
-.capture-rail > .panel::after,
-.time-board > .panel::after,
-.overview-sheet::after { background: transparent; }
+.topbar { backdrop-filter: none; -webkit-backdrop-filter: none; }
 
-.topbar { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+.today-rail > .task-panel-focus { background: var(--sg-focus-panel); }
+.capture-rail > .task-panel-backlog { background: var(--sg-backlog-panel); }
+.capture-rail > .rituals-panel { background: var(--sg-ritual-panel); }
+.time-board > .countdown-panel { background: var(--sg-event-panel); }
 
 .brand-glyph,
 .panel-icon-chip,
@@ -150,6 +157,10 @@ body { background-image: none; }
 .ritual-chip,
 .calendar-month,
 .calendar-day { background: var(--bg-board); }
+
+.overview-line { background: var(--sg-pane); }
+.ritual-chip { background: var(--sg-card); }
+.task-panel .glass-ridge, .rituals-panel .glass-ridge, .countdown-form, .quote-bar { background: transparent; }
 
 .overview-lines,
 .calendar-body,
@@ -193,7 +204,7 @@ body { background-image: none; }
 .ritual-check {
   border-radius: var(--radius-sm);
   background: var(--sg-control);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 
 .icon-button,
@@ -226,8 +237,9 @@ body { background-image: none; }
 }
 
 .toggle-row,
-.task-card,
 .search-result-item { border-radius: var(--radius-sm); }
+
+.task-card { border-radius: 0; }
 
 .task-card:hover { background: var(--sg-state); }
 
@@ -263,6 +275,17 @@ body { background-image: none; }
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
+
+/* A nested panel belongs to its dialog surface, not a second floating pane. */
+.dialog-surface .calendar-panel { border-color: transparent; background: transparent; box-shadow: none; }
+.icon-button:disabled, .ghost-button:disabled, .order-button:disabled, .drag-button:disabled { opacity: 0.45; cursor: default; }
+.icon-button[aria-expanded='true'], .drag-button[aria-expanded='true'], .chip-toggle.active { background: var(--sg-state); border-color: var(--sg-state-edge); }
+.check-button:hover, .ritual-check:hover { background: var(--ritual-soft); border-color: var(--accent-ritual); }
+.task-card.completed .check-button { background: var(--accent-ritual); color: var(--sg-on-primary); border-color: var(--accent-ritual); }
+.task-card.completed, .milestone-card.muted { opacity: 1; }
+.task-card.completed .task-title, .milestone-card.muted .milestone-title { color: var(--text-secondary); }
+.calendar-day.outside { opacity: 1; color: var(--text-muted); background: var(--bg-paper-soft); }
+.calendar-day.outside .day-number { color: var(--text-muted); }
 
 .dialog-surface .quote-manager { box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
 .pomodoro-mode-group label > span { border-radius: var(--radius-sm); }

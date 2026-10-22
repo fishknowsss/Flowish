@@ -22,11 +22,7 @@ body {
   margin: 0;
   overflow: hidden;
   background-color: var(--bg-app);
-  background-image:
-    linear-gradient(var(--bg-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--bg-line) 1px, transparent 1px);
-  background-size: 36px 36px;
-  background-position: -1px -1px;
+  background-image: none;
   color: var(--text-primary);
   font-family: var(--font-text);
   -webkit-font-smoothing: antialiased;
@@ -91,7 +87,7 @@ button {
 .topbar {
   z-index: 10;
   display: grid;
-  grid-template-columns: minmax(168px, 220px) minmax(280px, 1fr) auto;
+  grid-template-columns: minmax(160px, 190px) minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
   min-height: var(--topbar-height);
@@ -202,6 +198,7 @@ button {
 .toolbar {
   justify-content: flex-end;
   gap: 6px;
+  min-width: 0;
 }
 
 .settings-wrap {
@@ -248,7 +245,7 @@ button {
 
 .workspace-board {
   display: grid;
-  grid-template-columns: minmax(280px, 0.82fr) minmax(520px, 1.48fr) minmax(300px, 0.9fr);
+  grid-template-columns: minmax(300px, 1fr) minmax(500px, 1.55fr) minmax(320px, 1.1fr);
   gap: var(--main-gutter);
   min-height: 0;
 }
@@ -259,6 +256,7 @@ button {
   display: grid;
   gap: var(--dashboard-gap);
   min-height: 0;
+  min-width: 0;
 }
 
 .today-rail {
@@ -266,17 +264,18 @@ button {
 }
 
 .time-board {
-  grid-template-rows: 360px minmax(0, 1fr);
+  grid-template-rows: minmax(340px, 1fr) clamp(230px, 33dvh, 300px);
 }
 
 .capture-rail {
-  grid-template-rows: minmax(0, 1fr) 200px;
+  grid-template-rows: minmax(230px, 1fr) clamp(320px, 48dvh, 440px);
 }
 
 .panel {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  min-width: 0;
   overflow: hidden;
   padding: var(--panel-padding);
   border-color: var(--border-strong);
@@ -287,37 +286,6 @@ button {
 .time-board > .panel,
 .overview-sheet {
   background: var(--bg-board);
-}
-
-.today-rail > .panel::after,
-.capture-rail > .panel::after,
-.time-board > .panel::after,
-.overview-sheet::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 4px;
-  background: var(--bg-line-strong);
-}
-
-.task-panel-focus::after,
-.overview-sheet::after {
-  background: var(--brand-red);
-}
-
-.task-panel-backlog::after,
-.calendar-panel::after {
-  background: var(--accent-backlog);
-}
-
-.rituals-panel::after {
-  background: var(--accent-ritual);
-}
-
-.countdown-panel::after {
-  background: var(--brand-orange);
 }
 
 .panel-side-layout {
@@ -498,6 +466,7 @@ button {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
   min-width: 0;
+  align-content: start;
   background: var(--border-soft);
 }
 
@@ -556,7 +525,8 @@ button {
 }
 
 .countdown-form {
-  grid-template-columns: minmax(0, 1fr) 126px 98px auto;
+  grid-template-columns: minmax(0, 1fr) 132px 90px 36px;
+  gap: 8px;
   padding: 0 0 10px 8px;
   border-bottom: 1px solid var(--border-soft);
 }
@@ -564,6 +534,7 @@ button {
 .field,
 .note-field,
 .compact-select {
+  min-width: 0;
   width: 100%;
   min-height: 36px;
   padding: 8px 9px;
@@ -733,11 +704,12 @@ button {
 
 .task-list {
   display: grid;
+  grid-auto-rows: max-content;
   align-content: start;
   flex: 1;
   min-height: 0;
   margin-top: 2px;
-  padding-left: 8px;
+  padding: 0 2px;
 }
 
 .task-card,
@@ -910,26 +882,26 @@ button {
 
 .ritual-chip-grid {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(118px, 1fr);
-  grid-template-columns: none;
-  gap: 1px;
+  grid-auto-rows: max-content;
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  align-content: start;
+  gap: 8px;
   flex: 1;
   min-height: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  margin-top: 2px;
-  padding-left: 8px;
-  background: var(--border-soft);
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-top: 10px;
+  padding: 2px;
+  background: transparent;
 }
 
 .ritual-chip {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  min-height: 0;
-  padding: 8px;
-  border: 0;
+  min-height: 156px;
+  padding: 10px;
+  border: 1px solid var(--border-soft);
   background: var(--bg-board);
   cursor: grab;
   transition: background 140ms var(--easing-fluid);
@@ -1026,7 +998,7 @@ button {
 
 .calendar-body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 214px;
+  grid-template-columns: minmax(0, 1fr) minmax(172px, 0.62fr);
   gap: 1px;
   flex: 1;
   min-height: 0;
@@ -1231,7 +1203,8 @@ button {
 
 .selected-date-card {
   display: grid;
-  grid-template-rows: auto auto minmax(0, auto) minmax(0, auto) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: start;
   gap: 10px;
   min-width: 0;
   min-height: 0;
@@ -1325,11 +1298,14 @@ button {
 
 .milestone-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  grid-auto-rows: max-content;
+  align-content: start;
   gap: 8px;
   flex: 1;
   min-height: 0;
-  margin: 10px 0 0 8px;
+  margin: 10px 0 0;
+  padding: 2px;
   overflow-y: auto;
   overflow-x: hidden;
   background: transparent;
@@ -1342,9 +1318,9 @@ button {
   align-items: center;
   gap: 10px;
   min-height: 74px;
-  padding: 10px 36px 10px 10px;
+  padding: 38px 10px 10px;
   border: 1px solid var(--border-soft);
-  border-left: 3px solid var(--accent-surface);
+  border-left: 1px solid var(--accent-surface);
   background: var(--bg-board);
 }
 
@@ -1781,7 +1757,7 @@ button {
   }
 }
 
-@media (max-width: 1320px) {
+@media (max-width: 1199px), (max-height: 719px) {
   body {
     overflow-x: hidden;
     overflow-y: auto;
@@ -1794,22 +1770,27 @@ button {
   }
 
   .workspace-board {
-    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.82fr);
+    grid-template-columns: minmax(0, 1.15fr) minmax(330px, 1fr);
+    align-items: start;
   }
 
   .today-rail {
     grid-column: 1 / -1;
-    grid-template-columns: minmax(280px, 0.7fr) minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1fr);
+    grid-template-rows: auto;
+    align-items: start;
   }
 
-  .time-board,
-  .capture-rail {
-    min-height: 720px;
-  }
+  .time-board { grid-template-rows: auto auto; }
+  .capture-rail { grid-template-rows: auto auto; }
+  .calendar-panel.sidebar { min-height: 420px; }
+  .task-list { max-height: 440px; flex: none; }
+  .ritual-chip-grid { max-height: 360px; flex: none; }
+  .milestone-grid { max-height: 320px; flex: none; }
+  .countdown-panel { min-height: 0; }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 899px) {
   .topbar,
   .workspace-board,
   .today-rail {
@@ -1817,8 +1798,8 @@ button {
   }
 
   .toolbar {
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-wrap: nowrap;
   }
 
   .time-board,
@@ -1827,21 +1808,30 @@ button {
   }
 
   .overview-sheet {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(90px, 0.35fr) minmax(0, 1fr);
   }
 
   .calendar-panel.sidebar {
-    min-height: 520px;
+    min-height: 0;
   }
 
   .calendar-body {
     grid-template-columns: 1fr;
+    flex: none;
   }
 
+  .calendar-panel.sidebar .calendar-month { min-height: 320px; }
+
   .selected-date-card {
-    grid-template-rows: auto;
-    max-height: 220px;
+    grid-template-rows: auto minmax(0, 1fr);
+    max-height: 240px;
+    min-height: 110px;
   }
+
+  .topbar { grid-template-columns: minmax(0, 1fr) auto; }
+  .quote-bar { grid-column: 1 / -1; grid-row: 2; }
+  .toolbar { grid-column: 1 / -1; grid-row: 3; }
+  .settings-wrap { margin-left: auto; }
 }
 
 @media (max-width: 720px) {
@@ -1857,21 +1847,32 @@ button {
     padding: 12px;
   }
 
-  .quote-bar,
   .countdown-form,
   .quote-item,
-  .overview-lines,
   .milestone-grid {
     grid-template-columns: 1fr;
   }
+
+  .quote-bar { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .quote-copy p { white-space: normal; }
+  .quote-actions { flex-wrap: wrap; max-width: 64px; }
+  .calendar-header { flex-wrap: wrap; gap: 8px; }
+  .calendar-controls { flex: 1 0 100%; justify-content: space-between; }
+  .calendar-controls .icon-button { flex-shrink: 0; white-space: nowrap; }
+  .overview-sheet { gap: 10px; padding: 12px; }
+  .overview-line { padding: 8px; }
+  .overview-line strong { font-size: 0.86rem; }
+  .overview-line.wide strong { white-space: normal; overflow-wrap: anywhere; }
+  .countdown-form { grid-template-columns: minmax(0, 1fr) 90px 36px; }
+  .countdown-form > input[name='event-title'] { grid-column: 1 / -1; }
+  .countdown-form .compact-date { width: 100%; }
+  .milestone-card { padding: 12px; padding-top: 36px; }
 
   .calendar-day {
     padding: 6px;
   }
 
-  .calendar-panel.sidebar {
-    min-height: 460px;
-  }
+  .calendar-panel.sidebar .calendar-month { min-height: 300px; }
 
   .day-signal-list,
   .stage-task-preview.compact {

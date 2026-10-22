@@ -325,7 +325,7 @@
   font-size: clamp(48px, 10vw, 64px);
   font-variant-numeric: tabular-nums;
   font-weight: 600;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.03em;
   line-height: 1;
 }
 
@@ -648,7 +648,9 @@
 
 .day-number-meta { display: flex; align-items: center; gap: 3px; }
 .day-agenda-count { font-size: 0.6rem; color: var(--accent-backlog); }
-.selected-date-heading { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.selected-date-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
+.selected-date-heading > div { min-width: 0; }
+.selected-date-heading > .secondary-button { flex-shrink: 0; white-space: nowrap; }
 .selected-date-heading h3 { margin: 4px 0 0; font-size: 0.84rem; }
 .selected-date-kicker { color: var(--brand-red); font-size: 0.66rem; font-weight: 700; }
 .selected-date-overview { display: grid; align-content: start; gap: 8px; min-height: 0; overflow-y: auto; }
@@ -662,7 +664,6 @@
 
 .milestone-actions { position: absolute; display: flex; top: 5px; right: 5px; gap: 2px; }
 .milestone-actions .ghost-button { position: static; }
-.milestone-card { padding-right: 66px; }
 .milestone-edit-form { display: grid; gap: 5px; min-width: 0; }
 .milestone-edit-actions { display: flex; gap: 5px; }
 
@@ -677,3 +678,55 @@
 .ritual-chip-grid { overflow-y: auto; }
 .ritual-chip-top, .ritual-chip-footer { flex-shrink: 0; }
 .ritual-chip-body { min-height: min-content; }
+
+/* Components follow their available width inside the original three columns. */
+.task-panel { container-type: inline-size; }
+.countdown-panel { container-type: inline-size; }
+.calendar-controls { min-width: 0; }
+.calendar-label { white-space: nowrap; min-width: 0; }
+.panel-header, .panel-side-header { padding-left: 0; }
+.countdown-form { padding-left: 0; padding-top: 10px; }
+.calendar-body { margin-left: 0; }
+.task-meta-row { flex-wrap: wrap; }
+.task-actions { flex-wrap: wrap; }
+.ritual-chip-label { display: block; overflow: visible; overflow-wrap: anywhere; -webkit-line-clamp: unset; }
+.ritual-chip { border-radius: var(--radius-md); }
+.ritual-chip-footer { margin-top: auto; }
+.task-list, .ritual-chip-grid, .milestone-grid, .selected-date-overview { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
+
+@container (max-width: 400px) {
+  .task-card { grid-template-columns: auto minmax(0, 1fr); gap: 8px; }
+  .task-leading { align-self: start; }
+  .task-actions { grid-column: 2; justify-content: flex-end; }
+  .task-card .ghost-button { min-height: 30px; min-width: 30px; }
+  .task-composer, .task-panel-backlog .task-composer { grid-template-columns: minmax(0, 1fr) 36px; }
+  .task-composer > .field { grid-column: 1 / -1; }
+  .task-composer > .primary-button { grid-column: 2; grid-row: 2; }
+  .composer-schedule-select, .composer-due-input { min-height: 32px; }
+}
+
+@container (max-width: 480px) {
+  .countdown-form { grid-template-columns: minmax(0, 1fr) 96px 36px; }
+  .countdown-form > input[name='event-title'] { grid-column: 1 / -1; }
+}
+
+@media (max-width: 899px) {
+  .stage-sheet { overflow: auto; }
+  .stage-sheet .calendar-header { padding-right: 40px; }
+  .stage-sheet .calendar-panel { min-height: 0; }
+  .calendar-panel.stage .calendar-body { margin-left: 0; }
+  .calendar-panel.stage .calendar-month { min-height: 520px; }
+  .calendar-panel.stage .calendar-day { min-height: 0; padding: 6px; }
+}
+
+@media (max-width: 520px) {
+  .topbar .toolbar { position: relative; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+  .topbar .pomodoro-widget { grid-column: 1 / -1; justify-content: space-between; }
+  .topbar .settings-wrap { position: static; margin-left: 0; }
+  .topbar .toolbar > .icon-button, .topbar .settings-wrap > .icon-button { width: 100%; min-width: 0; padding: 0; }
+  .settings-popover { right: 0; width: min(260px, calc(100vw - 24px)); max-height: calc(100dvh - 240px); overflow-y: auto; }
+  .dialog-shell .pomodoro-settings-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stage-sheet .calendar-header { padding-top: 36px; padding-right: 0; }
+  .calendar-panel.stage .calendar-month { min-height: 400px; }
+  .calendar-panel.stage .calendar-day { padding: 4px; }
+}
